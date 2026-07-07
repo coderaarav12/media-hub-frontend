@@ -587,8 +587,9 @@ async function renderTvHome() {
   trendArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
   popArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
   const [trend, popular] = await Promise.all([fetchAPI('/trending?media=tv'), fetchAPI('/tv/popular')])
-  trendArea.innerHTML = renderMediaGrid(trend, 'tv')
-  popArea.innerHTML = renderMediaGrid(popular, 'tv')
+  const noAnime = d => d && d.results ? { ...d, results: d.results.filter(r => !r.genre_ids?.includes(16)) } : d
+  trendArea.innerHTML = renderMediaGrid(noAnime(trend), 'tv')
+  popArea.innerHTML = renderMediaGrid(noAnime(popular), 'tv')
 }
 
 // --- Anime Home ---
