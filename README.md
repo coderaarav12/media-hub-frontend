@@ -30,8 +30,9 @@ media-hub-api      →  Vercel (serverless Express + TMDB + AniList)
 2. Set up the backend on Vercel (see [media-hub-api](https://github.com/coderaarav12/media-hub-api))
 3. In your GitHub repo, go to **Settings > Secrets and variables > Actions** and add:
    - `VERCEL_API_URL` — your Vercel API base URL (e.g. `https://your-app.vercel.app/api`)
-4. Go to **Settings > Pages > Source** and select **GitHub Actions**
-5. Push to `main` — the workflow will deploy automatically
+   - `CLOUDFLARE_API_TOKEN` — Cloudflare API token with Pages permissions
+   - `CLOUDFLARE_ACCOUNT_ID` — your Cloudflare account ID (find in Cloudflare dashboard)
+4. Push to `main` — the workflow deploys to Cloudflare Pages automatically
 
 ## Credits
 
