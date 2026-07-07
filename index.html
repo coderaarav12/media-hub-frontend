@@ -227,6 +227,16 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 .changelog-msg{font-size:13px;color:var(--text);line-height:1.5}
 .changelog-date{font-size:10px;color:var(--muted);margin-top:2px}
 .changelog-loading{text-align:center;padding:40px;color:var(--muted)}
+/* Footer */
+.site-footer{margin-top:48px;padding:20px 0;border-top:1px solid var(--border)}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-logo{font-size:14px;font-weight:700;color:var(--text)}
+.footer-links{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.footer-links a{color:var(--primary);text-decoration:none}
+.footer-links a:hover{text-decoration:underline}
+.footer-dot{color:var(--border)}
+@media(max-width:480px){.site-footer{margin-top:32px}.footer-inner{flex-direction:column;text-align:center}}
+
 @media(max-width:480px){.changelog-modal{max-height:90vh}.changelog-body{padding:16px}}
 
 .loading{text-align:center;padding:80px 20px;color:var(--muted)}
@@ -384,6 +394,19 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
     <div class="section-header"><h2>Most Popular</h2></div>
     <div id="animePopularArea"></div>
   </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span class="footer-logo">&#9654; MediaHub</span>
+      <div class="footer-links">
+        <a href="https://github.com/coderaarav12/media-hub-frontend" target="_blank" rel="noopener">GitHub</a>
+        <span class="footer-dot">&middot;</span>
+        <span id="footerStars">&#9733; --</span>
+        <span class="footer-dot">&middot;</span>
+        <span id="footerUpdated">Updated --</span>
+      </div>
+    </div>
+  </footer>
 </div>
 
 <div class="share-overlay" id="shareOverlay" onclick="if(event.target===this)closeShare()">
@@ -777,8 +800,19 @@ function copyShareLink() {
   })
 }
 
-// --- Update Check ---
+// --- GitHub Repo Info ---
 const REPO = 'coderaarav12/media-hub-frontend'
+async function loadRepoStats() {
+  try {
+    const r = await fetch('https://api.github.com/repos/' + REPO)
+    if(!r.ok) return
+    const d = await r.json()
+    $('footerStars').innerHTML = '&#9733; ' + (d.stargazers_count || 0)
+    const updated = d.pushed_at ? new Date(d.pushed_at).toLocaleDateString() : ''
+    if(updated) $('footerUpdated').textContent = 'Updated ' + updated
+  } catch(e) {}
+}
+
 async function checkUpdate() {
   try {
     const r = await fetch('https://api.github.com/repos/' + REPO + '/commits/main?per_page=1')
@@ -806,6 +840,7 @@ async function openChangelog() {
 function closeChangelog() { $('changelogOverlay').classList.remove('active') }
 
 checkUpdate()
+loadRepoStats()
 handleRoute()
 </script>
 </body>
