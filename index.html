@@ -205,6 +205,30 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
   .share-modal{width:100%;max-width:100vw;border-radius:var(--radius) var(--radius) 0 0;margin-top:auto}
   .share-overlay.active{align-items:flex-end}
 }
+/* Update Banner */
+.update-banner{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:900;background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;padding:12px 24px;border-radius:12px;font-size:13px;font-weight:500;cursor:pointer;display:none;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(108,92,231,0.3);animation:fadeUp .4s ease;font-family:inherit;border:none}
+.update-banner:hover{opacity:0.92}
+.update-banner .close-update{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit}
+.update-banner .close-update:hover{background:rgba(255,255,255,0.3)}
+@media(max-width:480px){.update-banner{bottom:16px;left:16px;right:16px;transform:none;font-size:12px;padding:10px 16px;border-radius:10px}}
+
+/* Changelog Modal */
+.changelog-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.7);backdrop-filter:blur(16px);z-index:999;display:none;align-items:center;justify-content:center;animation:fadeUp .3s ease}
+.changelog-overlay.active{display:flex}
+.changelog-modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);width:500px;max-width:90vw;max-height:80vh;overflow:hidden;animation:scaleIn .35s ease}
+.changelog-header{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--border)}
+.changelog-header h3{font-size:16px;font-weight:600}
+.changelog-header button{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;padding:0 4px;transition:all .2s;line-height:1;font-family:inherit}
+.changelog-header button:hover{color:var(--text)}
+.changelog-body{padding:20px 24px;overflow-y:auto;max-height:60vh}
+.changelog-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.changelog-item:last-child{border-bottom:none}
+.changelog-sha{font-size:11px;color:var(--primary);font-family:monospace;white-space:nowrap;min-width:50px}
+.changelog-msg{font-size:13px;color:var(--text);line-height:1.5}
+.changelog-date{font-size:10px;color:var(--muted);margin-top:2px}
+.changelog-loading{text-align:center;padding:40px;color:var(--muted)}
+@media(max-width:480px){.changelog-modal{max-height:90vh}.changelog-body{padding:16px}}
+
 .loading{text-align:center;padding:80px 20px;color:var(--muted)}
 .spinner{width:36px;height:36px;border:2px solid rgba(255,255,255,0.04);border-top:2px solid var(--primary);border-right:2px solid var(--secondary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
 .skeleton{background:linear-gradient(90deg,var(--card) 0%,var(--card2) 50%,var(--card) 100%);background-size:200% 100%;animation:shimmer 1.4s ease-in-out infinite;border-radius:var(--radius)}
@@ -392,6 +416,23 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
   <div class="player-body">
     <div class="source-tabs" id="sourceTabs"></div>
     <iframe id="playerFrame" allowfullscreen allow="autoplay;fullscreen"></iframe>
+  </div>
+</div>
+
+<button class="update-banner" id="updateBanner" onclick="openChangelog()">
+  <span>✨ What's New? This app was updated</span>
+  <span class="close-update" onclick="event.stopPropagation();dismissUpdate()">&#10005;</span>
+</button>
+
+<div class="changelog-overlay" id="changelogOverlay" onclick="if(event.target===this)closeChangelog()">
+  <div class="changelog-modal">
+    <div class="changelog-header">
+      <h3>Recent Updates</h3>
+      <button onclick="closeChangelog()">&times;</button>
+    </div>
+    <div class="changelog-body" id="changelogBody">
+      <div class="changelog-loading"><div class="spinner"></div></div>
+    </div>
   </div>
 </div>
 
@@ -736,6 +777,35 @@ function copyShareLink() {
   })
 }
 
+// --- Update Check ---
+const REPO = 'coderaarav12/media-hub-frontend'
+async function checkUpdate() {
+  try {
+    const r = await fetch('https://api.github.com/repos/' + REPO + '/commits/main?per_page=1')
+    if(!r.ok) return
+    const data = await r.json(), sha = data.sha
+    if(!sha) return
+    const last = localStorage.getItem('lastSha')
+    if(last && last !== sha) { $('updateBanner').style.display = 'flex' }
+    localStorage.setItem('lastSha', sha)
+  } catch(e) {}
+}
+function dismissUpdate() { $('updateBanner').style.display = 'none' }
+async function openChangelog() {
+  $('updateBanner').style.display = 'none'; $('changelogOverlay').classList.add('active'); $('changelogBody').innerHTML = '<div class="changelog-loading"><div class="spinner"></div></div>'
+  try {
+    const r = await fetch('https://api.github.com/repos/' + REPO + '/commits/main?per_page=10')
+    if(!r.ok) { $('changelogBody').innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">Failed to load</p>'; return }
+    const commits = await r.json()
+    $('changelogBody').innerHTML = commits.map(c => {
+      const msg = c.commit.message.split('\n')[0], date = new Date(c.commit.committer.date).toLocaleDateString(), sha = c.sha.slice(0,7)
+      return '<div class="changelog-item"><div class="changelog-sha">' + sha + '</div><div><div class="changelog-msg">' + escapeHtml(msg) + '</div><div class="changelog-date">' + date + '</div></div></div>'
+    }).join('')
+  } catch(e) { $('changelogBody').innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">Failed to load</p>' }
+}
+function closeChangelog() { $('changelogOverlay').classList.remove('active') }
+
+checkUpdate()
 handleRoute()
 </script>
 </body>
