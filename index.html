@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MediaHub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236c5ce7'/%3E%3Cstop offset='100%25' stop-color='%2300cec9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='%23050508'/%3E%3Cpath d='M35 30v40l30-20z' fill='url(%23g)'/%3E%3C/svg%3E">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="config.js"></script>
+<link rel="manifest" href="https://coderaarav12.github.io/media-hub-frontend/manifest.json">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#050508;--bg2:#0a0a14;--card:#0d0d1a;--card2:#12121f;--border:rgba(255,255,255,0.05);--border-hover:rgba(108,92,231,0.2);--primary:#6c5ce7;--primary-light:#a29bfe;--secondary:#00cec9;--accent:#fd79a8;--text:#eeeef8;--text2:#9999bb;--muted:#666688;--radius:16px;--radius-sm:10px;--glow:0 0 30px rgba(108,92,231,0.08)}
+html{scroll-behavior:smooth}
+body{font-family:'Space Grotesk',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.5}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--primary);border-radius:4px}
+.container{max-width:1400px;margin:0 auto;padding:0 28px;width:100%}
+
+/* Ambient bg glow */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 25%,rgba(108,92,231,0.06),transparent 55%),radial-gradient(ellipse at 80% 75%,rgba(0,206,201,0.04),transparent 50%),radial-gradient(ellipse at 50% 0%,rgba(253,121,168,0.03),transparent 40%);pointer-events:none;z-index:-1}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(108,92,231,0.4)}50%{box-shadow:0 0 0 12px rgba(108,92,231,0)}}
+@keyframes glowPulse{0%,100%{opacity:0.6}50%{opacity:1}}
+@keyframes borderGlow{0%,100%{border-color:rgba(108,92,231,0.15)}50%{border-color:rgba(108,92,231,0.35)}}
+
+/* Nav */
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;position:sticky;top:0;z-index:100;background:#050508;border-bottom:1px solid var(--border);max-width:1400px;margin:0 auto;width:100%}
+.nav-left{display:flex;align-items:center;gap:32px;height:100%}
+.logo{font-size:21px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo-icon{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
+.nav-links{display:flex;align-items:center;gap:2px;height:100%}
+.nav-links button{background:none;border:none;color:var(--text2);cursor:pointer;font-size:14px;padding:0 16px;height:100%;transition:all .2s;font-weight:500;font-family:inherit;position:relative;display:flex;align-items:center}
+.nav-links button:hover{color:#fff}
+.nav-links button.active{color:#fff;font-weight:600}
+.nav-links button.active::after{content:'';position:absolute;bottom:0;left:8px;right:8px;height:2px;background:var(--primary);border-radius:1px}
+.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.nav-icon-btn{background:none;border:none;color:var(--text2);width:38px;height:38px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.nav-icon-btn:hover{color:#fff;background:rgba(255,255,255,0.06)}
+.search-wrap{display:flex;align-items:center;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:0 4px 0 14px;transition:all .25s}
+.search-wrap:focus-within{border-color:rgba(108,92,231,0.3);background:rgba(0,0,0,0.3);box-shadow:0 0 0 3px rgba(108,92,231,0.08)}
+.search-wrap input{flex:1;background:none;border:none;padding:8px 6px;color:#fff;font-size:13.5px;outline:none;font-family:inherit;min-width:180px}
+.search-wrap input::placeholder{color:var(--muted)}
+.search-wrap input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none}
+.search-wrap select{background:none;border:none;color:var(--text2);padding:8px 4px;font-size:12px;outline:none;cursor:pointer;font-family:inherit}
+.search-wrap button{background:var(--primary);border:none;color:#fff;padding:5px 11px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s;font-family:inherit;white-space:nowrap;line-height:1}
+.search-wrap button:hover{background:#5a4bd1}
+
+/* Mobile search toggle */
+.search-toggle{display:none}
+.search-mobile{display:none;padding:12px 16px 14px;background:#050508;border-bottom:1px solid var(--border)}
+.search-mobile.active{display:block}
+.search-mobile .search-wrap{width:100%}
+.search-mobile .search-wrap input{min-width:0;flex:1}
+.search-mobile .search-wrap button{background:var(--primary);border:none;color:#fff;padding:5px 11px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600;line-height:1}
+
+/* Section header */
+.section-header{display:flex;justify-content:space-between;align-items:center;margin:40px 0 24px}
+.section-header h2{font-size:18px;font-weight:700;letter-spacing:-0.2px;display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--text),var(--primary-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-header h2::before{content:'';display:block;width:4px;height:22px;border-radius:4px;background:linear-gradient(180deg,var(--primary),var(--secondary))}
+.section-header .see-all{color:var(--text2);font-size:12px;cursor:pointer;font-weight:500;transition:all .2s;padding:5px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02)}
+.section-header .see-all:hover{color:var(--text);border-color:var(--border-hover);background:rgba(108,92,231,0.05)}
+
+/* Trend tabs */
+.trend-tabs{display:flex;gap:6px;margin-bottom:28px}
+.trend-tabs button{padding:8px 22px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-size:13px;font-weight:500;transition:all .25s;font-family:inherit;letter-spacing:0.2px}
+.trend-tabs button.active{background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;border-color:transparent;box-shadow:0 4px 20px rgba(108,92,231,0.2)}
+.trend-tabs button:hover:not(.active){border-color:var(--border-hover);color:var(--text)}
+
+/* Spotlight */
+.spotlight{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:var(--radius);overflow:hidden;margin:28px 0 40px;min-height:400px;background:var(--card);border:1px solid var(--border);transition:all .4s}
+.spotlight:hover{border-color:var(--border-hover);box-shadow:var(--glow)}
+.spotlight-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0.12;filter:saturate(1.2)}
+.spotlight-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--card) 30%,transparent 70%)}
+.spotlight-poster{position:relative;display:flex;align-items:center;justify-content:center;padding:32px;min-height:400px}
+.spotlight-poster .poster-img{width:260px;aspect-ratio:2/3;border-radius:12px;background-size:cover;background-position:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);transition:transform .4s cubic-bezier(.16,1,.3,1);transform:perspective(800px) rotateY(-2deg)}
+.spotlight:hover .spotlight-poster .poster-img{transform:perspective(800px) rotateY(0deg) scale(1.02)}
+.spotlight-info{position:relative;display:flex;flex-direction:column;justify-content:center;padding:40px 40px 40px 0;z-index:2}
+.spotlight-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;background:linear-gradient(135deg,rgba(108,92,231,0.15),rgba(0,206,201,0.1));color:var(--primary-light);border:1px solid rgba(108,92,231,0.15);margin-bottom:14px;width:fit-content}
+.spotlight-badge::before{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--secondary);animation:glowPulse 2s infinite}
+.spotlight-info h1{font-size:30px;font-weight:700;letter-spacing:-0.5px;line-height:1.15;margin-bottom:10px}
+.spotlight-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.spotlight-meta span{padding:3px 12px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.04);color:var(--text2);border:1px solid var(--border)}
+.spotlight-meta .rating{color:var(--accent);border-color:rgba(253,121,168,0.15);background:rgba(253,121,168,0.05)}
+.spotlight-desc{color:var(--text2);font-size:14px;line-height:1.7;margin-bottom:18px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.spotlight-actions{display:flex;gap:10px}
+.spotlight-actions .btn-play{padding:11px 28px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;transition:all .25s;display:inline-flex;align-items:center;gap:8px;font-family:inherit}
+.spotlight-actions .btn-play:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,92,231,0.3)}
+.spotlight-actions .btn-secondary{padding:11px 22px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);font-size:13px;cursor:pointer;transition:all .25s;font-weight:500;font-family:inherit}
+.spotlight-actions .btn-secondary:hover{background:rgba(255,255,255,0.05);border-color:var(--border-hover);color:var(--text)}
+
+/* Bento grid */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px}
+.bento-card{position:relative;border-radius:var(--radius);overflow:hidden;cursor:pointer;background:var(--card);min-height:180px;transition:all .45s cubic-bezier(.16,1,.3,1);border:1px solid var(--border)}
+.bento-card:hover{transform:translateY(-3px);border-color:var(--border-hover);box-shadow:var(--glow)}
+.bento-card .bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .5s}
+.bento-card:hover .bg{transform:scale(1.05)}
+.bento-card .grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(5,5,8,0.92) 100%)}
+.bento-card .content{position:absolute;bottom:0;left:0;right:0;padding:16px 18px}
+.bento-card .content h3{font-size:14px;font-weight:600;line-height:1.3;margin-bottom:2px}
+.bento-card .content p{font-size:11px;color:var(--text2)}
+.bento-card .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.7);width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 20px rgba(108,92,231,0.3);z-index:3}
+.bento-card:hover .play-btn{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.bento-card .rating-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);padding:2px 9px;border-radius:6px;font-size:10px;font-weight:600;color:var(--accent);z-index:2;border:1px solid rgba(253,121,168,0.1)}
+.bento-wide{grid-column:span 2;min-height:280px}
+.bento-wide .content h3{font-size:16px}
+.bento-wide .play-btn{width:46px;height:46px;font-size:16px}
+
+/* Standard grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:14px}
+.card{border-radius:var(--radius);overflow:hidden;background:var(--card);cursor:pointer;transition:all .45s cubic-bezier(.16,1,.3,1);position:relative;opacity:0;animation:slideUp .5s ease forwards;animation-delay:calc(var(--i,0)*0.035s);border:1px solid var(--border)}
+.card:hover{transform:translateY(-5px);box-shadow:var(--glow);border-color:var(--border-hover)}
+.card .poster{aspect-ratio:2/3;background-size:cover;background-position:center;position:relative;background-color:#0a0a14;overflow:hidden}
+.card .poster::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(5,5,8,0.4) 100%);opacity:0;transition:opacity .35s}
+.card:hover .poster::after{opacity:1}
+.card .poster .rating{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);padding:2px 10px;border-radius:6px;font-size:10px;font-weight:600;color:var(--accent);z-index:2;border:1px solid rgba(253,121,168,0.1)}
+.card .poster .eps-badge{position:absolute;bottom:10px;left:10px;background:rgba(0,206,201,0.12);backdrop-filter:blur(8px);padding:2px 8px;border-radius:4px;font-size:10px;color:var(--secondary);font-weight:600;z-index:2;border:1px solid rgba(0,206,201,0.1)}
+.card .hover-overlay{position:absolute;inset:0;opacity:0;transition:opacity .35s;display:flex;align-items:center;justify-content:center;z-index:3;flex-direction:column;gap:10px}
+.card:hover .hover-overlay{opacity:1}
+.card .hover-overlay .pbtn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;box-shadow:0 4px 16px rgba(108,92,231,0.25);transform:scale(0.7);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.card:hover .hover-overlay .pbtn{transform:scale(1)}
+.card .hover-overlay .mtag{color:#fff;font-size:10px;font-weight:500;background:rgba(255,255,255,0.08);padding:3px 10px;border-radius:6px;backdrop-filter:blur(4px);letter-spacing:0.3px}
+.card .info{padding:12px 14px 14px;position:relative;z-index:2}
+.card .info h3{font-size:13px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;transition:color .3s}
+.card:hover .info h3{color:var(--secondary)}
+.card .info p{font-size:11px;color:var(--muted);margin-top:4px}
+
+/* Detail */
+.detail-page{display:none;padding-top:8px}
+.detail-hero{position:relative;border-radius:var(--radius);overflow:hidden;min-height:480px;margin-bottom:28px;border:1px solid var(--border)}
+.detail-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(0.3) saturate(0.9)}
+.detail-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,8,0.75),transparent 60%)}
+.detail-overlay{position:relative;padding:80px 44px 50px;display:flex;gap:44px;align-items:flex-end}
+.detail-poster{width:220px;border-radius:12px;aspect-ratio:2/3;background-size:cover;background-position:center;flex-shrink:0;box-shadow:0 20px 60px rgba(0,0,0,0.6);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.detail-poster:hover{transform:scale(1.04) rotate(1.5deg)}
+.detail-info{flex:1}
+.detail-info h1{font-size:32px;font-weight:700;margin-bottom:12px;letter-spacing:-0.5px;line-height:1.15}
+.detail-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.detail-meta span{padding:4px 14px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.04);color:var(--text2);border:1px solid var(--border)}
+.detail-info .overview{color:var(--text2);font-size:14px;line-height:1.7;max-width:620px;margin-bottom:18px}
+.detail-actions{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.btn-play{padding:12px 30px;border-radius:10px;border:none;font-size:14px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;transition:all .25s;display:inline-flex;align-items:center;gap:8px;font-family:inherit}
+.btn-play:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,92,231,0.3)}
+.btn-secondary{padding:12px 24px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);font-size:13px;cursor:pointer;transition:all .25s;font-weight:500;font-family:inherit;display:inline-flex;align-items:center;gap:8px}
+.btn-secondary:hover{background:rgba(255,255,255,0.05);border-color:var(--border-hover);color:var(--text)}
+.genre-tags{display:flex;flex-wrap:wrap;gap:4px}
+.genre-tags span{padding:3px 12px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(108,92,231,0.08);color:var(--primary-light);border:1px solid rgba(108,92,231,0.1)}
+
+/* Seasons */
+.season-tabs{display:flex;gap:6px;overflow-x:auto;padding:8px 0 16px}
+.season-tabs::-webkit-scrollbar{height:2px}
+.season-tabs button{padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;font-size:13px;font-weight:500;transition:all .25s;font-family:inherit}
+.season-tabs button:hover{border-color:var(--border-hover);color:var(--text)}
+.season-tabs button.active{background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;border-color:transparent}
+
+/* Episodes */
+.episodes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.episode-card{cursor:pointer;display:flex;gap:14px;padding:12px;border-radius:var(--radius-sm);background:var(--card);transition:all .3s;border:1px solid var(--border)}
+.episode-card:hover{background:var(--card2);border-color:var(--border-hover);transform:translateX(4px)}
+.episode-thumb{width:150px;height:85px;border-radius:8px;background-size:cover;background-position:center;flex-shrink:0;background-color:#0a0a14;position:relative;overflow:hidden}
+.episode-thumb::after{content:'\25B6';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);color:rgba(255,255,255,0.8);font-size:16px;opacity:0;transition:opacity .25s}
+.episode-card:hover .episode-thumb::after{opacity:1}
+.episode-info{flex:1;min-width:0}
+.episode-info h4{font-size:13px;font-weight:600;margin-bottom:3px;transition:color .2s}
+.episode-card:hover .episode-info h4{color:var(--secondary)}
+.episode-info p{font-size:12px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5}
+.episode-num{font-size:10px;color:var(--primary);font-weight:600;margin-bottom:2px;letter-spacing:0.5px}
+
+/* Player */
+.player-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.95);backdrop-filter:blur(20px);z-index:1000;display:none;flex-direction:column}
+.player-overlay.active{display:flex}
+.player-header{display:flex;justify-content:space-between;align-items:center;padding:14px 28px;background:rgba(5,5,8,0.8);border-bottom:1px solid var(--border)}
+.player-header h3{font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%}
+.player-header button{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;padding:2px 14px;border-radius:8px;transition:all .2s;line-height:1;font-family:inherit}
+.player-header button:hover{background:rgba(255,255,255,0.06)}
+.source-tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;padding:12px 28px 0}
+.source-tabs button{padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);cursor:pointer;font-size:12px;font-weight:500;transition:all .25s;font-family:inherit}
+.source-tabs button:hover{color:var(--text);border-color:var(--border-hover)}
+.source-tabs button.active{background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;border-color:transparent}
+.player-body{flex:1;display:flex;flex-direction:column;padding:12px 28px 28px}
+.player-body iframe{width:100%;flex:1;border:none;background:#000;border-radius:var(--radius)}
+
+/* Share Modal */
+.share-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.7);backdrop-filter:blur(16px);z-index:999;display:none;align-items:center;justify-content:center;animation:fadeUp .3s ease}
+.share-overlay.active{display:flex}
+.share-modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);width:360px;max-width:90vw;overflow:hidden;animation:scaleIn .35s ease}
+.share-header{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--border)}
+.share-header h3{font-size:16px;font-weight:600}
+.share-header button{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;padding:0 4px;transition:all .2s;line-height:1;font-family:inherit}
+.share-header button:hover{color:var(--text)}
+.share-body{padding:28px 24px 24px;text-align:center}
+.qr-wrap{display:flex;justify-content:center;margin-bottom:18px}
+.qr-wrap canvas{display:block;border-radius:12px;padding:12px;background:#fff;width:180px;height:180px}
+.share-url{font-size:11px;color:var(--muted);word-break:break-all;margin-bottom:18px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid var(--border)}
+.share-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.share-actions .btn-play{font-size:12px;padding:10px 20px}
+.share-actions .btn-secondary{font-size:12px;padding:10px 20px}
+.share-hint{font-size:11px;color:var(--muted);margin-top:14px}
+@media(max-width:480px){
+  .share-modal{width:100%;max-width:100vw;border-radius:var(--radius) var(--radius) 0 0;margin-top:auto}
+  .share-overlay.active{align-items:flex-end}
+}
+.loading{text-align:center;padding:80px 20px;color:var(--muted)}
+.spinner{width:36px;height:36px;border:2px solid rgba(255,255,255,0.04);border-top:2px solid var(--primary);border-right:2px solid var(--secondary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+.skeleton{background:linear-gradient(90deg,var(--card) 0%,var(--card2) 50%,var(--card) 100%);background-size:200% 100%;animation:shimmer 1.4s ease-in-out infinite;border-radius:var(--radius)}
+.skel-card{flex-shrink:0;width:100%;border-radius:var(--radius);overflow:hidden}
+.skel-card .skel-poster{aspect-ratio:2/3;width:100%}
+.skel-feat{flex-shrink:0;border-radius:var(--radius);overflow:hidden;min-height:280px;background:var(--card)}
+
+.back-btn{background:none;border:none;color:var(--primary);font-size:12px;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:4px;margin-bottom:14px;font-weight:500;transition:all .2s;font-family:inherit}
+.back-btn:hover{gap:10px;opacity:0.85}
+.results-info{font-size:13px;color:var(--muted);margin-bottom:14px}
+
+/* Mobile */
+@media(max-width:900px){
+  .container{padding:0 16px}
+  nav{padding:0 16px;height:auto;gap:0;flex-wrap:wrap}
+  .nav-left{width:100%;justify-content:space-between;gap:12px;height:56px}
+  .nav-links button{font-size:13px;padding:0 10px}
+  .nav-right{width:auto;margin-left:auto;height:44px;display:flex;align-items:center;gap:4px}
+  #desktopSearch{display:none}
+  .search-toggle{display:flex}
+  .nav-icon-btn{width:36px;height:36px}
+  .spotlight{grid-template-columns:1fr;min-height:auto}
+  .spotlight-poster{min-height:auto;padding:24px}
+  .spotlight-poster .poster-img{width:180px}
+  .spotlight-info{padding:0 24px 24px}
+  .spotlight-info h1{font-size:22px}
+  .spotlight-desc{-webkit-line-clamp:2}
+  .bento{grid-template-columns:1fr 1fr;gap:8px}
+  .bento-wide{min-height:180px}
+  .detail-overlay{flex-direction:column;align-items:center;padding:28px 20px}
+  .detail-poster{width:150px}
+  .detail-info h1{font-size:22px;text-align:center}
+  .detail-meta,.genre-tags{justify-content:center}
+  .detail-actions{justify-content:center}
+  .overview{text-align:center;margin:0 auto}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+  .episodes-grid{grid-template-columns:1fr}
+  .episode-card{flex-direction:column}
+  .episode-thumb{width:100%;height:120px}
+  .player-body iframe{min-height:35vh}
+}
+@media(max-width:480px){
+  .container{padding:0 12px}
+  nav{padding:0 10px}
+  .nav-left{height:48px;gap:8px}
+  .nav-links button{font-size:11.5px;padding:0 6px}
+  .nav-right{height:38px}
+  .nav-icon-btn{width:30px;height:30px}
+  .spotlight-poster .poster-img{width:140px}
+  .spotlight-info{padding:0 16px 16px}
+  .bento{grid-template-columns:1fr 1fr;gap:6px}
+  .bento-wide{min-height:150px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}
+  .detail-hero{min-height:340px}
+  .detail-poster{width:130px}
+  .detail-info h1{font-size:20px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-left">
+    <div class="logo" onclick="goHome()">
+      <span class="logo-icon">&#9654;</span> <span>MediaHub</span>
+    </div>
+    <div class="nav-links">
+      <button class="active" data-filter="all" onclick="navFilter('all',this)">Home</button>
+      <button data-filter="movie" onclick="navFilter('movie',this)">Movies</button>
+      <button data-filter="tv" onclick="navFilter('tv',this)">TV</button>
+      <button data-filter="anime" onclick="navFilter('anime',this)">Anime</button>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="search-toggle nav-icon-btn" onclick="toggleMobileSearch()" title="Search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <div class="search-wrap" id="desktopSearch">
+      <input type="search" id="searchInput" placeholder="Search movies, shows, anime..." enterkeyhint="search" autocomplete="off">
+      <select id="searchType">
+        <option value="multi">All</option>
+        <option value="movie">Movies</option>
+        <option value="tv">TV</option>
+        <option value="anime">Anime</option>
+      </select>
+      <button onclick="triggerSearch()">Search</button>
+    </div>
+    <button class="nav-icon-btn" onclick="openShare()" title="Share" aria-label="Share">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    </button>
+    <button class="nav-icon-btn" id="installBtn" style="display:none" onclick="installApp()" title="Install App" aria-label="Install">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="search-mobile" id="mobileSearch">
+  <div class="search-wrap">
+    <input type="search" id="searchInputMobile" placeholder="Search movies, shows, anime..." enterkeyhint="search" autocomplete="off">
+    <select id="searchTypeMobile">
+      <option value="multi">All</option>
+      <option value="movie">Movies</option>
+      <option value="tv">TV</option>
+      <option value="anime">Anime</option>
+    </select>
+    <button onclick="triggerMobileSearch()">Search</button>
+  </div>
+</div>
+
+<div class="container">
+  <div id="homePage">
+    <div id="spotlightArea"></div>
+    <div class="trend-tabs">
+      <button class="active" onclick="switchTrend('all',this)">All</button>
+      <button onclick="switchTrend('movie',this)">Movies</button>
+      <button onclick="switchTrend('tv',this)">TV</button>
+    </div>
+    <div class="section-header"><h2>Trending Now</h2></div>
+    <div id="bentoArea"></div>
+    <div class="section-header"><h2>More to Watch</h2></div>
+    <div id="trendingArea"></div>
+    <div class="section-header"><h2>Latest Releases</h2></div>
+    <div id="latestArea"></div>
+  </div>
+
+  <div id="detailPage" class="detail-page"></div>
+
+  <div id="searchPage" class="detail-page">
+    <button class="back-btn" onclick="goHome()">&larr; Back</button>
+    <div class="section-header"><h2 id="searchTitle">Search Results</h2></div>
+    <div class="results-info" id="searchInfo"></div>
+    <div class="grid" id="searchGrid"></div>
+  </div>
+
+  <div id="moviePage" class="detail-page">
+    <button class="back-btn" onclick="goHome()">&larr; Back</button>
+    <div class="section-header"><h2>Trending Movies</h2></div>
+    <div id="movieTrendingArea"></div>
+    <div class="section-header"><h2>Popular Movies</h2></div>
+    <div id="moviePopularArea"></div>
+  </div>
+
+  <div id="tvPage" class="detail-page">
+    <button class="back-btn" onclick="goHome()">&larr; Back</button>
+    <div class="section-header"><h2>Trending TV</h2></div>
+    <div id="tvTrendingArea"></div>
+    <div class="section-header"><h2>Popular TV</h2></div>
+    <div id="tvPopularArea"></div>
+  </div>
+
+  <div id="animePage" class="detail-page">
+    <button class="back-btn" onclick="goHome()">&larr; Back</button>
+    <div class="section-header"><h2>Trending Anime</h2></div>
+    <div id="animeTrendingArea"></div>
+    <div class="section-header"><h2>Most Popular</h2></div>
+    <div id="animePopularArea"></div>
+  </div>
+</div>
+
+<div class="share-overlay" id="shareOverlay" onclick="if(event.target===this)closeShare()">
+  <div class="share-modal">
+    <div class="share-header">
+      <h3>Share MediaHub</h3>
+      <button onclick="closeShare()">&times;</button>
+    </div>
+    <div class="share-body">
+      <div class="qr-wrap" id="qrContainer"></div>
+      <p class="share-url" id="shareUrl">https://coderaarav12.github.io/media-hub-frontend/</p>
+      <div class="share-actions">
+        <button class="btn-play" onclick="copyShareLink()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Link</button>
+        <button class="btn-secondary" onclick="navigator.share?navigator.share({url:'https://coderaarav12.github.io/media-hub-frontend/'}).catch(()=>{}):copyShareLink()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share</button>
+      </div>
+      <p class="share-hint" id="shareHint">Scan to open MediaHub on your device</p>
+    </div>
+  </div>
+</div>
+
+<div class="player-overlay" id="playerOverlay">
+  <div class="player-header">
+    <h3 id="playerTitle">Now Playing</h3>
+    <button onclick="closePlayer()">&times;</button>
+  </div>
+  <div class="player-body">
+    <div class="source-tabs" id="sourceTabs"></div>
+    <iframe id="playerFrame" allowfullscreen allow="autoplay;fullscreen"></iframe>
+  </div>
+</div>
+
+<script>
+const IMG = 'https://image.tmdb.org/t/p'
+let currentItem = null, currentSeason = 1, currentSources = [], currentSourceIdx = 0, trendData = []
+
+const $ = id => document.getElementById(id)
+
+$('searchInput').addEventListener('keydown', e => { if(e.key === 'Enter') triggerSearch() })
+$('searchInput').addEventListener('search', () => { if($('searchInput').value) triggerSearch() })
+$('searchInputMobile').addEventListener('keydown', e => { if(e.key === 'Enter') triggerMobileSearch() })
+
+// PWA Install
+let installPrompt = null
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt = e; $('installBtn').style.display = 'flex' })
+function installApp() { if(!installPrompt) return; installPrompt.prompt(); installPrompt.userChoice.then(() => { installPrompt = null; $('installBtn').style.display = 'none' }) }
+window.addEventListener('appinstalled', () => { installPrompt = null; $('installBtn').style.display = 'none' })
+
+// Register service worker
+if('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('https://coderaarav12.github.io/media-hub-frontend/sw.js').catch(() => {}) }) }
+
+function toggleMobileSearch() { const m = $('mobileSearch'); m.classList.toggle('active'); if(m.classList.contains('active')) $('searchInputMobile').focus() }
+
+function triggerMobileSearch() {
+  const q = $('searchInputMobile').value.trim(), type = $('searchTypeMobile').value
+  if(!q || !type) return
+  $('searchInput').value = q; $('searchType').value = type
+  $('mobileSearch').classList.remove('active')
+  navigate('#/search?q=' + encodeURIComponent(q) + '&type=' + type)
+}
+
+function navigate(hash) {
+  if(hash[0] !== '#') hash = '#' + hash
+  if(location.hash !== hash) location.hash = hash; else handleRoute()
+}
+window.addEventListener('hashchange', handleRoute)
+
+function handleRoute() {
+  const hash = location.hash.slice(1) || '/', [path, qs] = hash.split('?'), parts = path.split('/').filter(Boolean)
+  if(!parts[0]) renderHome()
+  else if(parts[0] === 'movies' && !parts[1]) renderMoviesHome()
+  else if(parts[0] === 'tv' && !parts[1]) renderTvHome()
+  else if(parts[0] === 'anime' && !parts[1]) renderAnimeHome()
+  else if(parts[0] === 'search') { const p = new URLSearchParams(qs||''); renderSearch(p.get('q')||'', p.get('type')||'multi') }
+  else if(['movie','tv','anime'].includes(parts[0])) renderDetail(parts[0], parts[1], parts[2]||null)
+  else renderHome()
+}
+
+function goHome() {
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'))
+  document.querySelector('.nav-links button[data-filter="all"]')?.classList.add('active')
+  if(trendType !== 'all') { trendType = 'all'; document.querySelectorAll('.trend-tabs button').forEach(b => b.classList.remove('active')); document.querySelector('.trend-tabs button')?.classList.add('active') }
+  navigate('#/')
+}
+
+function navFilter(filter, btn) {
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  if(filter === 'all') { navigate('#/') }
+  else if(filter === 'movie') { navigate('#/movies') }
+  else if(filter === 'tv') { navigate('#/tv') }
+  else if(filter === 'anime') { navigate('#/anime') }
+}
+
+function triggerSearch() {
+  const q = $('searchInput').value.trim(), type = $('searchType').value
+  if(!q || !type) return; navigate('#/search?q=' + encodeURIComponent(q) + '&type=' + type)
+}
+
+function showHome() { $('homePage').style.display = 'block'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; document.title = 'MediaHub' }
+function showDetail() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'block'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none' }
+function showSearch() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'block'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none' }
+function showMovies() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'block'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none' }
+function showTv() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'block'; $('animePage').style.display = 'none' }
+function showAnime() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'block' }
+
+async function fetchAPI(path) { try { const r = await fetch(API_BASE + path); return await r.json() } catch(e) { return null } }
+
+// --- Home ---
+let trendType = 'all'
+async function renderHome() {
+  showHome(); document.title = 'MediaHub'
+  const area = $('trendingArea'), spot = $('spotlightArea'), bento = $('bentoArea')
+  area.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  trendData = (await fetchAPI('/trending?media=' + trendType))?.results?.slice(0, 20) || []
+  if(!trendData.length) { area.innerHTML = ''; spot.innerHTML = ''; bento.innerHTML = ''; return }
+
+  // Spotlight: first item
+  const first = trendData[0]
+  const bg = first.backdrop_path ? IMG + '/w1280' + first.backdrop_path : ''
+  const poster = first.poster_path ? IMG + '/w342' + first.poster_path : ''
+  const title = first.title || first.name || '', year = (first.release_date||first.first_air_date||'').split('-')[0]
+  const rating = first.vote_average ? first.vote_average.toFixed(1) : '', media = first.media_type || trendType
+  const desc = first.overview || ''
+  spot.innerHTML = `<div class="spotlight" onclick="navigate('#/${media}/${first.id}')">
+    <div class="spotlight-bg" style="background-image:url('${bg||'https://placehold.co/1400x600/0a0a14/fff'}')"></div>
+    <div class="spotlight-poster">
+      <div class="poster-img" style="background-image:url('${poster||'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'}')"></div>
+    </div>
+    <div class="spotlight-info">
+      <div class="spotlight-badge">Featured</div>
+      <h1>${escapeHtml(title)}</h1>
+      <div class="spotlight-meta">
+        ${year ? '<span>'+year+'</span>' : ''}
+        ${rating ? '<span class="rating">\u2605 '+rating+'</span>' : ''}
+        <span>${media === 'movie' ? 'Movie' : 'TV'}</span>
+      </div>
+      <p class="spotlight-desc">${escapeHtml(desc)}</p>
+      <div class="spotlight-actions">
+        <button class="btn-play" onclick="event.stopPropagation();navigate('#/${media}/${first.id}')">\u25B6 View Details</button>
+      </div>
+    </div>
+  </div>`
+
+  // Bento grid: items 1-6 (first 2 wide, next 4 normal)
+  const bentoItems = trendData.slice(1, 7)
+  bento.innerHTML = '<div class="bento">' + bentoItems.map((item, i) => {
+    const t = item.title || item.name || '', b = item.backdrop_path ? IMG + '/w780' + item.backdrop_path : ''
+    const r2 = item.vote_average ? item.vote_average.toFixed(1) : '', m = item.media_type || trendType
+    const wide = i < 2
+    const img = item.backdrop_path ? b : (item.poster_path ? IMG + '/w342' + item.poster_path : '')
+    const cls = 'bento-card' + (wide ? ' bento-wide' : '')
+    return `<div class="${cls}" onclick="navigate('#/${m}/${item.id}')" style="animation:fadeUp .4s ease ${i*0.06}s both">
+      <div class="bg" style="background-image:url('${img||'https://placehold.co/800x400/0a0a14/fff'}')"></div>
+      <div class="grad"></div>
+      ${r2 ? '<span class="rating-badge">'+r2+'</span>' : ''}
+      <div class="play-btn">\u25B6</div>
+      <div class="content">
+        <h3>${escapeHtml(t)}</h3>
+        <p>${m === 'movie' ? 'Movie' : 'TV'}${item.release_date||item.first_air_date ? ' \u2022 '+(item.release_date||item.first_air_date).split('-')[0] : ''}</p>
+      </div>
+    </div>`
+  }).join('') + '</div>'
+
+  // Grid: rest
+  const rest = trendData.slice(7)
+  area.innerHTML = rest.length ? `<div class="grid">${rest.map((item, i) => {
+    const t = item.title || item.name || '', p = item.poster_path ? IMG + '/w342' + item.poster_path : ''
+    const r2 = item.vote_average ? item.vote_average.toFixed(1) : '', date = item.release_date||item.first_air_date||'', y = date ? date.split('-')[0] : '', m = item.media_type || trendType
+    return `<div class="card" style="--i:${i}" onclick="navigate('#/${m}/${item.id}')">
+      <div class="poster" style="background-image:url('${p||'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'}')">
+        ${r2 ? '<span class="rating">\u2605 '+r2+'</span>' : ''}
+        <div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">${m === 'movie' ? 'Movie' : 'TV'}</span></div>
+      </div>
+      <div class="info"><h3>${escapeHtml(t)}</h3><p>${y?y+' ':' '}${m === 'movie' ? '\u2022 Movie' : '\u2022 TV'}</p></div>
+    </div>`
+  }).join('')}</div>` : ''
+
+  // Latest Releases
+  const latest = $('latestArea')
+  latest.innerHTML = '<div class="loading"><div class="spinner" style="width:28px;height:28px"></div></div>'
+  const movieTrend = await fetchAPI('/trending?media=movie')
+  const movies = (movieTrend?.results || []).slice(0, 12)
+  if(movies.length) {
+    latest.innerHTML = `<div class="grid">${movies.map((item, i) => {
+      const t = item.title || item.name || '', p = item.poster_path ? IMG + '/w342' + item.poster_path : ''
+      const r2 = item.vote_average ? item.vote_average.toFixed(1) : '', date = item.release_date||'', y = date ? date.split('-')[0] : ''
+      return `<div class="card" style="--i:${i}" onclick="navigate('#/movie/${item.id}')">
+        <div class="poster" style="background-image:url('${p||'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'}')">
+          ${r2 ? '<span class="rating">\u2605 '+r2+'</span>' : ''}
+          <div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">Movie</span></div>
+        </div>
+        <div class="info"><h3>${escapeHtml(t)}</h3><p>${y ? y+' \u2022 ' : ''}Movie</p></div>
+      </div>`
+    }).join('')}</div>`
+  } else { latest.innerHTML = '' }
+}
+
+// --- Category Pages ---
+function renderMediaGrid(data, mediaType) {
+  if(!data || !data.results || !data.results.length) return '<div class="loading"><p style="color:var(--muted)">No results</p></div>'
+  return '<div class="grid">' + data.results.map((item, i) => {
+    const t = item.title || item.name || 'Untitled', date = item.release_date || item.first_air_date || '', y = date ? date.split('-')[0] : ''
+    const rt = item.vote_average ? '\u2605 ' + item.vote_average.toFixed(1) : '', poster = item.poster_path ? IMG + '/w342' + item.poster_path : ''
+    return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/' + mediaType + '/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (rt ? '<span class="rating">' + rt + '</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">' + (mediaType === 'movie' ? 'Movie' : 'TV') + '</span></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + y + ' \u2022 ' + (mediaType === 'movie' ? 'Movie' : 'TV') + '</p></div></div>'
+  }).join('') + '</div>'
+}
+
+async function renderMoviesHome() {
+  showMovies(); document.title = 'Movies - MediaHub'
+  const trendArea = $('movieTrendingArea'), popArea = $('moviePopularArea')
+  trendArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  popArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  const [trend, popular] = await Promise.all([fetchAPI('/trending?media=movie'), fetchAPI('/movie/popular')])
+  trendArea.innerHTML = renderMediaGrid(trend, 'movie')
+  popArea.innerHTML = renderMediaGrid(popular, 'movie')
+}
+
+async function renderTvHome() {
+  showTv(); document.title = 'TV Shows - MediaHub'
+  const trendArea = $('tvTrendingArea'), popArea = $('tvPopularArea')
+  trendArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  popArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  const [trend, popular] = await Promise.all([fetchAPI('/trending?media=tv'), fetchAPI('/tv/popular')])
+  trendArea.innerHTML = renderMediaGrid(trend, 'tv')
+  popArea.innerHTML = renderMediaGrid(popular, 'tv')
+}
+
+// --- Anime Home ---
+async function renderAnimeHome() {
+  showAnime(); document.title = 'Anime - MediaHub'
+  const trendArea = $('animeTrendingArea'), popArea = $('animePopularArea')
+  trendArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  popArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+
+  const trend = await fetchAPI('/anime/trending')
+  const popular = await fetchAPI('/anime/popular')
+
+  function renderAnimeGrid(data) {
+    if(!data || !data.media || !data.media.length) return '<div class="loading"><p style="color:var(--muted)">No anime found</p></div>'
+    return '<div class="grid">' + data.media.map((item, i) => {
+      const t = item.title?.romaji || item.title?.english || item.title?.native || 'Untitled', img = item.coverImage?.large || ''
+      return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/anime/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (img || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (item.averageScore ? '<span class="rating">\u2605 ' + (item.averageScore/10).toFixed(1) + '</span>' : '') + (item.episodes ? '<span class="eps-badge">' + item.episodes + ' eps</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + (item.format||'Anime') + (item.season ? ' \u2022 ' + item.season : '') + '</p></div></div>'
+    }).join('') + '</div>'
+  }
+
+  trendArea.innerHTML = renderAnimeGrid(trend)
+  popArea.innerHTML = renderAnimeGrid(popular)
+}
+
+function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML }
+
+function switchTrend(type, btn) {
+  trendType = type
+  document.querySelectorAll('.trend-tabs button').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  renderHome()
+}
+
+// --- Search ---
+async function renderSearch(q, type) {
+  showSearch(); document.title = 'Search: ' + q + ' - MediaHub'
+  $('searchTitle').textContent = 'Results for "' + q + '"'
+  $('searchInfo').textContent = 'Searching...'
+  $('searchGrid').innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  if(type === 'anime') {
+    const d = await fetchAPI('/anime/search?q=' + encodeURIComponent(q))
+    if(!d || !d.media) { $('searchInfo').textContent = 'No results'; $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No results found</p></div>'; return }
+    $('searchInfo').textContent = 'Found ' + d.media.length + ' results'
+    $('searchGrid').innerHTML = d.media.map((item, i) => {
+      const t = item.title?.romaji || item.title?.english || item.title?.native || 'Untitled', img = item.coverImage?.large || ''
+      return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/anime/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (img || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (item.averageScore ? '<span class="rating">\u2605 ' + (item.averageScore/10).toFixed(1) + '</span>' : '') + (item.episodes ? '<span class="eps-badge">' + item.episodes + ' eps</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + (item.format||'Anime') + (item.season ? ' \u2022 ' + item.season : '') + '</p></div></div>'
+    }).join('')
+  } else {
+    const d = await fetchAPI('/search?q=' + encodeURIComponent(q) + '&type=' + type)
+    if(!d || !d.results) { $('searchInfo').textContent = 'No results'; $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No results found</p></div>'; return }
+    const r = d.results.filter(x => x.media_type !== 'person' || !x.media_type)
+    $('searchInfo').textContent = 'Found ' + r.length + ' results'
+    $('searchGrid').innerHTML = r.map((item, i) => {
+      const t = item.title || item.name || 'Untitled', date = item.release_date || item.first_air_date || '', y = date ? date.split('-')[0] : ''
+      const rt = item.vote_average ? '\u2605 ' + item.vote_average.toFixed(1) : '', poster = item.poster_path ? IMG + '/w342' + item.poster_path : '', m = item.media_type || type
+      return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/' + m + '/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (rt ? '<span class="rating">' + rt + '</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">' + (m === 'movie' ? 'Movie' : m === 'tv' ? 'TV' : 'Anime') + '</span></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + y + (m === 'movie' ? ' \u2022 Movie' : ' \u2022 TV') + '</p></div></div>'
+    }).join('')
+  }
+}
+
+// --- Detail ---
+async function renderDetail(type, id, season) {
+  showDetail(); document.title = 'Loading...'
+  const dp = $('detailPage'); dp.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  if(type === 'anime') {
+    const d = await fetchAPI('/anime/' + id)
+    if(!d) { dp.innerHTML = '<div class="loading"><p>Error loading</p></div>'; return }
+    currentItem = { type: 'anime', id, title: d.title?.romaji || d.title?.english || 'Untitled' }
+    document.title = currentItem.title + ' - MediaHub'
+    const img = d.coverImage?.large || '', banner = d.bannerImage || '', desc = (d.description||'').replace(/<[^>]*>/g,'') || 'No description.'
+    dp.innerHTML = '<button class="back-btn" onclick="goHome()">\u2190 Back</button><div class="detail-hero"><div class="detail-bg" style="background-image:url(\'' + (banner || img || 'https://placehold.co/1280x720/0c0c1e/fff') + '\')"></div><div class="detail-overlay"><div class="detail-poster" style="background-image:url(\'' + (img || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')"></div><div class="detail-info"><h1>' + currentItem.title + '</h1><div class="detail-meta"><span>' + (d.format||'Anime') + '</span>' + (d.status ? '<span>' + d.status + '</span>' : '') + (d.episodes ? '<span>' + d.episodes + ' Episodes</span>' : '') + (d.averageScore ? '<span>\u2605 ' + (d.averageScore/10).toFixed(1) + '</span>' : '') + (d.startDate?.year ? '<span>' + d.startDate.year + '</span>' : '') + (d.duration ? '<span>' + d.duration + 'm</span>' : '') + '</div><p class="overview">' + desc + '</p><div class="genre-tags">' + (d.genres||[]).map(g => '<span>' + g + '</span>').join('') + '</div><div class="detail-actions" style="margin-top:16px"><button class="btn-play" onclick="playItem(\'anime\',' + id + ')">\u25B6 Play Now</button><button class="btn-secondary" onclick="goHome()">Browse</button></div></div></div></div>'
+  } else {
+    const d = await fetchAPI('/' + type + '/' + id)
+    if(!d) { dp.innerHTML = '<div class="loading"><p>Error loading</p></div>'; return }
+    const title = d.title || d.name || 'Untitled'; document.title = title + ' - MediaHub'
+    const year = (d.release_date||d.first_air_date||'').split('-')[0] || '', poster = d.poster_path ? IMG + '/w342' + d.poster_path : '', bg = d.backdrop_path ? IMG + '/w1280' + d.backdrop_path : ''
+    const rating = d.vote_average ? '\u2605 ' + d.vote_average.toFixed(1) : '', rt = type === 'movie' && d.runtime ? d.runtime + 'm' : '', genres = (d.genres||[]).map(g => g.name||g), desc = d.overview || 'No description.'
+    currentItem = { type, id, title }
+    dp.innerHTML = '<button class="back-btn" onclick="goHome()">\u2190 Back</button><div class="detail-hero"><div class="detail-bg" style="background-image:url(\'' + (bg || 'https://placehold.co/1280x720/0c0c1e/fff') + '\')"></div><div class="detail-overlay"><div class="detail-poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')"></div><div class="detail-info"><h1>' + title + '</h1><div class="detail-meta">' + (year ? '<span>' + year + '</span>' : '') + (rating ? '<span>' + rating + '</span>' : '') + (rt ? '<span>' + rt + '</span>' : '') + (d.status ? '<span>' + d.status + '</span>' : '') + (type === 'tv' && d.number_of_seasons ? '<span>' + d.number_of_seasons + ' Seasons</span>' : '') + '</div><p class="overview">' + desc + '</p><div class="genre-tags">' + genres.map(g => '<span>' + g + '</span>').join('') + '</div><div class="detail-actions" style="margin-top:16px">' + (type === 'movie' ? '<button class="btn-play" onclick="playItem(\'movie\',' + id + ')">\u25B6 Play Now</button>' : '') + (type === 'tv' ? '<button class="btn-play" onclick="playItem(\'tv\',' + id + ',1,1)">\u25B6 Play S1:E1</button>' : '') + '<button class="btn-secondary" onclick="goHome()">Browse</button></div></div></div></div>' + (type === 'tv' ? '<div id="seasonsSection"></div>' : '')
+    if(type === 'tv') loadSeasons(id, season)
+  }
+}
+
+async function loadSeasons(tvId, activeSeason) {
+  const d = await fetchAPI('/tv/' + tvId)
+  if(!d || !d.seasons) return
+  const seasons = d.seasons.filter(s => s.season_number > 0), init = activeSeason ? parseInt(activeSeason) : (seasons[0]?.season_number||1)
+  $('seasonsSection').innerHTML = '<div class="season-tabs">' + seasons.map(s => '<button class="' + (s.season_number === init ? 'active' : '') + '" onclick="switchSeason(' + tvId + ',' + s.season_number + ',this)">' + (s.name || 'Season ' + s.season_number) + '</button>').join('') + '</div><div id="episodesContainer"><div class="loading"><div class="spinner"></div></div></div>'
+  loadEpisodes(tvId, init)
+}
+function switchSeason(tvId, season, btn) { document.querySelectorAll('.season-tabs button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); loadEpisodes(tvId, season) }
+async function loadEpisodes(tvId, season) {
+  currentSeason = season; const d = await fetchAPI('/tv/' + tvId + '/season/' + season)
+  if(!d || !d.episodes) return
+  currentItem = { type: 'tv', id: tvId, title: currentItem?.title||'', season }
+  $('episodesContainer').innerHTML = '<div class="episodes-grid">' + d.episodes.map(ep => {
+    const still = ep.still_path ? IMG + '/w300' + ep.still_path : ''
+    return '<div class="episode-card" onclick="playItem(\'tv\',' + tvId + ',' + season + ',' + ep.episode_number + ')"><div class="episode-thumb" style="background-image:url(\'' + (still || 'https://placehold.co/300x169/0a0a14/666/?text=Episode+' + ep.episode_number) + '\')"></div><div class="episode-info"><div class="episode-num">EPISODE ' + ep.episode_number + '</div><h4>' + (ep.name||'Episode '+ep.episode_number) + '</h4>' + (ep.overview ? '<p>' + escapeHtml(ep.overview) + '</p>' : '') + '</div></div>'
+  }).join('') + '</div>'
+}
+
+// --- Player ---
+async function playItem(type, id, season, episode) {
+  $('playerOverlay').classList.add('active'); $('playerTitle').textContent = currentItem?.title || 'Now Playing'; $('playerFrame').src = ''
+  const d = await fetchAPI('/sources?type=' + type + '&id=' + id + (type === 'tv' ? '&season=' + season + '&episode=' + episode : ''))
+  currentSources = d?.sources || []; currentSourceIdx = 0
+  const tabs = $('sourceTabs'); tabs.innerHTML = currentSources.map((s, i) => '<button class="' + (i === 0 ? 'active' : '') + '" onclick="switchSource(' + i + ',this)">' + s.name + '</button>').join('')
+  if(currentSources.length) loadSource(0)
+}
+function switchSource(idx, btn) { if(btn) { document.querySelectorAll('#sourceTabs button').forEach(b => b.classList.remove('active')); btn.classList.add('active') } currentSourceIdx = idx; loadSource(idx) }
+function loadSource(idx) { const src = currentSources[idx]; if(!src) return; $('playerFrame').src = src.url }
+function closePlayer() { $('playerOverlay').classList.remove('active'); $('playerFrame').src = '' }
+
+// --- Share / QR ---
+const SITE_URL = 'https://coderaarav12.github.io/media-hub-frontend/'
+let qrInstance = null
+
+function openShare() {
+  $('shareOverlay').classList.add('active')
+  const c = $('qrContainer')
+  if(!qrInstance) {
+    c.innerHTML = '<div id="qrCanvas"></div>'
+    if(typeof QRCode !== 'undefined') {
+      qrInstance = new QRCode(document.getElementById('qrCanvas'), {
+        text: SITE_URL, width: 180, height: 180,
+        colorDark: '#6c5ce7', colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      })
+    }
+  }
+  $('shareUrl').textContent = SITE_URL
+  $('shareHint').textContent = 'Scan to open MediaHub on your device'
+}
+
+function closeShare() { $('shareOverlay').classList.remove('active') }
+
+function copyShareLink() {
+  navigator.clipboard.writeText(SITE_URL).then(() => {
+    $('shareHint').textContent = 'Link copied!'
+    setTimeout(() => { $('shareHint').textContent = 'Scan to open MediaHub on your device' }, 2000)
+  }).catch(() => {
+    $('shareHint').textContent = 'Press and hold to copy the URL above'
+    setTimeout(() => { $('shareHint').textContent = 'Scan to open MediaHub on your device' }, 3000)
+  })
+}
+
+handleRoute()
+</script>
+</body>
+</html>
