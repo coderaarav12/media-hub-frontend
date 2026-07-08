@@ -406,8 +406,10 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
   </div>
 </div>
 
-<button class="update-banner" id="updateBanner" onclick="openChangelog()">
-  <span>What's New? This app was updated</span>
+<button class="update-banner" id="updateBanner">
+  <span onclick="openChangelog()">What's New? This app was updated</span>
+  <span class="footer-dot" style="color:rgba(255,255,255,0.3);font-size:16px;margin:0 6px">|</span>
+  <span onclick="event.stopPropagation();refreshApp()" style="text-decoration:underline;cursor:pointer;font-weight:600">Refresh</span>
   <span class="close-update" onclick="event.stopPropagation();dismissUpdate()">&#10005;</span>
 </button>
 
@@ -1198,6 +1200,19 @@ async function checkUpdate() {
   } catch(e) {}
 }
 function dismissUpdate() { $('updateBanner').style.display = 'none' }
+async function refreshApp() {
+  $('updateBanner').style.display = 'none'
+  if('serviceWorker' in navigator) {
+    const regs = await navigator.serviceWorker.getRegistrations()
+    await Promise.all(regs.map(r => r.unregister()))
+  }
+  if('caches' in window) {
+    const keys = await caches.keys()
+    await Promise.all(keys.map(k => caches.delete(k)))
+  }
+  localStorage.removeItem('changelog')
+  location.reload()
+}
 async function openChangelog() {
   $('updateBanner').style.display = 'none'; $('changelogOverlay').classList.add('active'); $('changelogBody').innerHTML = '<div class="changelog-loading"><div class="spinner"></div></div>'
   try {
