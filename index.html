@@ -175,14 +175,15 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 /* Player */
 .player-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.95);backdrop-filter:blur(20px);z-index:1000;display:none;flex-direction:column}
 .player-overlay.active{display:flex}
-.player-header{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;background:rgba(5,5,8,0.8);border-bottom:1px solid var(--border);flex-shrink:0}
-@media(max-width:480px){.player-header{padding:6px 12px}.player-header h3{font-size:13px}}
-.player-header h3{font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:70%}
-.player-header button{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;padding:2px 14px;border-radius:8px;transition:all .2s;line-height:1;font-family:inherit}
+.player-header{display:flex;flex-wrap:wrap;align-items:center;padding:6px 12px;background:rgba(5,5,8,0.8);border-bottom:1px solid var(--border);flex-shrink:0;gap:6px}
+.player-header h3{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;flex:1 1 auto}
+.player-header-right{display:flex;align-items:center;gap:6px;flex:1 1 100%}
+@media(min-width:901px){.player-header{padding:10px 20px;flex-wrap:nowrap}.player-header h3{font-size:15px;max-width:70%;flex:0 1 auto}.player-header-right{flex:0 1 auto}}
+.player-header button{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;padding:2px 14px;border-radius:8px;transition:all .2s;line-height:1;font-family:inherit;flex-shrink:0}
 .player-header button:hover{background:rgba(255,255,255,0.06)}
-.source-tabs{display:flex;gap:4px;overflow-x:auto;justify-content:center;padding:8px 16px 0;-webkit-overflow-scrolling:touch;flex-shrink:0;scrollbar-width:none}
+.source-tabs{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;scrollbar-width:none;flex:1;min-width:0}
 .source-tabs::-webkit-scrollbar{display:none}
-.source-tabs button{padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);cursor:pointer;font-size:12px;font-weight:500;transition:all .25s;font-family:inherit}
+.source-tabs button{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);cursor:pointer;font-size:11px;font-weight:500;transition:all .25s;font-family:inherit;white-space:nowrap;flex-shrink:0}
 .source-tabs button:hover{color:var(--text);border-color:var(--border-hover)}
 .source-tabs button.active{background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;border-color:transparent}
 .player-body{flex:1;display:flex;flex-direction:column;padding:12px 28px 28px;min-height:0}
@@ -545,10 +546,12 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 <div class="player-overlay" id="playerOverlay">
   <div class="player-header">
     <h3 id="playerTitle">Now Playing</h3>
-    <button onclick="closePlayer()">&times;</button>
+    <div class="player-header-right">
+      <div class="source-tabs" id="sourceTabs"></div>
+      <button onclick="closePlayer()">&times;</button>
+    </div>
   </div>
   <div class="player-body">
-    <div class="source-tabs" id="sourceTabs"></div>
     <iframe id="playerFrame" allowfullscreen allow="autoplay;fullscreen"></iframe>
     <video id="livePlayer" controls autoplay muted style="display:none"></video>
   </div>
