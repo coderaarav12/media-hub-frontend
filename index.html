@@ -294,13 +294,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 .live-cats button{padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;font-size:13px;font-weight:500;transition:all .25s;font-family:inherit;flex-shrink:0}
 .live-cats button:hover{border-color:var(--border-hover);color:var(--text)}
 .live-cats button.active{background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;border-color:transparent}
-.live-channel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
-.live-channel-card{cursor:pointer;border-radius:var(--radius-sm);padding:16px;background:var(--card);border:1px solid var(--border);transition:all .3s;text-align:center}
-.live-channel-card:hover{border-color:var(--border-hover);transform:translateY(-3px);box-shadow:var(--glow)}
-.live-channel-card .ch-logo{width:60px;height:60px;object-fit:contain;margin:0 auto 10px;border-radius:8px;background:rgba(255,255,255,0.04);padding:4px}
-.live-channel-card .ch-name{font-size:13px;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.live-channel-card .ch-meta{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.3px}
-.live-channel-card .ch-src-badge{font-size:9px;color:var(--secondary);margin-top:4px;display:inline-block;padding:1px 8px;border-radius:4px;background:rgba(0,206,201,0.08);border:1px solid rgba(0,206,201,0.1)}
+.ch-letter-header{font-size:15px;font-weight:700;color:var(--primary);padding:16px 0 8px;position:sticky;top:0;background:var(--bg);z-index:2;border-bottom:1px solid var(--border)}
+.live-channel-grid{display:flex;flex-wrap:wrap;gap:6px;padding-bottom:4px}
+.live-channel-card{cursor:pointer;border-radius:var(--radius-sm);padding:8px 12px;background:var(--card);border:1px solid var(--border);transition:all .2s;display:flex;align-items:center;gap:8px;min-width:0;max-width:100%}
+.live-channel-card:hover{border-color:var(--border-hover);background:var(--card2)}
+.live-channel-card .ch-logo{width:22px;height:22px;object-fit:contain;border-radius:4px;flex-shrink:0}
+.live-channel-card .ch-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.live-channel-card .ch-src-badge{font-size:8px;color:var(--secondary);flex-shrink:0;padding:1px 6px;border-radius:3px;background:rgba(0,206,201,0.08);border:1px solid rgba(0,206,201,0.1);margin-left:auto}
 
 /* Mobile */
 @media(max-width:900px){
@@ -923,17 +923,31 @@ function renderLiveChannels(channels) {
     area.innerHTML = '<div class="loading"><p style="color:var(--muted)">No channels found</p></div>'
     return
   }
-  area.innerHTML = '<div class="results-info" style="margin-bottom:12px">' + channels.length + ' channels</div><div class="live-channel-grid">' +
-    channels.map((ch, i) => {
-      const initial = ch.name.charAt(0).toUpperCase()
+  const sorted = [...channels].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+  const groups = {}
+  for (const ch of sorted) {
+    const letter = ch.name.charAt(0).toUpperCase()
+    if (!groups[letter]) groups[letter] = []
+    groups[letter].push(ch)
+  }
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  let idx = 0
+  let html = '<div class="results-info" style="margin-bottom:4px">' + channels.length + ' channels</div>'
+  for (const letter of letters) {
+    if (!groups[letter]) continue
+    html += '<div class="ch-letter-header" id="ch-letter-' + letter + '">' + letter + '</div><div class="live-channel-grid">'
+    for (const ch of groups[letter]) {
       const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
-      return '<div class="live-channel-card" style="--i:' + i + '" onclick="playLiveStream(' + i + ')">' +
-        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="ch-logo" style="display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--primary)">' + initial + '</div>') +
+      html += '<div class="live-channel-card" onclick="playLiveStream(' + (idx++) + ')">' +
+        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
         '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
-        (ch.group ? '<div class="ch-meta">' + ch.group + '</div>' : '') +
         srcLabel +
         '</div>'
-    }).join('') + '</div>'
+    }
+    html += '</div>'
+  }
+  currentLiveChannels = sorted
+  area.innerHTML = html
 }
 
 function getSourceLabel(id) {
@@ -1044,12 +1058,10 @@ async function renderSearch(q, type) {
     if(!results.length) { $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No live channels found</p></div>'; return }
     currentLiveChannels = results
     $('searchGrid').innerHTML = '<div class="live-channel-grid">' + results.map((ch, i) => {
-      const initial = ch.name.charAt(0).toUpperCase()
       const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
-      return '<div class="live-channel-card" style="--i:' + i + '" onclick="playLiveStream(' + i + ')">' +
-        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="ch-logo" style="display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--primary)">' + initial + '</div>') +
+      return '<div class="live-channel-card" onclick="playLiveStream(' + i + ')">' +
+        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
         '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
-        (ch.group ? '<div class="ch-meta">' + ch.group + '</div>' : '') +
         srcLabel +
         '</div>'
     }).join('') + '</div>'
