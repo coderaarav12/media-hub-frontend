@@ -300,6 +300,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 .live-channel-card .ch-logo{width:60px;height:60px;object-fit:contain;margin:0 auto 10px;border-radius:8px;background:rgba(255,255,255,0.04);padding:4px}
 .live-channel-card .ch-name{font-size:13px;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .live-channel-card .ch-meta{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.3px}
+.live-channel-card .ch-src-badge{font-size:9px;color:var(--secondary);margin-top:4px;display:inline-block;padding:1px 8px;border-radius:4px;background:rgba(0,206,201,0.08);border:1px solid rgba(0,206,201,0.1)}
 
 /* Mobile */
 @media(max-width:900px){
@@ -799,7 +800,14 @@ const LIVE_CATEGORIES = [
   { id: 'documentary', name: 'Documentary' },
   { id: 'education', name: 'Education' },
 ]
-let liveHls = null
+
+const LIVE_SOURCES = [
+  { id: 'iptv-org', name: 'iptv-org', categoryUrl: cat => `https://iptv-org.github.io/iptv/categories/${cat}.m3u` },
+  { id: 'freetv', name: 'Free-TV', url: 'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8' },
+  { id: 'tvlink', name: 'TVLink', url: 'https://raw.githubusercontent.com/imShakil/tvlink/master/iptv.m3u8' },
+]
+
+let liveHls = null, currentLiveChannels = [], currentLiveIdx = 0, currentLiveSourceIdx = 0
 
 function parseM3U(text) {
   const channels = []
@@ -824,6 +832,46 @@ function parseM3U(text) {
   return channels
 }
 
+function normalizeChName(name) {
+  return name.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
+}
+
+function mergeChannelLists(baseChannels, extraLists) {
+  const map = new Map()
+  for (const ch of baseChannels) {
+    const key = normalizeChName(ch.name)
+    if (!key) continue
+    map.set(key, { name: ch.name, logo: ch.logo, group: ch.group, sources: [{ url: ch.url, sourceId: 'iptv-org' }] })
+  }
+  for (const { sourceId, channels } of extraLists) {
+    for (const ch of channels) {
+      const key = normalizeChName(ch.name)
+      if (!key || !map.has(key)) continue
+      const entry = map.get(key)
+      if (!entry.sources.some(s => s.url === ch.url)) {
+        entry.sources.push({ url: ch.url, sourceId })
+      }
+    }
+  }
+  return Array.from(map.values())
+}
+
+let sourceCache = {}, liveChannelsCache = {}
+
+async function ensureSourceCached(sourceId) {
+  if (sourceCache[sourceId]) return sourceCache[sourceId]
+  const src = LIVE_SOURCES.find(s => s.id === sourceId)
+  if (!src || !src.url) return []
+  try {
+    const r = await fetch(src.url)
+    if (!r.ok) return []
+    const text = await r.text()
+    const channels = parseM3U(text)
+    sourceCache[sourceId] = channels
+    return channels
+  } catch(e) { return [] }
+}
+
 async function renderLiveTv() {
   showLive()
   document.title = 'Live TV - MediaHub'
@@ -834,7 +882,6 @@ async function renderLiveTv() {
   loadLiveCategory(LIVE_CATEGORIES[0].id)
 }
 
-let liveChannelsCache = {}
 async function loadLiveCategory(cat, btn) {
   if(btn) {
     document.querySelectorAll('.live-cats button').forEach(b => b.classList.remove('active'))
@@ -842,7 +889,8 @@ async function loadLiveCategory(cat, btn) {
   }
   const area = $('liveArea')
   if(liveChannelsCache[cat]) {
-    renderLiveChannels(liveChannelsCache[cat])
+    currentLiveChannels = liveChannelsCache[cat]
+    renderLiveChannels(currentLiveChannels)
     return
   }
   area.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
@@ -850,9 +898,15 @@ async function loadLiveCategory(cat, btn) {
     const r = await fetch('https://iptv-org.github.io/iptv/categories/' + cat + '.m3u')
     if(!r.ok) { area.innerHTML = '<div class="loading"><p style="color:var(--muted)">Failed to load channels</p></div>'; return }
     const text = await r.text()
-    const channels = parseM3U(text)
-    liveChannelsCache[cat] = channels
-    renderLiveChannels(channels)
+    const baseChannels = parseM3U(text)
+    const [freetvCh, tvlinkCh] = await Promise.all([ensureSourceCached('freetv'), ensureSourceCached('tvlink')])
+    const merged = mergeChannelLists(baseChannels, [
+      { sourceId: 'freetv', channels: freetvCh },
+      { sourceId: 'tvlink', channels: tvlinkCh }
+    ])
+    liveChannelsCache[cat] = merged
+    currentLiveChannels = merged
+    renderLiveChannels(merged)
   } catch(e) {
     area.innerHTML = '<div class="loading"><p style="color:var(--muted)">Error loading channels</p></div>'
   }
@@ -867,21 +921,52 @@ function renderLiveChannels(channels) {
   area.innerHTML = '<div class="results-info" style="margin-bottom:12px">' + channels.length + ' channels</div><div class="live-channel-grid">' +
     channels.map((ch, i) => {
       const initial = ch.name.charAt(0).toUpperCase()
-      return '<div class="live-channel-card" style="--i:' + i + '" onclick="playLiveStream(\'' + encodeURIComponent(ch.url) + '\',\'' + encodeURIComponent(ch.name) + '\')">' +
+      const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
+      return '<div class="live-channel-card" style="--i:' + i + '" onclick="playLiveStream(' + i + ')">' +
         (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="ch-logo" style="display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--primary)">' + initial + '</div>') +
         '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
         (ch.group ? '<div class="ch-meta">' + ch.group + '</div>' : '') +
+        srcLabel +
         '</div>'
     }).join('') + '</div>'
 }
 
-function playLiveStream(urlEncoded, nameEncoded) {
-  const url = decodeURIComponent(urlEncoded), title = decodeURIComponent(nameEncoded)
+function getSourceLabel(id) {
+  const src = LIVE_SOURCES.find(s => s.id === id)
+  return src ? src.name : id
+}
+
+function playLiveStream(idx) {
+  const ch = currentLiveChannels[idx]
+  if (!ch) return
+  currentLiveIdx = idx
+  currentLiveSourceIdx = 0
   $('playerOverlay').classList.add('active')
-  $('playerTitle').textContent = title + ' | Live TV'
+  $('playerTitle').textContent = ch.name + ' | Live TV'
   $('playerFrame').style.display = 'none'
   $('livePlayer').style.display = 'block'
-  $('sourceTabs').innerHTML = ''
+  const tabs = $('sourceTabs')
+  if (ch.sources.length > 1) {
+    tabs.innerHTML = ch.sources.map((s, i) =>
+      '<button class="' + (i === 0 ? 'active' : '') + '" onclick="switchLiveSource(' + i + ',this)">' + getSourceLabel(s.sourceId) + (i === 0 ? ' (Auto)' : '') + '</button>'
+    ).join('')
+  } else {
+    tabs.innerHTML = ''
+  }
+  loadLiveSource(ch.sources[0].url)
+}
+
+function switchLiveSource(srcIdx, btn) {
+  if (btn) {
+    document.querySelectorAll('#sourceTabs button').forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+  }
+  currentLiveSourceIdx = srcIdx
+  const ch = currentLiveChannels[currentLiveIdx]
+  if (ch && ch.sources[srcIdx]) loadLiveSource(ch.sources[srcIdx].url)
+}
+
+function loadLiveSource(url) {
   if(liveHls) { liveHls.destroy(); liveHls = null }
   const video = $('livePlayer')
   video.src = ''
@@ -931,7 +1016,20 @@ async function renderSearch(q, type) {
     async function searchLiveChannels(query) {
       const ql = query.toLowerCase()
       if(!Object.keys(liveChannelsCache).length) {
-        await Promise.all(LIVE_CATEGORIES.slice(0, 5).map(c => fetch('https://iptv-org.github.io/iptv/categories/' + c.id + '.m3u').then(r => r.text()).then(t => { liveChannelsCache[c.id] = parseM3U(t) }).catch(() => {})))
+        const [ft, tl] = await Promise.all([ensureSourceCached('freetv'), ensureSourceCached('tvlink')])
+        await Promise.all(LIVE_CATEGORIES.slice(0, 5).map(async c => {
+          if (liveChannelsCache[c.id]) return
+          try {
+            const r = await fetch('https://iptv-org.github.io/iptv/categories/' + c.id + '.m3u')
+            if (!r.ok) return
+            const text = await r.text()
+            const base = parseM3U(text)
+            liveChannelsCache[c.id] = mergeChannelLists(base, [
+              { sourceId: 'freetv', channels: ft },
+              { sourceId: 'tvlink', channels: tl }
+            ])
+          } catch(e) {}
+        }))
       }
       const all = Object.values(liveChannelsCache).flat()
       return all.filter(ch => ch.name.toLowerCase().includes(ql))
@@ -939,12 +1037,15 @@ async function renderSearch(q, type) {
     const results = await searchLiveChannels(q)
     $('searchInfo').textContent = results.length ? 'Found ' + results.length + ' channels' : 'No channels found'
     if(!results.length) { $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No live channels found</p></div>'; return }
+    currentLiveChannels = results
     $('searchGrid').innerHTML = '<div class="live-channel-grid">' + results.map((ch, i) => {
       const initial = ch.name.charAt(0).toUpperCase()
-      return '<div class="live-channel-card" style="--i:' + i + '" onclick="playLiveStream(\'' + encodeURIComponent(ch.url) + '\',\'' + encodeURIComponent(ch.name) + '\')">' +
+      const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
+      return '<div class="live-channel-card" style="--i:' + i + '" onclick="playLiveStream(' + i + ')">' +
         (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="ch-logo" style="display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--primary)">' + initial + '</div>') +
         '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
         (ch.group ? '<div class="ch-meta">' + ch.group + '</div>' : '') +
+        srcLabel +
         '</div>'
     }).join('') + '</div>'
   } else {
