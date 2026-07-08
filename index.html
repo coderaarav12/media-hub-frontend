@@ -379,6 +379,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
         <option value="movie">Movies</option>
         <option value="tv">TV</option>
         <option value="anime">Anime</option>
+        <option value="live">Live TV</option>
       </select>
       <button onclick="triggerSearch()">Search</button>
     </div>
@@ -393,12 +394,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 <div class="search-mobile" id="mobileSearch">
   <div class="search-wrap">
     <input type="search" id="searchInputMobile" placeholder="Search movies, shows, anime..." enterkeyhint="search" autocomplete="off">
-    <select id="searchTypeMobile">
-      <option value="multi">All</option>
-      <option value="movie">Movies</option>
-      <option value="tv">TV</option>
-      <option value="anime">Anime</option>
-    </select>
+      <select id="searchTypeMobile">
+        <option value="multi">All</option>
+        <option value="movie">Movies</option>
+        <option value="tv">TV</option>
+        <option value="anime">Anime</option>
+        <option value="live">Live TV</option>
+      </select>
     <button onclick="triggerMobileSearch()">Search</button>
   </div>
 </div>
@@ -925,6 +927,26 @@ async function renderSearch(q, type) {
       const t = item.title?.romaji || item.title?.english || item.title?.native || 'Untitled', img = item.coverImage?.large || ''
       return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/anime/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (img || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (item.averageScore ? '<span class="rating">\u2605 ' + (item.averageScore/10).toFixed(1) + '</span>' : '') + (item.episodes ? '<span class="eps-badge">' + item.episodes + ' eps</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + (item.format||'Anime') + (item.season ? ' \u2022 ' + item.season : '') + '</p></div></div>'
     }).join('')
+  } else if(type === 'live') {
+    async function searchLiveChannels(query) {
+      const ql = query.toLowerCase()
+      if(!Object.keys(liveChannelsCache).length) {
+        await Promise.all(LIVE_CATEGORIES.slice(0, 5).map(c => fetch('https://iptv-org.github.io/iptv/categories/' + c.id + '.m3u').then(r => r.text()).then(t => { liveChannelsCache[c.id] = parseM3U(t) }).catch(() => {})))
+      }
+      const all = Object.values(liveChannelsCache).flat()
+      return all.filter(ch => ch.name.toLowerCase().includes(ql))
+    }
+    const results = await searchLiveChannels(q)
+    $('searchInfo').textContent = results.length ? 'Found ' + results.length + ' channels' : 'No channels found'
+    if(!results.length) { $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No live channels found</p></div>'; return }
+    $('searchGrid').innerHTML = '<div class="live-channel-grid">' + results.map((ch, i) => {
+      const initial = ch.name.charAt(0).toUpperCase()
+      return '<div class="live-channel-card" style="--i:' + i + '" onclick="playLiveStream(\'' + encodeURIComponent(ch.url) + '\',\'' + encodeURIComponent(ch.name) + '\')">' +
+        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="ch-logo" style="display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--primary)">' + initial + '</div>') +
+        '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
+        (ch.group ? '<div class="ch-meta">' + ch.group + '</div>' : '') +
+        '</div>'
+    }).join('') + '</div>'
   } else {
     const d = await fetchAPI('/search?q=' + encodeURIComponent(q) + '&type=' + type)
     if(!d || !d.results) { $('searchInfo').textContent = 'No results'; $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No results found</p></div>'; return }
