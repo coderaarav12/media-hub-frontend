@@ -247,7 +247,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 .changelog-body{padding:20px 24px;overflow-y:auto;max-height:60vh}
 .changelog-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
 .changelog-item:last-child{border-bottom:none}
-.changelog-sha{font-size:11px;color:var(--primary);font-family:monospace;white-space:nowrap;min-width:50px}
+.changelog-sha{font-size:11px;color:var(--primary);font-family:monospace;white-space:nowrap;min-width:80px}
 .changelog-msg{font-size:13px;color:var(--text);line-height:1.5}
 .changelog-date{font-size:10px;color:var(--muted);margin-top:2px}
 .changelog-loading{text-align:center;padding:40px;color:var(--muted)}
@@ -1201,16 +1201,22 @@ async function loadRepoStats() {
   } catch(e) { $('ghRepoArea').innerHTML = '<div class="gh-loading">Could not load repo info</div>' }
 }
 
-async function checkUpdate() {
-  try {
-    const r = await fetch('https://api.github.com/repos/' + REPO + '/commits/main?per_page=1', { headers: { 'User-Agent': 'MediaHub' } })
-    if(!r.ok) return
-    const data = await r.json(), sha = data.sha
-    if(!sha) return
-    const last = localStorage.getItem('lastSha')
-    if(last && last !== sha) { $('updateBanner').style.display = 'flex'; localStorage.removeItem('changelog') }
-    localStorage.setItem('lastSha', sha)
-  } catch(e) {}
+const CHANGELOG = [
+  { date: '2025-07-08', msg: 'Live TV: alphabetical grouping with letter headers, compact tile layout' },
+  { date: '2025-07-08', msg: 'Multi-source Live TV with channel merging and fallback (iptv-org, Free-TV, TVLink)' },
+  { date: '2025-07-08', msg: 'Service worker network-first strategy with versioned cache' },
+  { date: '2025-07-08', msg: 'Refresh button that clears SW cache and hard reloads' },
+  { date: '2025-07-08', msg: 'Changelog with What\'s New link in footer, fresh commits fetched' },
+  { date: '2025-07-08', msg: 'Live TV search across all merged channels' },
+  { date: '2025-07-08', msg: 'Source tabs in player for channel fallback' },
+  { date: '2025-07-08', msg: 'Initial release: MediaHub with Movies, TV, Anime, Live TV' },
+]
+const CHANGELOG_VER = 8
+
+function checkUpdate() {
+  const last = localStorage.getItem('changelogVer')
+  if(last !== String(CHANGELOG_VER)) { $('updateBanner').style.display = 'flex' }
+  localStorage.setItem('changelogVer', CHANGELOG_VER)
 }
 function dismissUpdate() { $('updateBanner').style.display = 'none' }
 async function refreshApp() {
@@ -1223,26 +1229,13 @@ async function refreshApp() {
     const keys = await caches.keys()
     await Promise.all(keys.map(k => caches.delete(k)))
   }
-  localStorage.removeItem('changelog')
   location.reload()
 }
-async function openChangelog() {
-  $('updateBanner').style.display = 'none'; $('changelogOverlay').classList.add('active'); $('changelogBody').innerHTML = '<div class="changelog-loading"><div class="spinner"></div></div>'
-  try {
-    const r = await fetch('https://api.github.com/repos/' + REPO + '/commits/main?per_page=10', { headers: { 'User-Agent': 'MediaHub' } })
-    if(!r.ok) { throw new Error('fetch failed') }
-    const commits = await r.json()
-    const html = commits.map(c => {
-      const msg = c.commit.message.split('\n')[0], date = new Date(c.commit.committer.date).toLocaleDateString(), sha = c.sha.slice(0,7)
-      return '<div class="changelog-item"><div class="changelog-sha">' + sha + '</div><div><div class="changelog-msg">' + escapeHtml(msg) + '</div><div class="changelog-date">' + date + '</div></div></div>'
-    }).join('')
-    $('changelogBody').innerHTML = html
-    localStorage.setItem('changelog', html)
-  } catch(e) {
-    const cached = localStorage.getItem('changelog')
-    if(cached) { $('changelogBody').innerHTML = cached }
-    else { $('changelogBody').innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">Could not load updates</p>' }
-  }
+function openChangelog() {
+  $('updateBanner').style.display = 'none'; $('changelogOverlay').classList.add('active')
+  $('changelogBody').innerHTML = CHANGELOG.map(e =>
+    '<div class="changelog-item"><div class="changelog-sha">' + e.date + '</div><div><div class="changelog-msg">' + escapeHtml(e.msg) + '</div></div></div>'
+  ).join('')
 }
 function closeChangelog() { $('changelogOverlay').classList.remove('active') }
 
