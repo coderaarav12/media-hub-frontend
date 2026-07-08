@@ -31,9 +31,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 @keyframes borderGlow{0%,100%{border-color:rgba(108,92,231,0.15)}50%{border-color:rgba(108,92,231,0.35)}}
 
 /* Nav */
-nav{display:flex;align-items:center;padding:0 32px;height:64px;position:sticky;top:0;z-index:100;background:#050508;border-bottom:1px solid var(--border);max-width:1400px;margin:0 auto;width:100%}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;position:sticky;top:0;z-index:100;background:#050508;border-bottom:1px solid var(--border);max-width:1400px;margin:0 auto;width:100%}
 .nav-left{display:flex;align-items:center;gap:32px;height:100%}
-.nav-bottom{display:flex;align-items:center;flex:1;min-width:0;height:100%}
 .logo{font-size:21px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:10px;flex-shrink:0}
 .logo-icon{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
 .nav-links{display:flex;align-items:center;gap:2px;height:100%}
@@ -41,7 +40,7 @@ nav{display:flex;align-items:center;padding:0 32px;height:64px;position:sticky;t
 .nav-links button:hover{color:#fff}
 .nav-links button.active{color:#fff;font-weight:600}
 .nav-links button.active::after{content:'';position:absolute;bottom:0;left:8px;right:8px;height:2px;background:var(--primary);border-radius:1px}
-.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0;margin-left:auto}
+.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
 .nav-icon-btn{background:none;border:none;color:var(--text2);width:38px;height:38px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
 .nav-icon-btn:hover{color:#fff;background:rgba(255,255,255,0.06)}
 .search-wrap{display:flex;align-items:center;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:0 4px 0 14px;transition:all .25s}
@@ -308,8 +307,7 @@ nav{display:flex;align-items:center;padding:0 32px;height:64px;position:sticky;t
   .container{padding:0 16px}
   nav{padding:0 16px;height:auto;gap:0;flex-wrap:wrap}
   .nav-left{width:100%;justify-content:flex-start;gap:12px;height:56px}
-  .nav-bottom{width:100%;height:44px}
-  .nav-links{flex:1;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap;gap:0;height:100%}
+  .nav-links{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap;gap:0;height:100%}
   .nav-links::-webkit-scrollbar{display:none}
   .nav-links button{font-size:13px;padding:0 10px;height:100%;flex-shrink:0}
   .nav-right{width:auto;margin-left:auto;height:44px;display:flex;align-items:center;gap:4px}
@@ -341,7 +339,6 @@ nav{display:flex;align-items:center;padding:0 32px;height:64px;position:sticky;t
   .container{padding:0 12px}
   nav{padding:0 10px}
   .nav-left{height:48px;gap:6px}
-  .nav-bottom{height:38px}
   .nav-links{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap;gap:0;height:100%}
   .nav-links::-webkit-scrollbar{display:none}
   .nav-links button{font-size:11.5px;padding:0 8px;height:100%;flex-shrink:0}
@@ -365,14 +362,13 @@ nav{display:flex;align-items:center;padding:0 32px;height:64px;position:sticky;t
       <div class="logo" onclick="goHome()">
         <span class="logo-icon">&#9654;</span> <span>MediaHub</span>
       </div>
-    </div>
-  <div class="nav-bottom">
-    <div class="nav-links">
-      <button class="active" data-filter="all" onclick="navFilter('all',this)">Home</button>
-      <button data-filter="movie" onclick="navFilter('movie',this)">Movies</button>
-      <button data-filter="tv" onclick="navFilter('tv',this)">TV</button>
-      <button data-filter="anime" onclick="navFilter('anime',this)">Anime</button>
-      <button data-filter="live" onclick="navFilter('live',this)">Live TV</button>
+      <div class="nav-links">
+        <button class="active" data-filter="all" onclick="navFilter('all',this)">Home</button>
+        <button data-filter="movie" onclick="navFilter('movie',this)">Movies</button>
+        <button data-filter="tv" onclick="navFilter('tv',this)">TV</button>
+        <button data-filter="anime" onclick="navFilter('anime',this)">Anime</button>
+        <button data-filter="live" onclick="navFilter('live',this)">Live TV</button>
+      </div>
     </div>
   <div class="nav-right">
     <button class="search-toggle nav-icon-btn" onclick="toggleMobileSearch()" title="Search" aria-label="Search">
@@ -396,7 +392,6 @@ nav{display:flex;align-items:center;padding:0 32px;height:64px;position:sticky;t
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
     </button>
   </div>
-</div>
 </nav>
 <div class="search-mobile" id="mobileSearch">
   <div class="search-wrap">
