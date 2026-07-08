@@ -936,10 +936,14 @@ async function loadLiveCategory(cat, btn) {
       { sourceId: 'tvlink', channels: tvlinkCh }
     ])
     if (cat === 'news') {
+      const entries = Object.entries(YOUTUBE_NEWS).sort((a, b) => b[0].length - a[0].length)
       for (const ch of merged) {
         const key = normalizeChName(ch.name)
-        for (const [pattern, channelId] of Object.entries(YOUTUBE_NEWS)) {
-          if (key.includes(pattern)) {
+        for (const [pattern, channelId] of entries) {
+          const match = pattern.includes(' ')
+            ? new RegExp('^' + pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\s|$)').test(key)
+            : key === pattern
+          if (match) {
             if (!ch.sources.some(s => s.sourceId === 'youtube')) {
               ch.sources.push({ url: 'https://www.youtube.com/embed/live_stream?channel=' + channelId + '&autoplay=1', sourceId: 'youtube' })
             }
