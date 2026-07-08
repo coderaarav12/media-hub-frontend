@@ -2,7 +2,7 @@
 
 Search and stream movies, TV shows, and anime from multiple embed sources.
 
-**Live site:** [https://media-hub.pages.dev](https://media-hub.pages.dev)
+**Live site:** [https://greatmedia-hub.pages.dev](https://greatmedia-hub.pages.dev)
 
 ## Architecture
 
