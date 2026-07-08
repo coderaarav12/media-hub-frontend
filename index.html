@@ -810,7 +810,29 @@ const LIVE_SOURCES = [
   { id: 'iptv-org', name: 'iptv-org', categoryUrl: cat => `https://iptv-org.github.io/iptv/categories/${cat}.m3u` },
   { id: 'freetv', name: 'Free-TV', url: 'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8' },
   { id: 'tvlink', name: 'TVLink', url: 'https://raw.githubusercontent.com/imShakil/tvlink/master/iptv.m3u8' },
+  { id: 'youtube', name: 'YouTube' },
 ]
+
+// YouTube live streams for news channels (channel name → embed URL)
+const YOUTUBE_NEWS = {
+  'bbc news': 'https://www.youtube.com/embed/9Auq9mYxFEE?autoplay=1',
+  'bbc world news': 'https://www.youtube.com/embed/9Auq9mYxFEE?autoplay=1',
+  'cnn': 'https://www.youtube.com/embed/AdEw6NgPqJ8?autoplay=1',
+  'al jazeera': 'https://www.youtube.com/embed/tuYcUeN8Y8s?autoplay=1',
+  'sky news': 'https://www.youtube.com/embed/9Auq9mYxFEE?autoplay=1',
+  'france 24': 'https://www.youtube.com/embed/wIe5AFnkBPM?autoplay=1',
+  'dw news': 'https://www.youtube.com/embed/GEBpM79NBkI?autoplay=1',
+  'reuters': 'https://www.youtube.com/embed/DNwM8O6rJ4s?autoplay=1',
+  'euronews': 'https://www.youtube.com/embed/H8X7sY7W7d8?autoplay=1',
+  'wion': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
+  'ndtv': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
+  'india today': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
+  'republic tv': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
+  'times now': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
+  'nbc news': 'https://www.youtube.com/embed/FCdaSj8w-tg?autoplay=1',
+  'abc news': 'https://www.youtube.com/embed/w_Ma8oQLmSM?autoplay=1',
+  'cbs news': 'https://www.youtube.com/embed/yeFQcPw3PmE?autoplay=1',
+}
 
 let liveHls = null, currentLiveChannels = [], currentLiveIdx = 0, currentLiveSourceIdx = 0
 
@@ -909,6 +931,19 @@ async function loadLiveCategory(cat, btn) {
       { sourceId: 'freetv', channels: freetvCh },
       { sourceId: 'tvlink', channels: tvlinkCh }
     ])
+    if (cat === 'news') {
+      for (const ch of merged) {
+        const key = normalizeChName(ch.name)
+        for (const [pattern, url] of Object.entries(YOUTUBE_NEWS)) {
+          if (key.includes(pattern)) {
+            if (!ch.sources.some(s => s.sourceId === 'youtube')) {
+              ch.sources.push({ url, sourceId: 'youtube' })
+            }
+            break
+          }
+        }
+      }
+    }
     liveChannelsCache[cat] = merged
     currentLiveChannels = merged
     renderLiveChannels(merged)
@@ -964,6 +999,7 @@ function playLiveStream(idx) {
   $('playerTitle').textContent = ch.name + ' | Live TV'
   $('playerFrame').style.display = 'none'
   $('livePlayer').style.display = 'block'
+  $('playerFrame').src = ''
   const tabs = $('sourceTabs')
   if (ch.sources.length > 1) {
     tabs.innerHTML = ch.sources.map((s, i) =>
@@ -987,8 +1023,16 @@ function switchLiveSource(srcIdx, btn) {
 
 function loadLiveSource(url) {
   if(liveHls) { liveHls.destroy(); liveHls = null }
-  const video = $('livePlayer')
-  video.src = ''
+  const video = $('livePlayer'), iframe = $('playerFrame')
+  video.pause(); video.src = ''; iframe.src = ''
+  if (url.includes('youtube.com/embed/') || url.includes('youtu.be/')) {
+    video.style.display = 'none'
+    iframe.style.display = 'block'
+    iframe.src = url
+    return
+  }
+  video.style.display = 'block'
+  iframe.style.display = 'none'
   if(url.includes('.m3u8') && Hls.isSupported()) {
     liveHls = new Hls()
     liveHls.loadSource(url)
@@ -1002,7 +1046,7 @@ function loadLiveSource(url) {
 
 function closePlayer() {
   $('playerOverlay').classList.remove('active')
-  $('playerFrame').style.display = ''
+  $('playerFrame').style.display = ''; $('playerFrame').src = ''
   $('livePlayer').style.display = 'none'
   const v = $('livePlayer'); v.pause(); v.src = ''
   if(liveHls) { liveHls.destroy(); liveHls = null }
