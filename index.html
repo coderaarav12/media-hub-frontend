@@ -188,21 +188,24 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 /* Share Modal */
 .share-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.7);backdrop-filter:blur(16px);z-index:999;display:none;align-items:center;justify-content:center;animation:fadeUp .3s ease}
 .share-overlay.active{display:flex}
-.share-modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);width:360px;max-width:90vw;overflow:hidden;animation:scaleIn .35s ease}
-.share-header{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--border)}
-.share-header h3{font-size:16px;font-weight:600}
+.share-modal{background:linear-gradient(145deg,var(--card),#0d0d1a);border:1px solid var(--border);border-radius:20px;width:380px;max-width:90vw;overflow:hidden;animation:scaleIn .35s ease;box-shadow:0 24px 80px rgba(0,0,0,0.6)}
+.share-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--border)}
+.share-header h3{font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .share-header button{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;padding:0 4px;transition:all .2s;line-height:1;font-family:inherit}
 .share-header button:hover{color:var(--text)}
 .share-body{padding:28px 24px 24px;text-align:center}
-.qr-wrap{display:flex;justify-content:center;margin-bottom:18px}
-.qr-wrap canvas{display:block;border-radius:12px;padding:12px;background:#fff;width:180px;height:180px}
-.share-url{font-size:11px;color:var(--muted);word-break:break-all;margin-bottom:18px;padding:8px 12px;background:rgba(255,255,255,0.02);border-radius:8px;border:1px solid var(--border)}
+.qr-wrap{display:flex;justify-content:center;margin-bottom:18px;position:relative}
+.qr-wrap canvas{display:block;border-radius:16px;padding:16px;background:#fff;width:200px;height:200px;box-shadow:0 8px 32px rgba(108,92,231,0.15)}
+.qr-logo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;background:linear-gradient(135deg,var(--primary),var(--secondary));border-radius:10px;display:flex;align-items:center;justify-content:center;pointer-events:none;box-shadow:0 2px 12px rgba(108,92,231,0.4)}
+.qr-logo span{color:#fff;font-size:18px;line-height:1}
+.share-url{font-size:11px;color:var(--muted);word-break:break-all;margin-bottom:18px;padding:10px 14px;background:rgba(255,255,255,0.02);border-radius:10px;border:1px solid var(--border);font-family:monospace;letter-spacing:0.3px}
 .share-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .share-actions .btn-play{font-size:12px;padding:10px 20px}
 .share-actions .btn-secondary{font-size:12px;padding:10px 20px}
-.share-hint{font-size:11px;color:var(--muted);margin-top:14px}
+.share-hint{font-size:11px;color:var(--muted);margin-top:16px}
+.share-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:18px 0}
 @media(max-width:480px){
-  .share-modal{width:100%;max-width:100vw;border-radius:var(--radius) var(--radius) 0 0;margin-top:auto}
+  .share-modal{width:100%;max-width:100vw;border-radius:20px 20px 0 0;margin-top:auto}
   .share-overlay.active{align-items:flex-end}
 }
 /* Update Banner */
@@ -436,13 +439,16 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
       <button onclick="closeShare()">&times;</button>
     </div>
     <div class="share-body">
-      <div class="qr-wrap" id="qrContainer"></div>
-      <p class="share-url" id="shareUrl">https://coderaarav12.github.io/media-hub-frontend/</p>
+      <div class="qr-wrap" id="qrContainer">
+        <div class="qr-logo" id="qrLogo"><span>&#9654;</span></div>
+      </div>
+      <p class="share-url" id="shareUrl">https://media-hub-frontend.pages.dev</p>
+      <div class="share-divider"></div>
       <div class="share-actions">
         <button class="btn-play" onclick="copyShareLink()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           Copy Link</button>
-        <button class="btn-secondary" onclick="navigator.share?navigator.share({url:'https://coderaarav12.github.io/media-hub-frontend/'}).catch(()=>{}):copyShareLink()">
+        <button class="btn-secondary" onclick="navigator.share?navigator.share({url:'https://media-hub-frontend.pages.dev'}).catch(()=>{}):copyShareLink()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
           Share</button>
       </div>
@@ -788,20 +794,40 @@ function loadSource(idx) { const src = currentSources[idx]; if(!src) return; $('
 function closePlayer() { $('playerOverlay').classList.remove('active'); $('playerFrame').src = '' }
 
 // --- Share / QR ---
-const SITE_URL = 'https://coderaarav12.github.io/media-hub-frontend/'
+const SITE_URL = 'https://media-hub-frontend.pages.dev'
 let qrInstance = null
 
 function openShare() {
   $('shareOverlay').classList.add('active')
   const c = $('qrContainer')
   if(!qrInstance) {
-    c.innerHTML = '<div id="qrCanvas"></div>'
+    const existing = c.querySelector('canvas')
+    if(existing) existing.remove()
     if(typeof QRCode !== 'undefined') {
-      qrInstance = new QRCode(document.getElementById('qrCanvas'), {
-        text: SITE_URL, width: 180, height: 180,
-        colorDark: '#6c5ce7', colorLight: '#ffffff',
+      const cv = document.createElement('div'); cv.id = 'qrCanvas'
+      c.prepend(cv)
+      qrInstance = new QRCode(cv, {
+        text: SITE_URL, width: 200, height: 200,
+        colorDark: '#1a1a2e', colorLight: '#ffffff',
         correctLevel: QRCode.CorrectLevel.H
       })
+      // Draw center logo overlay
+      const canvas = cv.querySelector('canvas')
+      if(canvas) {
+        const ctx = canvas.getContext('2d')
+        const cx = canvas.width/2, cy = canvas.height/2, r = 18
+        ctx.beginPath()
+        ctx.arc(cx, cy, r, 0, Math.PI*2)
+        const grad = ctx.createLinearGradient(cx-r, cy-r, cx+r, cy+r)
+        grad.addColorStop(0, '#6c5ce7'); grad.addColorStop(1, '#00cec9')
+        ctx.fillStyle = grad
+        ctx.fill()
+        ctx.fillStyle = '#fff'
+        ctx.font = 'bold 20px sans-serif'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText('\u25B6', cx+1, cy+1)
+      }
     }
   }
   $('shareUrl').textContent = SITE_URL
