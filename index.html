@@ -816,25 +816,26 @@ const LIVE_SOURCES = [
   { id: 'youtube', name: 'YouTube' },
 ]
 
-// YouTube live streams for news channels (channel name → embed URL)
+// YouTube live streams for news channels (channel name → channel ID)
+// Uses /embed/live_stream?channel=CHANNEL_ID which always shows the current live stream
 const YOUTUBE_NEWS = {
-  'bbc news': 'https://www.youtube.com/embed/9Auq9mYxFEE?autoplay=1',
-  'bbc world news': 'https://www.youtube.com/embed/9Auq9mYxFEE?autoplay=1',
-  'cnn': 'https://www.youtube.com/embed/AdEw6NgPqJ8?autoplay=1',
-  'al jazeera': 'https://www.youtube.com/embed/tuYcUeN8Y8s?autoplay=1',
-  'sky news': 'https://www.youtube.com/embed/9Auq9mYxFEE?autoplay=1',
-  'france 24': 'https://www.youtube.com/embed/wIe5AFnkBPM?autoplay=1',
-  'dw news': 'https://www.youtube.com/embed/GEBpM79NBkI?autoplay=1',
-  'reuters': 'https://www.youtube.com/embed/DNwM8O6rJ4s?autoplay=1',
-  'euronews': 'https://www.youtube.com/embed/H8X7sY7W7d8?autoplay=1',
-  'wion': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
-  'ndtv': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
-  'india today': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
-  'republic tv': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
-  'times now': 'https://www.youtube.com/embed/7rVn7s7Y7d8?autoplay=1',
-  'nbc news': 'https://www.youtube.com/embed/FCdaSj8w-tg?autoplay=1',
-  'abc news': 'https://www.youtube.com/embed/w_Ma8oQLmSM?autoplay=1',
-  'cbs news': 'https://www.youtube.com/embed/yeFQcPw3PmE?autoplay=1',
+  'bbc news': 'UC16niRr50-MSBwiO3YDb3RA',
+  'bbc world news': 'UC16niRr50-MSBwiO3YDb3RA',
+  'cnn': 'UCupvZG-5ko_eiXAupbDfxWw',
+  'al jazeera': 'UCNye-wNBqNL5ZzHSJj3l8Bg',
+  'sky news': 'UCoMdktPbSTixAyNGwb-UYkQ',
+  'france 24': 'UCQfwfsi5VrQ8yKZ-UWmAEFg',
+  'dw news': 'UCknLrEdhRCp1aegoMqRaCZg',
+  'reuters': 'UChqUTb7kYRX8-EiaN3XFrSQ',
+  'euronews': 'UCSrZ3UV4jOidv8ppoVuvW9Q',
+  'wion': 'UC_gUM8rL-Lrg6O3adPW9K1g',
+  'ndtv': 'UCZFMm1mMw0F81Z37aaEzTUA',
+  'india today': 'UCYPvAwZP8pZhSMW8qs7cVCw',
+  'republic tv': 'UCwqusr8YDwM-3mEYTDeJHzw',
+  'times now': 'UC6RJ7-PaXg6TIH2BzZfTV7w',
+  'nbc news': 'UCeY0bbntWzzVIaj2z3QigXg',
+  'abc news': 'UCBi2mrWuNuyYy4gbM6fU18Q',
+  'cbs news': 'UC8p1vwvWtl6T73JiExfWs1g',
 }
 
 let liveHls = null, currentLiveChannels = [], currentLiveIdx = 0, currentLiveSourceIdx = 0
@@ -937,10 +938,10 @@ async function loadLiveCategory(cat, btn) {
     if (cat === 'news') {
       for (const ch of merged) {
         const key = normalizeChName(ch.name)
-        for (const [pattern, url] of Object.entries(YOUTUBE_NEWS)) {
+        for (const [pattern, channelId] of Object.entries(YOUTUBE_NEWS)) {
           if (key.includes(pattern)) {
             if (!ch.sources.some(s => s.sourceId === 'youtube')) {
-              ch.sources.push({ url, sourceId: 'youtube' })
+              ch.sources.push({ url: 'https://www.youtube.com/embed/live_stream?channel=' + channelId + '&autoplay=1', sourceId: 'youtube' })
             }
             break
           }
