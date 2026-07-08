@@ -480,6 +480,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
         <span id="footerStars">&#9733; --</span>
         <span class="footer-dot">&middot;</span>
         <span id="footerUpdated">Updated --</span>
+        <span class="footer-dot">&middot;</span>
+        <a href="#" onclick="event.preventDefault();openChangelog()">What's New?</a>
       </div>
     </div>
   </footer>
@@ -1191,18 +1193,16 @@ async function checkUpdate() {
     const data = await r.json(), sha = data.sha
     if(!sha) return
     const last = localStorage.getItem('lastSha')
-    if(last && last !== sha) { $('updateBanner').style.display = 'flex' }
+    if(last && last !== sha) { $('updateBanner').style.display = 'flex'; localStorage.removeItem('changelog') }
     localStorage.setItem('lastSha', sha)
   } catch(e) {}
 }
 function dismissUpdate() { $('updateBanner').style.display = 'none' }
 async function openChangelog() {
   $('updateBanner').style.display = 'none'; $('changelogOverlay').classList.add('active'); $('changelogBody').innerHTML = '<div class="changelog-loading"><div class="spinner"></div></div>'
-  const cached = localStorage.getItem('changelog')
-  if(cached) { $('changelogBody').innerHTML = cached }
   try {
     const r = await fetch('https://api.github.com/repos/' + REPO + '/commits/main?per_page=10', { headers: { 'User-Agent': 'MediaHub' } })
-    if(!r.ok) { if(!cached) $('changelogBody').innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">Could not load updates</p>'; return }
+    if(!r.ok) { throw new Error('fetch failed') }
     const commits = await r.json()
     const html = commits.map(c => {
       const msg = c.commit.message.split('\n')[0], date = new Date(c.commit.committer.date).toLocaleDateString(), sha = c.sha.slice(0,7)
@@ -1210,7 +1210,11 @@ async function openChangelog() {
     }).join('')
     $('changelogBody').innerHTML = html
     localStorage.setItem('changelog', html)
-  } catch(e) { if(!cached) $('changelogBody').innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">Could not load updates</p>' }
+  } catch(e) {
+    const cached = localStorage.getItem('changelog')
+    if(cached) { $('changelogBody').innerHTML = cached }
+    else { $('changelogBody').innerHTML = '<p style="color:var(--muted);text-align:center;padding:20px">Could not load updates</p>' }
+  }
 }
 function closeChangelog() { $('changelogOverlay').classList.remove('active') }
 
