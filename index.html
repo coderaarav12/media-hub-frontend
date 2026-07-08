@@ -6,6 +6,7 @@
 <title>MediaHub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236c5ce7'/%3E%3Cstop offset='100%25' stop-color='%2300cec9'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='%23050508'/%3E%3Cpath d='M35 30v40l30-20z' fill='url(%23g)'/%3E%3C/svg%3E">
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="config.js"></script>
 <link rel="manifest" href="/manifest.json">
 <style>
@@ -286,6 +287,17 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 .back-btn{background:none;border:none;color:var(--primary);font-size:12px;cursor:pointer;padding:8px 0;display:inline-flex;align-items:center;gap:4px;margin-bottom:14px;font-weight:500;transition:all .2s;font-family:inherit}
 .back-btn:hover{gap:10px;opacity:0.85}
 .results-info{font-size:13px;color:var(--muted);margin-bottom:14px}
+.live-cats{display:flex;gap:6px;overflow-x:auto;padding:0 0 24px;-webkit-overflow-scrolling:touch}
+.live-cats::-webkit-scrollbar{height:2px}
+.live-cats button{padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;font-size:13px;font-weight:500;transition:all .25s;font-family:inherit;flex-shrink:0}
+.live-cats button:hover{border-color:var(--border-hover);color:var(--text)}
+.live-cats button.active{background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;border-color:transparent}
+.live-channel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.live-channel-card{cursor:pointer;border-radius:var(--radius-sm);padding:16px;background:var(--card);border:1px solid var(--border);transition:all .3s;text-align:center}
+.live-channel-card:hover{border-color:var(--border-hover);transform:translateY(-3px);box-shadow:var(--glow)}
+.live-channel-card .ch-logo{width:60px;height:60px;object-fit:contain;margin:0 auto 10px;border-radius:8px;background:rgba(255,255,255,0.04);padding:4px}
+.live-channel-card .ch-name{font-size:13px;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.live-channel-card .ch-meta{font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.3px}
 
 /* Mobile */
 @media(max-width:900px){
@@ -346,6 +358,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
       <button data-filter="movie" onclick="navFilter('movie',this)">Movies</button>
       <button data-filter="tv" onclick="navFilter('tv',this)">TV</button>
       <button data-filter="anime" onclick="navFilter('anime',this)">Anime</button>
+      <button data-filter="live" onclick="navFilter('live',this)">Live TV</button>
     </div>
   </div>
   <div class="nav-right">
@@ -441,6 +454,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
     <div id="animePopularArea"></div>
   </div>
 
+  <div id="livePage" class="detail-page">
+    <button class="back-btn" onclick="goHome()">&larr; Back</button>
+    <div class="section-header"><h2>Live TV</h2></div>
+    <div class="live-cats" id="liveCats"></div>
+    <div id="liveArea"></div>
+  </div>
+
   <footer class="site-footer">
     <div class="footer-inner">
       <span class="footer-logo">&#9654; MediaHub</span>
@@ -515,6 +535,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
   <div class="player-body">
     <div class="source-tabs" id="sourceTabs"></div>
     <iframe id="playerFrame" allowfullscreen allow="autoplay;fullscreen"></iframe>
+    <video id="livePlayer" controls autoplay muted style="display:none;width:100%;flex:1;background:#000;border-radius:var(--radius)"></video>
   </div>
 </div>
 
@@ -576,6 +597,7 @@ function handleRoute() {
   else if(parts[0] === 'movies' && !parts[1]) renderMoviesHome()
   else if(parts[0] === 'tv' && !parts[1]) renderTvHome()
   else if(parts[0] === 'anime' && !parts[1]) renderAnimeHome()
+  else if(parts[0] === 'live') renderLiveTv()
   else if(parts[0] === 'search') { const p = new URLSearchParams(qs||''); renderSearch(p.get('q')||'', p.get('type')||'multi') }
   else if(['movie','tv','anime'].includes(parts[0])) renderDetail(parts[0], parts[1], parts[2]||null)
   else renderHome()
@@ -595,6 +617,7 @@ function navFilter(filter, btn) {
   else if(filter === 'movie') { navigate('#/movies') }
   else if(filter === 'tv') { navigate('#/tv') }
   else if(filter === 'anime') { navigate('#/anime') }
+  else if(filter === 'live') { navigate('#/live') }
 }
 
 function triggerSearch() {
@@ -602,12 +625,13 @@ function triggerSearch() {
   if(!q || !type) return; navigate('#/search?q=' + encodeURIComponent(q) + '&type=' + type)
 }
 
-function showHome() { $('homePage').style.display = 'block'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; document.title = 'MediaHub' }
-function showDetail() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'block'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none' }
-function showSearch() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'block'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none' }
-function showMovies() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'block'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none' }
-function showTv() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'block'; $('animePage').style.display = 'none' }
-function showAnime() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'block' }
+function showHome() { $('homePage').style.display = 'block'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none'; document.title = 'MediaHub' }
+function showDetail() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'block'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none' }
+function showSearch() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'block'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none' }
+function showMovies() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'block'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none' }
+function showTv() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'block'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none' }
+function showAnime() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'block'; $('livePage').style.display = 'none' }
+function showLive() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'block' }
 
 async function fetchAPI(path) { try { const r = await fetch(API_BASE + path); return await r.json() } catch(e) { return null } }
 
@@ -754,6 +778,123 @@ async function renderAnimeHome() {
   popArea.innerHTML = renderAnimeGrid(popular)
 }
 
+// --- Live TV ---
+const LIVE_CATEGORIES = [
+  { id: 'news', name: 'News' },
+  { id: 'sports', name: 'Sports' },
+  { id: 'entertainment', name: 'Entertainment' },
+  { id: 'movies', name: 'Movies' },
+  { id: 'music', name: 'Music' },
+  { id: 'kids', name: 'Kids' },
+  { id: 'general', name: 'General' },
+  { id: 'documentary', name: 'Documentary' },
+  { id: 'education', name: 'Education' },
+]
+let liveHls = null
+
+function parseM3U(text) {
+  const channels = []
+  const lines = text.split('\n')
+  for(let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim()
+    if(!line.startsWith('#EXTINF:')) continue
+    const info = line.slice(8)
+    let name = info
+    const logoMatch = info.match(/tvg-logo="([^"]*)"/)
+    const logo = logoMatch ? logoMatch[1] : ''
+    const groupMatch = info.match(/group-title="([^"]*)"/)
+    const group = groupMatch ? groupMatch[1] : ''
+    const nameMatch = info.match(/,(.+)$/)
+    if(nameMatch) name = nameMatch[1].trim()
+    name = name.replace(/\s*\([\d]+p\)/gi, '').replace(/\s*\[.*?\]/g, '').trim()
+    const urlLine = lines[i + 1]
+    if(urlLine && urlLine.trim() && !urlLine.trim().startsWith('#')) {
+      channels.push({ name, url: urlLine.trim(), logo, group })
+    }
+  }
+  return channels
+}
+
+async function renderLiveTv() {
+  showLive()
+  document.title = 'Live TV - MediaHub'
+  const cats = $('liveCats'), area = $('liveArea')
+  cats.innerHTML = LIVE_CATEGORIES.map((c, i) =>
+    '<button class="' + (i === 0 ? 'active' : '') + '" onclick="loadLiveCategory(\'' + c.id + '\',this)">' + c.name + '</button>'
+  ).join('')
+  loadLiveCategory(LIVE_CATEGORIES[0].id)
+}
+
+let liveChannelsCache = {}
+async function loadLiveCategory(cat, btn) {
+  if(btn) {
+    document.querySelectorAll('.live-cats button').forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+  }
+  const area = $('liveArea')
+  if(liveChannelsCache[cat]) {
+    renderLiveChannels(liveChannelsCache[cat])
+    return
+  }
+  area.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  try {
+    const r = await fetch('https://iptv-org.github.io/iptv/categories/' + cat + '.m3u')
+    if(!r.ok) { area.innerHTML = '<div class="loading"><p style="color:var(--muted)">Failed to load channels</p></div>'; return }
+    const text = await r.text()
+    const channels = parseM3U(text)
+    liveChannelsCache[cat] = channels
+    renderLiveChannels(channels)
+  } catch(e) {
+    area.innerHTML = '<div class="loading"><p style="color:var(--muted)">Error loading channels</p></div>'
+  }
+}
+
+function renderLiveChannels(channels) {
+  const area = $('liveArea')
+  if(!channels.length) {
+    area.innerHTML = '<div class="loading"><p style="color:var(--muted)">No channels found</p></div>'
+    return
+  }
+  area.innerHTML = '<div class="results-info" style="margin-bottom:12px">' + channels.length + ' channels</div><div class="live-channel-grid">' +
+    channels.map((ch, i) => {
+      const initial = ch.name.charAt(0).toUpperCase()
+      return '<div class="live-channel-card" style="--i:' + i + '" onclick="playLiveStream(\'' + encodeURIComponent(ch.url) + '\',\'' + encodeURIComponent(ch.name) + '\')">' +
+        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '<div class="ch-logo" style="display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--primary)">' + initial + '</div>') +
+        '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
+        (ch.group ? '<div class="ch-meta">' + ch.group + '</div>' : '') +
+        '</div>'
+    }).join('') + '</div>'
+}
+
+function playLiveStream(urlEncoded, nameEncoded) {
+  const url = decodeURIComponent(urlEncoded), title = decodeURIComponent(nameEncoded)
+  $('playerOverlay').classList.add('active')
+  $('playerTitle').textContent = title + ' | Live TV'
+  $('playerFrame').style.display = 'none'
+  $('livePlayer').style.display = 'block'
+  $('sourceTabs').innerHTML = ''
+  if(liveHls) { liveHls.destroy(); liveHls = null }
+  const video = $('livePlayer')
+  video.src = ''
+  if(url.includes('.m3u8') && Hls.isSupported()) {
+    liveHls = new Hls()
+    liveHls.loadSource(url)
+    liveHls.attachMedia(video)
+    liveHls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}))
+  } else {
+    video.src = url
+    video.play().catch(() => {})
+  }
+}
+
+function closePlayer() {
+  $('playerOverlay').classList.remove('active')
+  $('playerFrame').style.display = ''
+  $('livePlayer').style.display = 'none'
+  const v = $('livePlayer'); v.pause(); v.src = ''
+  if(liveHls) { liveHls.destroy(); liveHls = null }
+}
+
 function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML }
 
 function switchTrend(type, btn) {
@@ -833,7 +974,10 @@ async function loadEpisodes(tvId, season) {
 
 // --- Player ---
 async function playItem(type, id, season, episode) {
-  $('playerOverlay').classList.add('active'); $('playerTitle').textContent = currentItem?.title || 'Now Playing'; $('playerFrame').src = ''
+  $('playerOverlay').classList.add('active'); $('playerTitle').textContent = currentItem?.title || 'Now Playing'
+  $('playerFrame').style.display = ''; $('livePlayer').style.display = 'none'
+  if(liveHls) { liveHls.destroy(); liveHls = null }
+  $('playerFrame').src = ''
   const d = await fetchAPI('/sources?type=' + type + '&id=' + id + (type === 'tv' ? '&season=' + season + '&episode=' + episode : ''))
   currentSources = d?.sources || []; currentSourceIdx = 0
   const tabs = $('sourceTabs'); tabs.innerHTML = currentSources.map((s, i) => '<button class="' + (i === 0 ? 'active' : '') + '" onclick="switchSource(' + i + ',this)">' + s.name + '</button>').join('')
@@ -841,8 +985,6 @@ async function playItem(type, id, season, episode) {
 }
 function switchSource(idx, btn) { if(btn) { document.querySelectorAll('#sourceTabs button').forEach(b => b.classList.remove('active')); btn.classList.add('active') } currentSourceIdx = idx; loadSource(idx) }
 function loadSource(idx) { const src = currentSources[idx]; if(!src) return; $('playerFrame').src = src.url }
-function closePlayer() { $('playerOverlay').classList.remove('active'); $('playerFrame').src = '' }
-
 // --- Share / QR ---
 const SITE_URL = 'https://greatmedia-hub.pages.dev'
 let qrInstance = null
