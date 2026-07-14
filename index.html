@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -552,7 +552,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
     </div>
   </div>
   <div class="player-body">
-    <iframe id="playerFrame" allowfullscreen allow="autoplay;fullscreen"></iframe>
+    <iframe id="playerFrame" allowfullscreen allow="autoplay;fullscreen" sandbox="allow-scripts allow-same-origin allow-presentation"></iframe>
     <video id="livePlayer" controls autoplay muted style="display:none"></video>
   </div>
 </div>
@@ -816,7 +816,7 @@ const LIVE_SOURCES = [
   { id: 'youtube', name: 'YouTube' },
 ]
 
-// YouTube live streams for news channels (channel name → channel ID)
+// YouTube live streams for news channels (channel name ΓåÆ channel ID)
 // Uses /embed/live_stream?channel=CHANNEL_ID which always shows the current live stream
 const YOUTUBE_NEWS = {
   'bbc news': 'UC16niRr50-MSBwiO3YDb3RA',
@@ -974,7 +974,7 @@ function renderLiveChannels(channels) {
     if (!groups[letter]) groups[letter] = []
     groups[letter].push(ch)
   }
-  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  const letters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
   let idx = 0
   let html = '<div class="results-info" style="margin-bottom:4px">' + channels.length + ' channels</div>'
   for (const letter of letters) {
@@ -1295,6 +1295,15 @@ function closeChangelog() { $('changelogOverlay').classList.remove('active') }
 checkUpdate()
 loadRepoStats()
 handleRoute()
+
+// --- Popup Blocker ---
+;(function(){
+  window.open = function(){ return null }
+  document.addEventListener('click',function(e){
+    const a = e.target.closest('a[target="_blank"]')
+    if(a){ e.preventDefault(); e.stopPropagation(); return false }
+  },true)
+})()
 </script>
 </body>
 </html>
