@@ -618,6 +618,7 @@ function handleRoute() {
   else if(parts[0] === 'live') renderLiveTv()
   else if(parts[0] === 'search') { const p = new URLSearchParams(qs||''); renderSearch(p.get('q')||'', p.get('type')||'multi') }
   else if(['movie','tv','anime'].includes(parts[0])) renderDetail(parts[0], parts[1], parts[2]||null)
+  else if(parts[0] === 'multi' && parts[1]) renderDetail('movie', parts[1], parts[2]||null)
   else renderHome()
 }
 
@@ -1125,7 +1126,7 @@ async function renderSearch(q, type) {
     $('searchInfo').textContent = 'Found ' + r.length + ' results'
     $('searchGrid').innerHTML = r.map((item, i) => {
       const t = item.title || item.name || 'Untitled', date = item.release_date || item.first_air_date || '', y = date ? date.split('-')[0] : ''
-      const rt = item.vote_average ? '\u2605 ' + item.vote_average.toFixed(1) : '', poster = item.poster_path ? IMG + '/w342' + item.poster_path : '', m = item.media_type || type
+      const rt = item.vote_average ? '\u2605 ' + item.vote_average.toFixed(1) : '', poster = item.poster_path ? IMG + '/w342' + item.poster_path : '', m = item.media_type || (type === 'multi' ? 'movie' : type)
       return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/' + m + '/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (rt ? '<span class="rating">' + rt + '</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">' + (m === 'movie' ? 'Movie' : m === 'tv' ? 'TV' : 'Anime') + '</span></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + y + (m === 'movie' ? ' \u2022 Movie' : ' \u2022 TV') + '</p></div></div>'
     }).join('')
   }

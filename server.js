@@ -43,8 +43,7 @@ app.get("/api/search", async (req, res, next) => {
   try {
     const { q, type = "multi", page = 1 } = req.query
     if (!q) return res.json({ results: [] })
-    const t = type === "multi" ? "movie" : type
-    const data = await fetchTMDB(`/search/${t}`, { query: q, page })
+    const data = await fetchTMDB(`/search/${type}`, { query: q, page })
     res.json({ ...data, results: (data.results || []).filter(r => r.media_type !== "person") })
   } catch (e) { next(e) }
 })
