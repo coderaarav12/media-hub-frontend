@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -667,7 +667,9 @@ async function renderHome() {
   const bg = first.backdrop_path ? IMG + '/w1280' + first.backdrop_path : ''
   const poster = first.poster_path ? IMG + '/w342' + first.poster_path : ''
   const title = first.title || first.name || '', year = (first.release_date||first.first_air_date||'').split('-')[0]
-  const rating = first.vote_average ? first.vote_average.toFixed(1) : '', media = first.media_type || trendType
+  const rating = first.vote_average ? first.vote_average.toFixed(1) : '';
+  let media = first.media_type || trendType;
+  if (!['movie', 'tv', 'anime'].includes(media)) media = 'movie';
   const desc = first.overview || ''
   spot.innerHTML = `<div class="spotlight" onclick="navigate('#/${media}/${first.id}')">
     <div class="spotlight-bg" style="background-image:url('${bg||'https://placehold.co/1400x600/0a0a14/fff'}')"></div>
@@ -693,7 +695,9 @@ async function renderHome() {
   const bentoItems = trendData.slice(1, 7)
   bento.innerHTML = '<div class="bento">' + bentoItems.map((item, i) => {
     const t = item.title || item.name || '', b = item.backdrop_path ? IMG + '/w780' + item.backdrop_path : ''
-    const r2 = item.vote_average ? item.vote_average.toFixed(1) : '', m = item.media_type || trendType
+    const r2 = item.vote_average ? item.vote_average.toFixed(1) : '';
+    let m = item.media_type || trendType;
+    if (!['movie', 'tv', 'anime'].includes(m)) m = 'movie';
     const wide = i < 2
     const img = item.backdrop_path ? b : (item.poster_path ? IMG + '/w342' + item.poster_path : '')
     const cls = 'bento-card' + (wide ? ' bento-wide' : '')
@@ -713,7 +717,9 @@ async function renderHome() {
   const rest = trendData.slice(7)
   area.innerHTML = rest.length ? `<div class="grid">${rest.map((item, i) => {
     const t = item.title || item.name || '', p = item.poster_path ? IMG + '/w342' + item.poster_path : ''
-    const r2 = item.vote_average ? item.vote_average.toFixed(1) : '', date = item.release_date||item.first_air_date||'', y = date ? date.split('-')[0] : '', m = item.media_type || trendType
+    const r2 = item.vote_average ? item.vote_average.toFixed(1) : '', date = item.release_date||item.first_air_date||'', y = date ? date.split('-')[0] : '';
+    let m = item.media_type || trendType;
+    if (!['movie', 'tv', 'anime'].includes(m)) m = 'movie';
     return `<div class="card" style="--i:${i}" onclick="navigate('#/${m}/${item.id}')">
       <div class="poster" style="background-image:url('${p||'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'}')">
         ${r2 ? '<span class="rating">\u2605 '+r2+'</span>' : ''}
@@ -1125,7 +1131,9 @@ async function renderSearch(q, type) {
     $('searchInfo').textContent = 'Found ' + r.length + ' results'
     $('searchGrid').innerHTML = r.map((item, i) => {
       const t = item.title || item.name || 'Untitled', date = item.release_date || item.first_air_date || '', y = date ? date.split('-')[0] : ''
-      const rt = item.vote_average ? '\u2605 ' + item.vote_average.toFixed(1) : '', poster = item.poster_path ? IMG + '/w342' + item.poster_path : '', m = item.media_type || type
+      const rt = item.vote_average ? '\u2605 ' + item.vote_average.toFixed(1) : '', poster = item.poster_path ? IMG + '/w342' + item.poster_path : '';
+      let m = item.media_type || type;
+      if (!['movie', 'tv', 'anime'].includes(m)) m = 'movie';
       return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/' + m + '/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (rt ? '<span class="rating">' + rt + '</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">' + (m === 'movie' ? 'Movie' : m === 'tv' ? 'TV' : 'Anime') + '</span></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + y + (m === 'movie' ? ' \u2022 Movie' : ' \u2022 TV') + '</p></div></div>'
     }).join('')
   }
