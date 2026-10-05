@@ -12,11 +12,11 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#050508;--bg2:#0a0a14;--card:#0d0d1a;--card2:#12121f;--border:rgba(255,255,255,0.05);--border-hover:rgba(108,92,231,0.2);--primary:#6c5ce7;--primary-light:#a29bfe;--secondary:#00cec9;--accent:#fd79a8;--text:#eeeef8;--text2:#9999bb;--muted:#666688;--radius:16px;--radius-sm:10px;--glow:0 0 30px rgba(108,92,231,0.08)}
+:root{--bg:#030305;--bg2:#0a0a10;--card:#0d0d16;--card2:#14141f;--border:rgba(255,255,255,0.06);--border-hover:rgba(108,92,231,0.25);--primary:#7c66ff;--primary-light:#b3a6ff;--secondary:#00e5df;--accent:#ff7eb3;--text:#f5f5fa;--text2:#a3a3c2;--muted:#707090;--radius:20px;--radius-sm:12px;--glow:0 0 30px rgba(124,102,255,0.1)}
 html{scroll-behavior:smooth}
-body{font-family:'Space Grotesk',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.5}
-::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--primary);border-radius:4px}
-.container{max-width:1400px;margin:0 auto;padding:0 28px;width:100%}
+body{font-family:'Space Grotesk',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.6;letter-spacing:-0.2px;font-size:15px;font-weight:400}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--card2);border-radius:6px}::-webkit-scrollbar-thumb:hover{background:var(--primary)}
+.container{max-width:1800px;margin:0 auto;padding:0 40px;width:100%}
 
 /* Ambient bg glow */
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 25%,rgba(108,92,231,0.06),transparent 55%),radial-gradient(ellipse at 80% 75%,rgba(0,206,201,0.04),transparent 50%),radial-gradient(ellipse at 50% 0%,rgba(253,121,168,0.03),transparent 40%);pointer-events:none;z-index:-1}
@@ -31,26 +31,40 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 @keyframes borderGlow{0%,100%{border-color:rgba(108,92,231,0.15)}50%{border-color:rgba(108,92,231,0.35)}}
 
 /* Nav */
-nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:64px;position:sticky;top:0;z-index:100;background:#050508;border-bottom:1px solid var(--border);max-width:1400px;margin:0 auto;width:100%}
-.nav-left{display:flex;align-items:center;gap:32px;height:100%}
-.logo{font-size:21px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.logo-icon{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff}
-.nav-links{display:flex;align-items:center;gap:2px;height:100%}
-.nav-links button{background:none;border:none;color:var(--text2);cursor:pointer;font-size:14px;padding:0 16px;height:100%;transition:all .2s;font-weight:500;font-family:inherit;position:relative;display:flex;align-items:center}
-.nav-links button:hover{color:#fff}
-.nav-links button.active{color:#fff;font-weight:600}
-.nav-links button.active::after{content:'';position:absolute;bottom:0;left:8px;right:8px;height:2px;background:var(--primary);border-radius:1px}
-.nav-right{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.nav-icon-btn{background:none;border:none;color:var(--text2);width:38px;height:38px;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.nav-icon-btn:hover{color:#fff;background:rgba(255,255,255,0.06)}
-.search-wrap{display:flex;align-items:center;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:0 4px 0 14px;transition:all .25s}
-.search-wrap:focus-within{border-color:rgba(108,92,231,0.3);background:rgba(0,0,0,0.3);box-shadow:0 0 0 3px rgba(108,92,231,0.08)}
-.search-wrap input{flex:1;background:none;border:none;padding:8px 6px;color:#fff;font-size:13.5px;outline:none;font-family:inherit;min-width:180px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:70px;position:sticky;top:0;z-index:100;background:rgba(5,5,8,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.05);width:100%;max-width:none}
+.nav-left{display:flex;align-items:center;gap:40px;height:100%}
+.logo{font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:12px;flex-shrink:0;letter-spacing:-0.5px;}
+.logo-icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+.nav-links{display:flex;align-items:center;gap:8px;height:100%}
+.nav-links button{background:none;border:none;color:var(--text2);cursor:pointer;font-size:14.5px;padding:0 12px;height:36px;border-radius:18px;transition:all .25s;font-weight:500;font-family:inherit;display:flex;align-items:center}
+.nav-links button:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.nav-links button.active{color:#fff;font-weight:600;background:rgba(255,255,255,0.08)}
+.nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.nav-icon-btn{background:none;border:none;color:var(--text2);width:40px;height:40px;border-radius:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.nav-icon-btn:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.search-wrap{display:flex;align-items:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:30px;padding:4px 6px;position:relative;transition:all .25s}
+.search-wrap:focus-within{border-color:rgba(108,92,231,0.5);background:rgba(0,0,0,0.4);box-shadow:0 0 0 4px rgba(108,92,231,0.1)}
+.search-wrap input{flex:1;background:none;border:none;padding:8px 12px;color:#fff;font-size:14px;outline:none;font-family:inherit;min-width:220px}
 .search-wrap input::placeholder{color:var(--muted)}
 .search-wrap input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none}
-.search-wrap select{background:none;border:none;color:var(--text2);padding:8px 4px;font-size:12px;outline:none;cursor:pointer;font-family:inherit}
-.search-wrap button{background:var(--primary);border:none;color:#fff;padding:5px 11px;border-radius:5px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s;font-family:inherit;white-space:nowrap;line-height:1}
-.search-wrap button:hover{background:#5a4bd1}
+.search-wrap select{background:none;border:none;color:var(--text2);padding:8px 12px;font-size:13px;outline:none;cursor:pointer;font-family:inherit;border-left:1px solid rgba(255,255,255,0.1);appearance:none;-webkit-appearance:none;padding-right:24px;background-image:url('data:image/svg+xml;utf8,<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="%238c8c9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');background-repeat:no-repeat;background-position:right 8px center;}
+.search-wrap select option{background:var(--card);color:var(--text);}
+.search-wrap button{background:var(--primary);border:none;color:#fff;padding:8px 18px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:600;transition:all .25s;font-family:inherit;white-space:nowrap;margin-left:6px}
+.search-wrap button:hover{background:#8b7cf7;transform:translateY(-1px);box-shadow:0 4px 12px rgba(108,92,231,0.3)}
+
+/* Autocomplete */
+.ac-dropdown{position:absolute;top:calc(100% + 8px);left:0;right:0;background:rgba(15,15,22,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.6);z-index:200;max-height:400px;overflow-y:auto;display:none;flex-direction:column;padding:8px}
+.ac-dropdown.active{display:flex}
+.ac-dropdown::-webkit-scrollbar{width:6px}
+.ac-dropdown::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}
+.ac-item{display:flex;align-items:center;gap:14px;padding:8px;border-radius:10px;cursor:pointer;transition:background .2s;text-decoration:none}
+.ac-item:hover{background:rgba(255,255,255,0.06)}
+.ac-poster{width:42px;height:62px;background-size:cover;background-position:center;border-radius:6px;background-color:#1a1a2e;flex-shrink:0}
+.ac-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.ac-title{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.ac-meta{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.ac-meta span{background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:0.3px}
+
 
 /* Mobile search toggle */
 .search-toggle{display:none}
@@ -84,11 +98,11 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 .spotlight-info{position:relative;display:flex;flex-direction:column;justify-content:center;padding:40px 40px 40px 0;z-index:2}
 .spotlight-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;background:linear-gradient(135deg,rgba(108,92,231,0.15),rgba(0,206,201,0.1));color:var(--primary-light);border:1px solid rgba(108,92,231,0.15);margin-bottom:14px;width:fit-content}
 .spotlight-badge::before{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--secondary);animation:glowPulse 2s infinite}
-.spotlight-info h1{font-size:30px;font-weight:700;letter-spacing:-0.5px;line-height:1.15;margin-bottom:10px}
-.spotlight-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
-.spotlight-meta span{padding:3px 12px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.04);color:var(--text2);border:1px solid var(--border)}
-.spotlight-meta .rating{color:var(--accent);border-color:rgba(253,121,168,0.15);background:rgba(253,121,168,0.05)}
-.spotlight-desc{color:var(--text2);font-size:14px;line-height:1.7;margin-bottom:18px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.spotlight-info h1{font-size:38px;font-weight:700;letter-spacing:-1px;line-height:1.2;margin-bottom:12px}
+.spotlight-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.spotlight-meta span{padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600;background:rgba(255,255,255,0.06);color:var(--text);border:1px solid var(--border)}
+.spotlight-meta .rating{color:var(--accent);border-color:rgba(253,121,168,0.2);background:rgba(253,121,168,0.1)}
+.spotlight-desc{color:var(--text2);font-size:15px;line-height:1.7;margin-bottom:24px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 .spotlight-actions{display:flex;gap:10px}
 .spotlight-actions .btn-play{padding:11px 28px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;transition:all .25s;display:inline-flex;align-items:center;gap:8px;font-family:inherit}
 .spotlight-actions .btn-play:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(108,92,231,0.3)}
@@ -126,10 +140,10 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 .card .hover-overlay .pbtn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;box-shadow:0 4px 16px rgba(108,92,231,0.25);transform:scale(0.7);transition:transform .35s cubic-bezier(.16,1,.3,1)}
 .card:hover .hover-overlay .pbtn{transform:scale(1)}
 .card .hover-overlay .mtag{color:#fff;font-size:10px;font-weight:500;background:rgba(255,255,255,0.08);padding:3px 10px;border-radius:6px;backdrop-filter:blur(4px);letter-spacing:0.3px}
-.card .info{padding:12px 14px 14px;position:relative;z-index:2}
-.card .info h3{font-size:13px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;transition:color .3s}
-.card:hover .info h3{color:var(--secondary)}
-.card .info p{font-size:11px;color:var(--muted);margin-top:4px}
+.card .info{padding:14px 16px 18px;position:relative;z-index:2}
+.card .info h3{font-size:14.5px;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;transition:color .3s;letter-spacing:-0.2px;}
+.card:hover .info h3{color:var(--primary-light)}
+.card .info p{font-size:12.5px;color:var(--muted);margin-top:6px;font-weight:500;}
 
 /* Detail */
 .detail-page{display:none;padding-top:8px}
@@ -323,12 +337,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 /* Mobile */
 @media(max-width:900px){
   .container{padding:0 16px}
-  nav{padding:0 16px;height:auto;gap:0;flex-wrap:wrap}
-  .nav-left{width:100%;justify-content:flex-start;gap:12px;height:56px}
-  .nav-links{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap;gap:0;height:100%}
+  nav{display:grid;grid-template-areas:"logo right" "links links";grid-template-columns:1fr auto;padding:12px 20px 8px;height:auto;gap:12px;background:rgba(5,5,8,0.85)}
+  .nav-left{display:contents}
+  .logo{grid-area:logo;height:44px;}
+  .nav-links{grid-area:links;width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap;gap:8px;padding-bottom:4px;}
   .nav-links::-webkit-scrollbar{display:none}
-  .nav-links button{font-size:13px;padding:0 10px;height:100%;flex-shrink:0}
-  .nav-right{width:auto;margin-left:auto;height:44px;display:flex;align-items:center;gap:4px}
+  .nav-links button{font-size:13.5px;padding:0 14px;height:34px;flex-shrink:0;background:rgba(255,255,255,0.05);border-radius:17px;}
+  .nav-right{grid-area:right;display:flex;align-items:center;gap:6px;height:44px;}
   #desktopSearch{display:none}
   .search-toggle{display:flex}
   .nav-icon-btn{width:36px;height:36px}
@@ -355,14 +370,12 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 }
 @media(max-width:480px){
   .container{padding:0 12px}
-  nav{padding:0 10px}
-  .nav-left{height:48px;gap:6px}
-  .nav-links{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;flex-wrap:nowrap;gap:0;height:100%}
-  .nav-links::-webkit-scrollbar{display:none}
-  .nav-links button{font-size:11.5px;padding:0 8px;height:100%;flex-shrink:0}
-  .nav-links button.active::after{display:none}
-  .nav-right{height:38px}
-  .nav-icon-btn{width:30px;height:30px}
+  nav{padding:10px 12px 6px}
+  .nav-links button{font-size:12px;padding:0 10px;height:30px}
+  .logo{height:36px;font-size:20px;}
+  .logo-icon{width:26px;height:26px;}
+  .nav-right{height:36px}
+  .nav-icon-btn{width:32px;height:32px}
   .spotlight-poster .poster-img{width:140px}
   .spotlight-info{padding:0 16px 16px}
   .bento{grid-template-columns:1fr 1fr;gap:6px}
@@ -402,6 +415,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
         <option value="live">Live TV</option>
       </select>
       <button onclick="triggerSearch()">Search</button>
+      <div class="ac-dropdown" id="desktopAcDropdown"></div>
     </div>
     <button class="nav-icon-btn" onclick="openShare()" title="Share" aria-label="Share">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -422,6 +436,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
         <option value="live">Live TV</option>
       </select>
     <button onclick="triggerMobileSearch()">Search</button>
+    <div class="ac-dropdown" id="mobileAcDropdown"></div>
   </div>
 </div>
 
@@ -496,6 +511,10 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
     <div class="footer-inner">
       <span class="footer-logo">&#9654; MediaHub</span>
       <div class="footer-links">
+        <a href="#/terms">Terms of Use</a>
+        <span class="footer-dot">&middot;</span>
+        <a href="#/privacy">Privacy Policy</a>
+        <span class="footer-dot">&middot;</span>
         <a href="https://github.com/coderaarav12/media-hub-frontend" target="_blank" rel="noopener">GitHub</a>
         <span class="footer-dot">&middot;</span>
         <span id="footerStars">&#9733; --</span>
@@ -592,9 +611,64 @@ let currentItem = null, currentSeason = 1, currentSources = [], currentSourceIdx
 
 const $ = id => document.getElementById(id)
 
-$('searchInput').addEventListener('keydown', e => { if(e.key === 'Enter') triggerSearch() })
-$('searchInput').addEventListener('search', () => { if($('searchInput').value) triggerSearch() })
-$('searchInputMobile').addEventListener('keydown', e => { if(e.key === 'Enter') triggerMobileSearch() })
+$('searchInput').addEventListener('keydown', e => { if(e.key === 'Enter') { $('desktopAcDropdown')?.classList.remove('active'); triggerSearch() } })
+$('searchInput').addEventListener('search', () => { if($('searchInput').value) { $('desktopAcDropdown')?.classList.remove('active'); triggerSearch() } })
+$('searchInputMobile').addEventListener('keydown', e => { if(e.key === 'Enter') { $('mobileAcDropdown')?.classList.remove('active'); triggerMobileSearch() } })
+
+let acTimeout;
+async function fetchAutocomplete(q, type, dropdownId) {
+  const dd = $(dropdownId);
+  if (!q.trim()) { dd.classList.remove('active'); return; }
+  dd.innerHTML = '<div class="ac-item" style="justify-content:center;color:var(--muted);background:none">Searching...</div>';
+  dd.classList.add('active');
+  try {
+    let results = [];
+    if (type === 'live') {
+      const all = currentLiveChannels.length ? currentLiveChannels : []; 
+      const lower = q.toLowerCase();
+      results = all.filter(c => c.name.toLowerCase().includes(lower)).slice(0, 10);
+    } else {
+      const d = await fetchAPI(`/search?q=${encodeURIComponent(q)}&type=${type}`);
+      if (d && d.results) {
+        results = d.results.filter(x => x.media_type !== 'person' || !x.media_type).slice(0, 8);
+      }
+    }
+    if (!results.length) {
+      dd.innerHTML = '<div class="ac-item" style="justify-content:center;color:var(--muted);background:none">No results</div>';
+      return;
+    }
+    let html = '';
+    results.forEach(item => {
+      if (type === 'live') {
+        html += `<div class="ac-item" onclick="playLiveStream(${currentLiveChannels.indexOf(item)}); $('${dropdownId}').classList.remove('active')"><div class="ac-poster" style="background-image:url('${item.logo || 'https://placehold.co/42x62/1a1a2e/666/?text=TV'}')"></div><div class="ac-info"><div class="ac-title">${escapeHtml(item.name)}</div><div class="ac-meta"><span>LIVE</span></div></div></div>`;
+      } else {
+        let m = item.media_type || type;
+        if (!['movie', 'tv', 'anime'].includes(m)) m = 'movie';
+        const t = item.title || item.name || 'Untitled', date = item.release_date || item.first_air_date || '', y = date ? date.split('-')[0] : '';
+        const p = item.poster_path ? IMG + '/w154' + item.poster_path : 'https://placehold.co/42x62/1a1a2e/666/?text=No+Img';
+        html += `<a class="ac-item" href="#/${m}/${item.id}" onclick="$('${dropdownId}').classList.remove('active')"><div class="ac-poster" style="background-image:url('${p}')"></div><div class="ac-info"><div class="ac-title">${escapeHtml(t)}</div><div class="ac-meta"><span>${m.toUpperCase()}</span>${y ? `<span>${y}</span>` : ''}</div></div></a>`;
+      }
+    });
+    dd.innerHTML = html;
+  } catch (e) {
+    dd.innerHTML = '<div class="ac-item" style="justify-content:center;color:var(--muted);background:none">Error fetching results</div>';
+  }
+}
+$('searchInput').addEventListener('input', e => {
+  clearTimeout(acTimeout);
+  acTimeout = setTimeout(() => fetchAutocomplete(e.target.value, $('searchType').value, 'desktopAcDropdown'), 350);
+});
+$('searchInputMobile').addEventListener('input', e => {
+  clearTimeout(acTimeout);
+  acTimeout = setTimeout(() => fetchAutocomplete(e.target.value, $('searchTypeMobile').value, 'mobileAcDropdown'), 350);
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) {
+    $('desktopAcDropdown')?.classList.remove('active');
+    $('mobileAcDropdown')?.classList.remove('active');
+  }
+});
+
 
 // PWA Install
 let installPrompt = null
@@ -635,6 +709,8 @@ function handleRoute() {
   else if(parts[0] === 'live') renderLiveTv()
   else if(parts[0] === 'search') { const p = new URLSearchParams(qs||''); renderSearch(p.get('q')||'', p.get('type')||'multi') }
   else if(['movie','tv','anime'].includes(parts[0])) renderDetail(parts[0], parts[1], parts[2]||null)
+  else if(parts[0] === 'terms') renderTerms()
+  else if(parts[0] === 'privacy') renderPrivacy()
   else renderHome()
 }
 
@@ -1011,14 +1087,13 @@ function renderLiveChannels(channels) {
     groups[letter].push(ch)
   }
   const letters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  let idx = 0
   let html = '<div class="results-info" style="margin-bottom:4px">' + channels.length + ' channels</div>'
   for (const letter of letters) {
     if (!groups[letter]) continue
     html += '<div class="ch-letter-header" id="ch-letter-' + letter + '">' + letter + '</div><div class="live-channel-grid">'
     for (const ch of groups[letter]) {
       const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
-      html += '<div class="live-channel-card" onclick="playLiveStream(' + (idx++) + ')">' +
+      html += '<div class="live-channel-card" onclick="playLiveStream(' + sorted.indexOf(ch) + ')">' +
         (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
         '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
         srcLabel +
@@ -1167,6 +1242,15 @@ async function renderSearch(q, type) {
       return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/' + m + '/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (rt ? '<span class="rating">' + rt + '</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">' + (m === 'movie' ? 'Movie' : m === 'tv' ? 'TV' : 'Anime') + '</span></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + y + (m === 'movie' ? ' \u2022 Movie' : ' \u2022 TV') + '</p></div></div>'
     }).join('')
   }
+}
+// --- Legal Pages ---
+function renderTerms() {
+  showDetail(); document.title = 'Terms of Use - MediaHub'
+  $('detailPage').innerHTML = '<div style="max-width:800px;margin:40px auto;padding:0 20px;"><h1 style="font-size:32px;margin-bottom:24px;">Terms of Use</h1><p style="margin-bottom:16px;color:var(--text2)">Last updated: October 2026</p><h3 style="margin:24px 0 12px;font-size:20px;">1. Acceptance of Terms</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">By accessing and using MediaHub, you accept and agree to be bound by the terms and provision of this agreement. MediaHub acts merely as an aggregator and does not host any media content on its own servers.</p><h3 style="margin:24px 0 12px;font-size:20px;">2. Content Disclaimer</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">MediaHub indexes content available publicly on the internet. We do not control or take responsibility for the nature, content, and availability of third-party streams or sites linked through our app.</p><h3 style="margin:24px 0 12px;font-size:20px;">3. User Conduct</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">You agree to use MediaHub only for lawful purposes. You are prohibited from violating or attempting to violate the security of the application or using it to distribute malicious software.</p></div>'
+}
+function renderPrivacy() {
+  showDetail(); document.title = 'Privacy Policy - MediaHub'
+  $('detailPage').innerHTML = '<div style="max-width:800px;margin:40px auto;padding:0 20px;"><h1 style="font-size:32px;margin-bottom:24px;">Privacy Policy</h1><p style="margin-bottom:16px;color:var(--text2)">Last updated: October 2026</p><h3 style="margin:24px 0 12px;font-size:20px;">1. Information Collection</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">MediaHub is designed to be privacy-first. We do not require you to create an account, and we do not collect personally identifiable information (PII) such as your name, email, or address.</p><h3 style="margin:24px 0 12px;font-size:20px;">2. Local Storage</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">We may use your browser\'s local storage to save your preferences, search history, or customized settings locally on your device. This data is not transmitted to our servers.</p><h3 style="margin:24px 0 12px;font-size:20px;">3. Third-Party Services</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">MediaHub utilizes external APIs (such as TMDB) to fetch metadata. These third-party services may log your IP address according to their own privacy policies when requests are made directly from your browser.</p></div>'
 }
 
 // --- Detail ---
