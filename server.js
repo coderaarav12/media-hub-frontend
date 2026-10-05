@@ -70,6 +70,13 @@ app.get("/api/tv/:id", async (req, res, next) => {
   } catch (e) { next(e) }
 })
 
+app.get("/api/person/:id", async (req, res, next) => {
+  try {
+    const data = await fetchTMDB(`/person/${req.params.id}`, { append_to_response: "combined_credits" })
+    res.json(data)
+  } catch (e) { next(e) }
+})
+
 app.get("/api/tv/:id/season/:season", async (req, res, next) => {
   try {
     const data = await fetchTMDB(`/tv/${req.params.id}/season/${req.params.season}`)
