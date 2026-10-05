@@ -39,6 +39,16 @@ app.use(cors())
 app.use(express.json({ limit: "1mb" }))
 app.use(express.static("public"))
 
+// Normalize incoming paths so that both /movie/:id and /api/movie/:id work seamlessly,
+// and clean up any double slashes (e.g. //movie/550)
+app.use((req, res, next) => {
+  req.url = req.url.replace(/\/+/g, '/')
+  if (!req.url.startsWith('/api') && req.url !== '/' && !req.url.startsWith('/public')) {
+    req.url = '/api' + req.url
+  }
+  next()
+})
+
 app.get("/api/search", async (req, res, next) => {
   try {
     const { q, type = "multi", page = 1 } = req.query
