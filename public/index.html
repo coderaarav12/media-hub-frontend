@@ -1308,13 +1308,24 @@ checkUpdate()
 loadRepoStats()
 handleRoute()
 
-// --- Popup Blocker ---
+// --- Popup Blocker (Allows legitimate links like IMDb) ---
 ;(function(){
-  window.open = function(){ return null }
-  document.addEventListener('click',function(e){
+  const _realOpen = window.open
+  window.open = function(url, target, features){
+    if (typeof url === 'string' && (url.includes('imdb.com') || url.includes('themoviedb.org'))) {
+      return _realOpen ? _realOpen.call(window, url, target, features) : null
+    }
+    return null
+  }
+  document.addEventListener('click', function(e){
     const a = e.target.closest('a[target="_blank"]')
-    if(a){ e.preventDefault(); e.stopPropagation(); return false }
-  },true)
+    if(a){
+      if(a.href && (a.href.includes('imdb.com') || a.href.includes('themoviedb.org'))){
+        return
+      }
+      e.preventDefault(); e.stopPropagation(); return false
+    }
+  }, true)
 })()
 </script>
 </body>
