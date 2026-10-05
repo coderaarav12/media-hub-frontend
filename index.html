@@ -830,7 +830,18 @@ function showTv() { $('homePage').style.display = 'none'; $('detailPage').style.
 function showAnime() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'block'; $('livePage').style.display = 'none' }
 function showLive() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'block' }
 
-async function fetchAPI(path) { try { const r = await fetch(API_BASE + path); const d = await r.json(); return (d && d.success === false) ? null : d; } catch(e) { return null } }
+async function fetchAPI(path) {
+  try {
+    let base = (typeof API_BASE !== 'undefined' ? API_BASE : '').trim().replace(/\/+$/, '')
+    if (base && !base.endsWith('/api')) base += '/api'
+    const cleanPath = path.startsWith('/') ? path : '/' + path
+    const r = await fetch((base ? base : '/api') + cleanPath)
+    const d = await r.json()
+    return (d && d.success === false) ? null : d
+  } catch(e) {
+    return null
+  }
+}
 
 // --- Home ---
 let trendType = 'all'
