@@ -58,8 +58,15 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 .search-wrap input{flex:1;background:none;border:none;padding:8px 12px;color:#fff;font-size:14px;outline:none;font-family:inherit;min-width:400px;max-width:600px}
 .search-wrap input::placeholder{color:var(--muted)}
 .search-wrap input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none}
-.search-wrap select{background:none;border:none;color:var(--text2);padding:8px 12px;font-size:13px;outline:none;cursor:pointer;font-family:inherit;border-left:1px solid rgba(255,255,255,0.1);appearance:none;-webkit-appearance:none;padding-right:24px;background-image:url('data:image/svg+xml;utf8,<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="%238c8c9e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');background-repeat:no-repeat;background-position:right 8px center;}
-.search-wrap select option{background:var(--card);color:var(--text);}
+.custom-select-wrapper{position:relative;user-select:none;border-left:1px solid rgba(255,255,255,0.1)}
+.custom-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 14px;color:var(--text2);font-size:13px;cursor:pointer;min-width:85px;font-weight:500;transition:all .2s}
+.custom-select-trigger:hover{color:#fff}
+.custom-select-options{position:absolute;top:calc(100% + 12px);right:0;background:#0d0d16;border:1px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,0.6);opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .2s;min-width:130px;z-index:200}
+.custom-select-wrapper.open .custom-select-options{opacity:1;visibility:visible;transform:translateY(0)}
+.custom-option{padding:12px 16px;font-size:13px;color:var(--text2);cursor:pointer;transition:background .2s,color .2s;border-bottom:1px solid rgba(255,255,255,0.03)}
+.custom-option:last-child{border-bottom:none}
+.custom-option:hover{background:rgba(255,255,255,0.06);color:#fff}
+.custom-option.selected{color:var(--primary-light);background:rgba(108,92,231,0.15);font-weight:600}
 .search-wrap button{background:var(--primary);border:none;color:#fff;padding:8px 18px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:600;transition:all .25s;font-family:inherit;white-space:nowrap;margin-left:6px}
 .search-wrap button:hover{background:#8b7cf7;transform:translateY(-1px);box-shadow:0 4px 12px rgba(108,92,231,0.3)}
 
@@ -429,13 +436,17 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
     </button>
     <div class="search-wrap" id="desktopSearch">
       <input type="search" id="searchInput" placeholder="Search movies, shows, anime..." enterkeyhint="search" autocomplete="off">
-      <select id="searchType">
-        <option value="multi">All</option>
-        <option value="movie">Movies</option>
-        <option value="tv">TV</option>
-        <option value="anime">Anime</option>
-        <option value="live">Live TV</option>
-      </select>
+      <div class="custom-select-wrapper" id="typeDesktopWrapper">
+        <div class="custom-select-trigger"><span class="c-val">All</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+        <div class="custom-select-options">
+          <div class="custom-option selected" data-value="multi">All</div>
+          <div class="custom-option" data-value="movie">Movies</div>
+          <div class="custom-option" data-value="tv">TV</div>
+          <div class="custom-option" data-value="anime">Anime</div>
+          <div class="custom-option" data-value="live">Live TV</div>
+        </div>
+        <input type="hidden" id="searchType" value="multi">
+      </div>
       <button onclick="triggerSearch()">Search</button>
       <div class="ac-dropdown" id="desktopAcDropdown"></div>
     </div>
@@ -450,13 +461,17 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 <div class="search-mobile" id="mobileSearch">
   <div class="search-wrap">
     <input type="search" id="searchInputMobile" placeholder="Search movies, shows, anime..." enterkeyhint="search" autocomplete="off">
-      <select id="searchTypeMobile">
-        <option value="multi">All</option>
-        <option value="movie">Movies</option>
-        <option value="tv">TV</option>
-        <option value="anime">Anime</option>
-        <option value="live">Live TV</option>
-      </select>
+      <div class="custom-select-wrapper" id="typeMobileWrapper">
+        <div class="custom-select-trigger"><span class="c-val">All</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+        <div class="custom-select-options">
+          <div class="custom-option selected" data-value="multi">All</div>
+          <div class="custom-option" data-value="movie">Movies</div>
+          <div class="custom-option" data-value="tv">TV</div>
+          <div class="custom-option" data-value="anime">Anime</div>
+          <div class="custom-option" data-value="live">Live TV</div>
+        </div>
+        <input type="hidden" id="searchTypeMobile" value="multi">
+      </div>
     <button onclick="triggerMobileSearch()">Search</button>
     <div class="ac-dropdown" id="mobileAcDropdown"></div>
   </div>
@@ -707,9 +722,9 @@ async function fetchAutocomplete(q, type, dropdownId) {
       const tmdbItems = (tmdbRes?.results || []).filter(x => x.media_type !== 'person').slice(0, 4);
       const animeItems = (animeRes?.media || []).slice(0, 2);
       
-      addTMDB(tmdbItems);
-      addAnime(animeItems);
-      addLive(liveMatches);
+      if(tmdbItems.length) { itemsHtml += `<div style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.05);margin-bottom:4px">Movies & TV</div>`; addTMDB(tmdbItems); }
+      if(animeItems.length) { itemsHtml += `<div style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.05);margin:4px 0">Anime</div>`; addAnime(animeItems); }
+      if(liveMatches.length) { itemsHtml += `<div style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.05);margin:4px 0">Live TV</div>`; addLive(liveMatches); }
     }
 
     if (!itemsHtml) {
@@ -1563,6 +1578,27 @@ function closeChangelog() { $('changelogOverlay').classList.remove('active') }
 checkUpdate()
 loadRepoStats()
 handleRoute()
+// --- Custom Selects ---
+document.querySelectorAll('.custom-select-wrapper').forEach(wrap => {
+  const trig = wrap.querySelector('.custom-select-trigger')
+  const opts = wrap.querySelectorAll('.custom-option')
+  const inp = wrap.querySelector('input')
+  trig.addEventListener('click', e => { e.stopPropagation(); document.querySelectorAll('.custom-select-wrapper').forEach(w => w !== wrap && w.classList.remove('open')); wrap.classList.toggle('open') })
+  opts.forEach(o => {
+    o.addEventListener('click', () => {
+      opts.forEach(x => x.classList.remove('selected'))
+      o.classList.add('selected')
+      inp.value = o.dataset.value
+      trig.querySelector('.c-val').textContent = o.textContent
+      wrap.classList.remove('open')
+      
+      // Auto trigger search if input has value
+      if(wrap.id === 'typeDesktopWrapper' && $('searchInput').value) triggerSearch()
+      if(wrap.id === 'typeMobileWrapper' && $('searchInputMobile').value) triggerMobileSearch()
+    })
+  })
+})
+document.addEventListener('click', () => { document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open')) })
 
 // --- Popup Blocker ---
 ;(function(){
