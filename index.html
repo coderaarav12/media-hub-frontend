@@ -172,7 +172,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 .cast-list{display:flex;overflow-x:auto;gap:14px;padding-bottom:12px;scroll-snap-type:x mandatory;}
 .cast-list::-webkit-scrollbar{height:4px;}
 .cast-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-.cast-card{width:130px;flex-shrink:0;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);scroll-snap-align:start;}
+.cast-card{width:130px;flex-shrink:0;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);scroll-snap-align:start;cursor:pointer;transition:transform .2s,border-color .2s}
+.cast-card:hover{transform:translateY(-4px);border-color:var(--border-hover)}
 .cast-photo{width:100%;aspect-ratio:2/3;background-size:cover;background-position:center;background-color:#1a1a2e;}
 .cast-info-box{padding:12px 10px;text-align:center;}
 .cast-info-box strong{display:block;font-size:13px;color:var(--text);font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -709,6 +710,7 @@ function handleRoute() {
   else if(parts[0] === 'live') renderLiveTv()
   else if(parts[0] === 'search') { const p = new URLSearchParams(qs||''); renderSearch(p.get('q')||'', p.get('type')||'multi') }
   else if(['movie','tv','anime'].includes(parts[0])) renderDetail(parts[0], parts[1], parts[2]||null)
+  else if(parts[0] === 'person') renderPerson(parts[1])
   else if(parts[0] === 'terms') renderTerms()
   else if(parts[0] === 'privacy') renderPrivacy()
   else renderHome()
@@ -1252,6 +1254,29 @@ function renderPrivacy() {
   showDetail(); document.title = 'Privacy Policy - MediaHub'
   $('detailPage').innerHTML = '<div style="max-width:800px;margin:40px auto;padding:0 20px;"><h1 style="font-size:32px;margin-bottom:24px;">Privacy Policy</h1><p style="margin-bottom:16px;color:var(--text2)">Last updated: October 2026</p><h3 style="margin:24px 0 12px;font-size:20px;">1. Information Collection</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">MediaHub is designed to be privacy-first. We do not require you to create an account, and we do not collect personally identifiable information (PII) such as your name, email, or address.</p><h3 style="margin:24px 0 12px;font-size:20px;">2. Local Storage</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">We may use your browser\'s local storage to save your preferences, search history, or customized settings locally on your device. This data is not transmitted to our servers.</p><h3 style="margin:24px 0 12px;font-size:20px;">3. Third-Party Services</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">MediaHub utilizes external APIs (such as TMDB) to fetch metadata. These third-party services may log your IP address according to their own privacy policies when requests are made directly from your browser.</p></div>'
 }
+async function renderPerson(id) {
+  showDetail(); document.title = 'Loading...'
+  const dp = $('detailPage'); dp.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  const d = await fetchAPI('/person/' + id)
+  if(!d) { dp.innerHTML = '<div class="loading"><p>Error loading</p></div>'; return }
+  document.title = (d.name || 'Unknown') + ' - MediaHub'
+  const photo = d.profile_path ? IMG + '/w500' + d.profile_path : 'https://placehold.co/500x750/0a0a14/fff/?text=No+Photo'
+  const bio = d.biography ? d.biography.replace(/\n/g, '<br>') : 'No biography available.'
+  const knownFor = d.known_for_department || 'Acting'
+  const birthday = d.birthday || 'Unknown'
+  const placeOfBirth = d.place_of_birth || 'Unknown'
+  let credits = []
+  if (d.combined_credits && d.combined_credits.cast) {
+    credits = d.combined_credits.cast.sort((a, b) => b.popularity - a.popularity).slice(0, 24)
+  }
+  const creditsHtml = credits.length > 0 ? '<div class="similar-section" style="margin-top:0"><h2 class="section-title">Known For</h2><div class="grid" style="margin-top:16px;">' + credits.map(s => {
+    const p = s.poster_path ? IMG + '/w342' + s.poster_path : 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster';
+    const y = (s.release_date||s.first_air_date||'').split('-')[0] || '';
+    const m = s.media_type || 'movie'
+    return '<div class="card" onclick="navigate(\'#/' + m + '/' + s.id + '\')"><div class="poster" style="background-image:url(\'' + p + '\')">' + (s.vote_average ? '<span class="rating">\u2605 ' + s.vote_average.toFixed(1) + '</span>' : '') + '</div><div class="info"><h3>' + escapeHtml(s.title || s.name || '') + '</h3><p>' + y + '</p></div></div>';
+  }).join('') + '</div></div>' : ''
+  dp.innerHTML = '<button class="back-btn" onclick="history.back()">\u2190 Back</button><div class="detail-hero" style="min-height:auto; align-items:flex-start; padding: 4% 6%; background:var(--card); display:flex; gap:32px; flex-wrap:wrap; border:none; box-shadow:none;"><div class="detail-poster" style="background-image:url(\'' + photo + '\'); width: 260px; max-width: 100%; flex-shrink: 0; box-shadow:0 20px 40px rgba(0,0,0,0.5);"></div><div class="detail-info" style="flex:1; min-width:200px;"><h1 style="font-size:42px; font-weight:700; margin-bottom:16px; letter-spacing:-1px;">' + escapeHtml(d.name) + '</h1><div class="spotlight-meta" style="margin-bottom:24px;"><span>' + escapeHtml(knownFor) + '</span>' + (birthday !== 'Unknown' ? '<span>Born: ' + escapeHtml(birthday) + '</span>' : '') + (placeOfBirth !== 'Unknown' ? '<span>' + escapeHtml(placeOfBirth) + '</span>' : '') + '</div><h3 style="font-size:20px; font-weight:600; margin-bottom:12px;">Biography</h3><p class="overview" style="max-width:none; line-height:1.8; font-size:15px; color:var(--text2);">' + bio + '</p></div></div><div class="detail-content">' + creditsHtml + '</div>'
+}
 
 // --- Detail ---
 async function renderDetail(type, id, season) {
@@ -1271,7 +1296,7 @@ async function renderDetail(type, id, season) {
     const year = (d.release_date||d.first_air_date||'').split('-')[0] || '', poster = d.poster_path ? IMG + '/w342' + d.poster_path : '', bg = d.backdrop_path ? IMG + '/w1280' + d.backdrop_path : ''
     const rating = d.vote_average ? '\u2605 ' + d.vote_average.toFixed(1) + (d.vote_count ? ' (' + d.vote_count + ' votes)' : '') : '', rt = type === 'movie' && d.runtime ? d.runtime + 'm' : '', genres = (d.genres||[]).map(g => g.name||g), desc = d.overview || 'No description.'
     currentItem = { type, id, title }
-    const castHtml = (d.credits && d.credits.cast && d.credits.cast.length > 0) ? '<div class="cast-section"><h2 class="section-title">Cast</h2><div class="cast-list">' + d.credits.cast.slice(0, 10).map(c => '<div class="cast-card"><div class="cast-photo" style="background-image:url(\'' + (c.profile_path ? IMG + '/w185' + c.profile_path : 'https://placehold.co/185x278/1a1a2e/666/?text=No+Photo') + '\')"></div><div class="cast-info-box"><strong>' + escapeHtml(c.name) + '</strong><span>' + escapeHtml(c.character || '') + '</span></div></div>').join('') + '</div></div>' : ''
+    const castHtml = (d.credits && d.credits.cast && d.credits.cast.length > 0) ? '<div class="cast-section"><h2 class="section-title">Cast</h2><div class="cast-list">' + d.credits.cast.slice(0, 10).map(c => '<div class="cast-card" onclick="navigate(\'#/person/' + c.id + '\')"><div class="cast-photo" style="background-image:url(\'' + (c.profile_path ? IMG + '/w185' + c.profile_path : 'https://placehold.co/185x278/1a1a2e/666/?text=No+Photo') + '\')"></div><div class="cast-info-box"><strong>' + escapeHtml(c.name) + '</strong><span>' + escapeHtml(c.character || '') + '</span></div></div>').join('') + '</div></div>' : ''
     const similarHtml = (d.similar && d.similar.results && d.similar.results.length > 0) ? '<div class="similar-section"><h2 class="section-title">Similar ' + (type === 'movie' ? 'Movies' : 'Shows') + '</h2><div class="similar-list">' + d.similar.results.slice(0, 10).map(s => { const p = s.poster_path ? IMG + '/w342' + s.poster_path : 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'; const y = (s.release_date||s.first_air_date||'').split('-')[0] || ''; return '<div class="card" onclick="navigate(\'#/' + type + '/' + s.id + '\')"><div class="poster" style="background-image:url(\'' + p + '\')">' + (s.vote_average ? '<span class="rating">\u2605 ' + s.vote_average.toFixed(1) + '</span>' : '') + '</div><div class="info"><h3>' + escapeHtml(s.title || s.name || '') + '</h3><p>' + y + '</p></div></div>'; }).join('') + '</div></div>' : ''
     const extendedInfo = '<div class="extended-info">' + castHtml + similarHtml + '</div>'
     dp.innerHTML = '<button class="back-btn" onclick="goHome()">\u2190 Back</button><div class="detail-hero"><div class="detail-bg" style="background-image:url(\'' + (bg || 'https://placehold.co/1280x720/0c0c1e/fff') + '\')"></div><div class="detail-overlay"><div class="detail-poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')"></div><div class="detail-info"><h1>' + title + '</h1><div class="detail-meta">' + (year ? '<span>' + year + '</span>' : '') + (rating ? '<span>' + rating + '</span>' : '') + (rt ? '<span>' + rt + '</span>' : '') + (d.status ? '<span>' + d.status + '</span>' : '') + (type === 'tv' && d.number_of_seasons ? '<span>' + d.number_of_seasons + ' Seasons</span>' : '') + '</div><p class="overview">' + desc + '</p><div class="genre-tags">' + genres.map(g => '<span>' + g + '</span>').join('') + '</div><div class="detail-actions" style="margin-top:16px">' + (type === 'movie' ? '<button class="btn-play" onclick="playItem(\'movie\',' + id + ')">\u25B6 Play Now</button>' : '') + (type === 'tv' ? '<button class="btn-play" onclick="playItem(\'tv\',' + id + ',1,1)">\u25B6 Play S1:E1</button>' : '') + '<button class="btn-secondary" onclick="goHome()">Browse</button></div></div></div></div><div class="detail-content">' + (type === 'tv' ? '<div id="seasonsSection"></div>' : '') + extendedInfo + '</div>'
