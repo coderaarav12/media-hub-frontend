@@ -152,6 +152,23 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 32px
 .genre-tags{display:flex;flex-wrap:wrap;gap:4px}
 .genre-tags span{padding:3px 12px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(108,92,231,0.08);color:var(--primary-light);border:1px solid rgba(108,92,231,0.1)}
 
+/* Extended Info */
+.extended-info{margin-top:40px; display:flex; flex-direction:column; gap:32px;}
+.section-title{font-size:20px;font-weight:600;margin-bottom:16px;color:var(--text);letter-spacing:-0.3px;}
+.cast-list{display:flex;overflow-x:auto;gap:14px;padding-bottom:12px;scroll-snap-type:x mandatory;}
+.cast-list::-webkit-scrollbar{height:4px;}
+.cast-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.cast-card{width:130px;flex-shrink:0;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);scroll-snap-align:start;}
+.cast-photo{width:100%;aspect-ratio:2/3;background-size:cover;background-position:center;background-color:#1a1a2e;}
+.cast-info-box{padding:12px 10px;text-align:center;}
+.cast-info-box strong{display:block;font-size:13px;color:var(--text);font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cast-info-box span{display:block;font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.similar-list{display:flex;overflow-x:auto;gap:16px;padding-bottom:12px;scroll-snap-type:x mandatory;}
+.similar-list::-webkit-scrollbar{height:4px;}
+.similar-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.similar-list .card{width:160px;scroll-snap-align:start;}
+
+
 /* Seasons */
 .season-tabs{display:flex;gap:6px;overflow-x:auto;padding:8px 0 16px}
 .season-tabs::-webkit-scrollbar{height:2px}
@@ -818,7 +835,7 @@ const LIVE_CATEGORIES = [
 const LIVE_SOURCES = [
   { id: 'iptv-org', name: 'iptv-org', categoryUrl: cat => `https://iptv-org.github.io/iptv/categories/${cat}.m3u` },
   { id: 'freetv', name: 'Free-TV', url: 'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8' },
-  { id: 'tvlink', name: 'TVLink', url: 'https://raw.githubusercontent.com/imShakil/tvlink/master/iptv.m3u8' },
+  { id: 'iptv-org-us', name: 'US Streams', url: 'https://raw.githubusercontent.com/iptv-org/iptv/master/streams/us.m3u' },
   { id: 'youtube', name: 'YouTube' },
 ]
 
@@ -862,9 +879,22 @@ function parseM3U(text) {
     const nameMatch = info.match(/,(.+)$/)
     if(nameMatch) name = nameMatch[1].trim()
     name = name.replace(/\s*\([\d]+p\)/gi, '').replace(/\s*\[.*?\]/g, '').trim()
-    const urlLine = lines[i + 1]
-    if(urlLine && urlLine.trim() && !urlLine.trim().startsWith('#')) {
-      channels.push({ name, url: urlLine.trim(), logo, group })
+    let j = i + 1;
+    let urlLine = null;
+    while(j < lines.length) {
+      const lineText = lines[j].trim();
+      if(!lineText) { j++; continue; }
+      if(!lineText.startsWith('#')) {
+        urlLine = lineText;
+        break;
+      }
+      if(lineText.startsWith('#EXTINF:')) {
+        break; // Next channel started without a URL for the previous one
+      }
+      j++;
+    }
+    if(urlLine) {
+      channels.push({ name, url: urlLine, logo, group })
     }
   }
   return channels
@@ -937,10 +967,10 @@ async function loadLiveCategory(cat, btn) {
     if(!r.ok) { area.innerHTML = '<div class="loading"><p style="color:var(--muted)">Failed to load channels</p></div>'; return }
     const text = await r.text()
     const baseChannels = parseM3U(text)
-    const [freetvCh, tvlinkCh] = await Promise.all([ensureSourceCached('freetv'), ensureSourceCached('tvlink')])
+    const [freetvCh, usCh] = await Promise.all([ensureSourceCached('freetv'), ensureSourceCached('iptv-org-us')])
     const merged = mergeChannelLists(baseChannels, [
       { sourceId: 'freetv', channels: freetvCh },
-      { sourceId: 'tvlink', channels: tvlinkCh }
+      { sourceId: 'iptv-org-us', channels: usCh }
     ])
     if (cat === 'news') {
       const entries = Object.entries(YOUTUBE_NEWS).sort((a, b) => b[0].length - a[0].length)
@@ -1155,9 +1185,12 @@ async function renderDetail(type, id, season) {
     if(!d) { dp.innerHTML = '<div class="loading"><p>Error loading</p></div>'; return }
     const title = d.title || d.name || 'Untitled'; document.title = title + ' - MediaHub'
     const year = (d.release_date||d.first_air_date||'').split('-')[0] || '', poster = d.poster_path ? IMG + '/w342' + d.poster_path : '', bg = d.backdrop_path ? IMG + '/w1280' + d.backdrop_path : ''
-    const rating = d.vote_average ? '\u2605 ' + d.vote_average.toFixed(1) : '', rt = type === 'movie' && d.runtime ? d.runtime + 'm' : '', genres = (d.genres||[]).map(g => g.name||g), desc = d.overview || 'No description.'
+    const rating = d.vote_average ? '\u2605 ' + d.vote_average.toFixed(1) + (d.vote_count ? ' (' + d.vote_count + ' votes)' : '') : '', rt = type === 'movie' && d.runtime ? d.runtime + 'm' : '', genres = (d.genres||[]).map(g => g.name||g), desc = d.overview || 'No description.'
     currentItem = { type, id, title }
-    dp.innerHTML = '<button class="back-btn" onclick="goHome()">\u2190 Back</button><div class="detail-hero"><div class="detail-bg" style="background-image:url(\'' + (bg || 'https://placehold.co/1280x720/0c0c1e/fff') + '\')"></div><div class="detail-overlay"><div class="detail-poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')"></div><div class="detail-info"><h1>' + title + '</h1><div class="detail-meta">' + (year ? '<span>' + year + '</span>' : '') + (rating ? '<span>' + rating + '</span>' : '') + (rt ? '<span>' + rt + '</span>' : '') + (d.status ? '<span>' + d.status + '</span>' : '') + (type === 'tv' && d.number_of_seasons ? '<span>' + d.number_of_seasons + ' Seasons</span>' : '') + '</div><p class="overview">' + desc + '</p><div class="genre-tags">' + genres.map(g => '<span>' + g + '</span>').join('') + '</div><div class="detail-actions" style="margin-top:16px">' + (type === 'movie' ? '<button class="btn-play" onclick="playItem(\'movie\',' + id + ')">\u25B6 Play Now</button>' : '') + (type === 'tv' ? '<button class="btn-play" onclick="playItem(\'tv\',' + id + ',1,1)">\u25B6 Play S1:E1</button>' : '') + '<button class="btn-secondary" onclick="goHome()">Browse</button></div></div></div></div>' + (type === 'tv' ? '<div id="seasonsSection"></div>' : '')
+    const castHtml = (d.credits && d.credits.cast && d.credits.cast.length > 0) ? '<div class="cast-section"><h2 class="section-title">Cast</h2><div class="cast-list">' + d.credits.cast.slice(0, 10).map(c => '<div class="cast-card"><div class="cast-photo" style="background-image:url(\'' + (c.profile_path ? IMG + '/w185' + c.profile_path : 'https://placehold.co/185x278/1a1a2e/666/?text=No+Photo') + '\')"></div><div class="cast-info-box"><strong>' + escapeHtml(c.name) + '</strong><span>' + escapeHtml(c.character || '') + '</span></div></div>').join('') + '</div></div>' : ''
+    const similarHtml = (d.similar && d.similar.results && d.similar.results.length > 0) ? '<div class="similar-section"><h2 class="section-title">Similar ' + (type === 'movie' ? 'Movies' : 'Shows') + '</h2><div class="similar-list">' + d.similar.results.slice(0, 10).map(s => { const p = s.poster_path ? IMG + '/w342' + s.poster_path : 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'; const y = (s.release_date||s.first_air_date||'').split('-')[0] || ''; return '<div class="card" onclick="navigate(\'#/' + type + '/' + s.id + '\')"><div class="poster" style="background-image:url(\'' + p + '\')">' + (s.vote_average ? '<span class="rating">\u2605 ' + s.vote_average.toFixed(1) + '</span>' : '') + '</div><div class="info"><h3>' + escapeHtml(s.title || s.name || '') + '</h3><p>' + y + '</p></div></div>'; }).join('') + '</div></div>' : ''
+    const extendedInfo = '<div class="extended-info">' + castHtml + similarHtml + '</div>'
+    dp.innerHTML = '<button class="back-btn" onclick="goHome()">\u2190 Back</button><div class="detail-hero"><div class="detail-bg" style="background-image:url(\'' + (bg || 'https://placehold.co/1280x720/0c0c1e/fff') + '\')"></div><div class="detail-overlay"><div class="detail-poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')"></div><div class="detail-info"><h1>' + title + '</h1><div class="detail-meta">' + (year ? '<span>' + year + '</span>' : '') + (rating ? '<span>' + rating + '</span>' : '') + (rt ? '<span>' + rt + '</span>' : '') + (d.status ? '<span>' + d.status + '</span>' : '') + (type === 'tv' && d.number_of_seasons ? '<span>' + d.number_of_seasons + ' Seasons</span>' : '') + '</div><p class="overview">' + desc + '</p><div class="genre-tags">' + genres.map(g => '<span>' + g + '</span>').join('') + '</div><div class="detail-actions" style="margin-top:16px">' + (type === 'movie' ? '<button class="btn-play" onclick="playItem(\'movie\',' + id + ')">\u25B6 Play Now</button>' : '') + (type === 'tv' ? '<button class="btn-play" onclick="playItem(\'tv\',' + id + ',1,1)">\u25B6 Play S1:E1</button>' : '') + '<button class="btn-secondary" onclick="goHome()">Browse</button></div></div></div></div><div class="detail-content">' + (type === 'tv' ? '<div id="seasonsSection"></div>' : '') + extendedInfo + '</div>'
     if(type === 'tv') loadSeasons(id, season)
   }
 }
