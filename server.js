@@ -14,7 +14,7 @@ const httpsAgent = new https.Agent({ keepAlive: true, maxSockets: 10 })
 
 const tmdbClient = axios.create({
   baseURL: "https://api.themoviedb.org/3",
-  params: { api_key: TMDB_KEY },
+  params: { api_key: TMDB_KEY, language: 'en-US' },
   timeout: 15000,
   httpsAgent,
 })
@@ -98,7 +98,7 @@ app.get("/api/anime/search", async (req, res, next) => {
 
 app.get("/api/anime/:id", async (req, res, next) => {
   try {
-    const graphqlQuery = `query ($id: Int) { Media(id: $id, type: ANIME) { id idMal title { romaji english native } description startDate { year } episodes genres averageScore coverImage { large } bannerImage format status season duration studios { nodes { name } } recommendations(perPage: 10) { nodes { mediaRecommendation { id title { romaji } coverImage { large } } } } } }`
+    const graphqlQuery = `query ($id: Int) { Media(id: $id, type: ANIME) { id idMal title { romaji english native } description startDate { year } episodes genres averageScore coverImage { large } bannerImage format status season duration studios { nodes { name } } recommendations(perPage: 10) { nodes { mediaRecommendation { id title { romaji } coverImage { large } } } } characters(sort: ROLE, perPage: 15) { edges { role node { id name { full } image { large } } voiceActors(language: JAPANESE, sort: RELEVANCE) { id name { full } image { large } } } } } }`
     const { data } = await axios.post("https://graphql.anilist.co",
       { query: graphqlQuery, variables: { id: parseInt(req.params.id) } },
       { timeout: 10000, headers: { "Content-Type": "application/json" } }
