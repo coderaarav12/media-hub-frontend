@@ -84,6 +84,14 @@ app.get("/api/tv/:id/season/:season", async (req, res, next) => {
   } catch (e) { next(e) }
 })
 
+app.get("/api/imdb/:id", async (req, res, next) => {
+  try {
+    const response = await fetch(`https://www.omdbapi.com/?i=${req.params.id}&apikey=thewdb`)
+    const data = await response.json()
+    res.json(data)
+  } catch (e) { next(e) }
+})
+
 app.get("/api/anime/search", async (req, res, next) => {
   try {
     const { q, page = 1 } = req.query
