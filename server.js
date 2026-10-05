@@ -65,7 +65,7 @@ app.get("/api/movie/:id", async (req, res, next) => {
 
 app.get("/api/tv/:id", async (req, res, next) => {
   try {
-    const data = await fetchTMDB(`/tv/${req.params.id}`, { append_to_response: "credits,videos,similar" })
+    const data = await fetchTMDB(`/tv/${req.params.id}`, { append_to_response: "credits,aggregate_credits,videos,similar" })
     res.json(data)
   } catch (e) { next(e) }
 })
@@ -73,6 +73,10 @@ app.get("/api/tv/:id", async (req, res, next) => {
 app.get("/api/person/:id", async (req, res, next) => {
   try {
     const data = await fetchTMDB(`/person/${req.params.id}`, { append_to_response: "combined_credits" })
+    if (!data.biography) {
+      const fb = await tmdbClient.get(`/person/${req.params.id}`, { params: { api_key: TMDB_KEY } }).then(r=>r.data).catch(()=>null)
+      if (fb && fb.biography) data.biography = fb.biography
+    }
     res.json(data)
   } catch (e) { next(e) }
 })
