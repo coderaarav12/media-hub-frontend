@@ -56,6 +56,40 @@ app.get("/api/trending", async (req, res, next) => {
   } catch (e) { next(e) }
 })
 
+app.get("/api/movie/popular", async (req, res, next) => {
+  try { res.json(await fetchTMDB("/movie/popular", { page: req.query.page || 1 })) }
+  catch (e) { next(e) }
+})
+
+app.get("/api/tv/popular", async (req, res, next) => {
+  try { res.json(await fetchTMDB("/tv/popular", { page: req.query.page || 1 })) }
+  catch (e) { next(e) }
+})
+
+app.get("/api/anime/trending", async (req, res, next) => {
+  try {
+    const { page = 1 } = req.query
+    const graphqlQuery = `query ($p: Int) { Page(page: $p, perPage: 50) { media(sort: TRENDING_DESC, type: ANIME) { id idMal title { romaji english native } description startDate { year } episodes genres averageScore coverImage { large } format status season } } }`
+    const { data } = await axios.post("https://graphql.anilist.co",
+      { query: graphqlQuery, variables: { p: parseInt(page) } },
+      { timeout: 10000 }
+    )
+    res.json(data.data.Page)
+  } catch (e) { next(e) }
+})
+
+app.get("/api/anime/popular", async (req, res, next) => {
+  try {
+    const { page = 1 } = req.query
+    const graphqlQuery = `query ($p: Int) { Page(page: $p, perPage: 50) { media(sort: POPULARITY_DESC, type: ANIME) { id idMal title { romaji english native } description startDate { year } episodes genres averageScore coverImage { large } format status season } } }`
+    const { data } = await axios.post("https://graphql.anilist.co",
+      { query: graphqlQuery, variables: { p: parseInt(page) } },
+      { timeout: 10000 }
+    )
+    res.json(data.data.Page)
+  } catch (e) { next(e) }
+})
+
 app.get("/api/movie/:id", async (req, res, next) => {
   try {
     const data = await fetchTMDB(`/movie/${req.params.id}`, { append_to_response: "credits,videos,similar" })
