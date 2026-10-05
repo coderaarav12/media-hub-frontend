@@ -785,6 +785,7 @@ function navigate(hash) {
 window.addEventListener('hashchange', handleRoute)
 
 function handleRoute() {
+  window.scrollTo(0, 0)
   const hash = location.hash.slice(1) || '/', [path, qs] = hash.split('?'), parts = path.split('/').filter(Boolean)
   if(!parts[0]) renderHome()
   else if(parts[0] === 'movies' && !parts[1]) renderMoviesHome()
