@@ -205,21 +205,19 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 .episode-num{font-size:10px;color:var(--primary);font-weight:600;margin-bottom:2px;letter-spacing:0.5px}
 
 /* Player */
-.player-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.95);backdrop-filter:blur(20px);z-index:1000;display:none;flex-direction:column}
-.player-overlay.active{display:flex}
-.player-header{display:flex;flex-wrap:wrap;align-items:center;padding:6px 12px;background:rgba(5,5,8,0.8);border-bottom:1px solid var(--border);flex-shrink:0;gap:6px}
-.player-header h3{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;flex:1 1 auto}
-.player-header-right{display:flex;align-items:center;gap:6px;flex:1 1 100%}
-@media(min-width:901px){.player-header{padding:10px 20px;flex-wrap:nowrap}.player-header h3{font-size:15px;max-width:70%;flex:0 1 auto}.player-header-right{flex:0 1 auto}}
-.player-header button{background:none;border:none;color:#fff;font-size:28px;cursor:pointer;padding:2px 14px;border-radius:8px;transition:all .2s;line-height:1;font-family:inherit;flex-shrink:0}
-.player-header button:hover{background:rgba(255,255,255,0.06)}
-.source-tabs{display:flex;gap:4px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;scrollbar-width:none;flex:1;min-width:0}
+.player-overlay{position:fixed;inset:0;background:#000;z-index:1000;display:none;flex-direction:column}
+.player-overlay.active{display:flex;animation:fadeUp 0.3s ease forwards}
+.player-header{display:flex;align-items:center;padding:0 20px;height:56px;background:#050508;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;gap:16px}
+.player-header h3{font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff;flex-shrink:0;letter-spacing:-0.2px;max-width:200px}
+.source-tabs{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;scrollbar-width:none;flex:1;min-width:0;align-items:center;height:100%}
 .source-tabs::-webkit-scrollbar{display:none}
-.source-tabs button{padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);cursor:pointer;font-size:11px;font-weight:500;transition:all .25s;font-family:inherit;white-space:nowrap;flex-shrink:0}
-.source-tabs button:hover{color:var(--text);border-color:var(--border-hover)}
-.source-tabs button.active{background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;border-color:transparent}
-.player-body{flex:1;display:flex;flex-direction:column;padding:12px 28px 28px;min-height:0}
-.player-body iframe,.player-body video{width:100%;flex:1;border:none;background:#000;border-radius:var(--radius);min-height:0}
+.source-tabs button{padding:6px 14px;border-radius:6px;border:none;background:rgba(255,255,255,0.05);color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;font-family:inherit;white-space:nowrap;flex-shrink:0;letter-spacing:-0.1px}
+.source-tabs button:hover{background:rgba(255,255,255,0.1);color:#fff}
+.source-tabs button.active{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(124,102,255,0.25)}
+.player-close{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;padding:8px;border-radius:8px;transition:all .2s;line-height:1;margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.player-close:hover{color:#fff;background:rgba(255,255,255,0.08);transform:rotate(90deg)}
+.player-body{flex:1;display:flex;flex-direction:column;padding:0;min-height:0;background:#000}
+.player-body iframe,.player-body video{width:100%;flex:1;border:none;background:#000;min-height:0;border-radius:0}
 
 /* Share Modal */
 .share-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.7);backdrop-filter:blur(16px);z-index:999;display:none;align-items:center;justify-content:center;animation:fadeUp .3s ease}
@@ -583,10 +581,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 <div class="player-overlay" id="playerOverlay">
   <div class="player-header">
     <h3 id="playerTitle">Now Playing</h3>
-    <div class="player-header-right">
-      <div class="source-tabs" id="sourceTabs"></div>
-      <button onclick="closePlayer()">&times;</button>
-    </div>
+    <div class="source-tabs" id="sourceTabs"></div>
+    <button class="player-close" onclick="closePlayer()">&times;</button>
   </div>
   <div class="player-body">
     <iframe id="playerFrame" allowfullscreen allow="autoplay;fullscreen"></iframe>
