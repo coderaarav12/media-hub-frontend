@@ -1445,7 +1445,7 @@ async function renderDetail(type, id, season) {
       if(d.first_air_date) infoGrid += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">First Aired</span><strong>' + d.first_air_date + '</strong></div>';
       if(d.number_of_episodes) infoGrid += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">Episodes</span><strong>' + d.number_of_episodes + '</strong></div>';
     }
-    if(d.imdb_id) infoGrid += '<div id="imdbStatsContainer"></div><div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">IMDb</span><a href="https://www.imdb.com/title/' + d.imdb_id + '" target="_blank" style="color:var(--primary-light);text-decoration:none"><strong>View on IMDb</strong></a></div>'
+    if(d.imdb_id) infoGrid += '<div id="imdbStatsContainer"></div><div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">IMDb</span><button onclick="event.stopPropagation();window.open(\'https://www.imdb.com/title/' + d.imdb_id + '\',\'_blank\')" style="background:none;border:none;padding:0;cursor:pointer;color:var(--primary-light);font-weight:700;font-size:inherit"><strong>View on IMDb ↗</strong></button></div>'
     infoGrid += '</div>'
     
     const castList = (d.credits && d.credits.cast && d.credits.cast.length > 0) ? d.credits.cast : (d.aggregate_credits && d.aggregate_credits.cast) || []
