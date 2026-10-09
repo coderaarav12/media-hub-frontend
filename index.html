@@ -231,8 +231,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 .source-tabs button{padding:6px 14px;border-radius:6px;border:none;background:rgba(255,255,255,0.05);color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;font-family:inherit;white-space:nowrap;flex-shrink:0;letter-spacing:-0.1px}
 .source-tabs button:hover{background:rgba(255,255,255,0.1);color:#fff}
 .source-tabs button.active{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(124,102,255,0.25)}
-.player-close{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;padding:8px;border-radius:8px;transition:all .2s;line-height:1;margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-.player-close:hover{color:#fff;background:rgba(255,255,255,0.08);transform:rotate(90deg)}
+.player-close{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:#fff;width:34px;height:34px;cursor:pointer;border-radius:50%;transition:all .2s;margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.player-close:hover{color:#fff;background:rgba(255,255,255,0.2);transform:scale(1.06)}
 .player-body{flex:1;display:flex;padding:0;min-height:0;background:#000;align-items:center;justify-content:center}
 .player-body iframe,.player-body video{width:100%;height:auto;aspect-ratio:16/9;max-width:calc((100vh - 56px) * 1.7778);border:none;background:#000;margin:auto;box-shadow:0 0 40px rgba(0,0,0,0.8)}
 
@@ -395,9 +395,9 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
   .episode-card{flex-direction:column}
   .episode-thumb{width:100%;height:120px}
   .player-header{height:auto;flex-wrap:wrap;padding:10px 14px;gap:10px}
-  .player-header h3{max-width:calc(100% - 40px);margin:0;font-size:14px}
-  .player-close{margin-left:auto;padding:4px}
-  .source-tabs{width:100%;flex:0 0 100%;padding-bottom:2px}
+  .player-header h3{max-width:calc(100% - 46px);margin:0;font-size:14px;order:1}
+  .player-close{margin-left:auto;order:2;width:32px;height:32px}
+  .source-tabs{width:100%;flex:0 0 100%;padding-bottom:2px;order:3}
   .player-body{padding:0}
 }
 @media(max-width:480px){
@@ -638,7 +638,12 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
   <div class="player-header">
     <h3 id="playerTitle">Now Playing</h3>
     <div class="source-tabs" id="sourceTabs"></div>
-    <button class="player-close" onclick="closePlayer()">&times;</button>
+    <button class="player-close" onclick="closePlayer()" aria-label="Close Player" title="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
   </div>
   <div class="player-body">
     <iframe id="playerFrame" allowfullscreen allow="autoplay;fullscreen"></iframe>
