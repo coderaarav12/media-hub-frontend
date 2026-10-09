@@ -169,19 +169,27 @@ app.get("/api/sources", async (req, res, next) => {
     const sources = []
     if (type === "movie") {
       sources.push({ name: "VidLink", url: `https://vidlink.pro/movie/${id}?primaryColor=2392EE&autoplay=false` })
-      sources.push({ name: "VidSrc", url: `https://vidsrc.xyz/embed/movie?tmdb=${id}` })
       sources.push({ name: "VidSrc Pro", url: `https://vidsrc.su/embed/movie/${id}` })
       sources.push({ name: "VidFast", url: `https://vidfast.pro/movie/${id}?autoPlay=true&theme=2392EE` })
       sources.push({ name: "Videoasy", url: `https://player.videasy.net/movie/${id}?color=2392EE` })
+      sources.push({ name: "2Embed", url: `https://www.2embed.cc/embed/movie/${id}` })
+      sources.push({ name: "VidSrc", url: `https://vidsrc.xyz/embed/movie?tmdb=${id}` })
     } else if (type === "tv") {
       sources.push({ name: "VidLink", url: `https://vidlink.pro/tv/${id}/${season}/${episode}?primaryColor=2392EE&autoplay=false` })
-      sources.push({ name: "VidSrc", url: `https://vidsrc.xyz/embed/tv/${id}/${season}-${episode}` })
       sources.push({ name: "VidSrc Pro", url: `https://vidsrc.su/embed/tv/${id}/${season}/${episode}` })
       sources.push({ name: "VidFast", url: `https://vidfast.pro/tv/${id}/${season}/${episode}?autoPlay=true&theme=2392EE` })
       sources.push({ name: "Videoasy", url: `https://player.videasy.net/tv/${id}/${season}/${episode}?color=2392EE` })
+      sources.push({ name: "2Embed", url: `https://www.2embed.cc/embed/tv/${id}/${season}/${episode}` })
+      sources.push({ name: "VidSrc", url: `https://vidsrc.xyz/embed/tv/${id}/${season}-${episode}` })
     } else if (type === "anime") {
-      sources.push({ name: "ZenIME", url: `https://api.zenime.site/api/stream?id=${id}&server=1&type=sub` })
-      sources.push({ name: "VidSrc", url: `https://vidsrc.xyz/embed/movie?tmdb=${id}` })
+      const ep = episode || 1
+      const malId = req.query.malId || id
+      sources.push({ name: "VidLink (Sub)", url: `https://vidlink.pro/anime/${malId}/${ep}/sub?primaryColor=2392EE&autoplay=false` })
+      sources.push({ name: "VidLink (Dub)", url: `https://vidlink.pro/anime/${malId}/${ep}/dub?primaryColor=2392EE&autoplay=false` })
+      sources.push({ name: "VidJoy", url: `https://vidjoy.pro/embed/anime/${malId}/${ep}` })
+      sources.push({ name: "2Embed", url: `https://www.2embed.cc/embed/anime/${malId}` })
+      sources.push({ name: "2Embed Skin", url: `https://2embed.skin/embed/anime/${malId}` })
+      sources.push({ name: "AutoEmbed", url: `https://player.autoembed.cc/embed/anime/${malId}/${ep}` })
     }
     res.json({ sources })
   } catch (e) { next(e) }

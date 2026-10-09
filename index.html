@@ -224,8 +224,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 /* Player */
 .player-overlay{position:fixed;inset:0;background:#000;z-index:1000;display:none;flex-direction:column}
 .player-overlay.active{display:flex;animation:fadeUp 0.3s ease forwards}
-.player-header{display:flex;align-items:center;padding:0 20px;height:56px;background:#050508;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;gap:16px}
-.player-header h3{font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff;flex-shrink:0;letter-spacing:-0.2px;max-width:200px}
+.player-header{display:flex;align-items:center;padding:0 20px;height:56px;background:#050508;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;gap:14px}
+.player-header-left{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.player-header h3{font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff;letter-spacing:-0.2px;max-width:190px}
+.player-status-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(35,146,238,0.12);border:1px solid rgba(35,146,238,0.3);color:var(--primary-light);white-space:nowrap;transition:all 0.3s}
+.player-status-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:glowPulse 1.2s infinite;flex-shrink:0}
+.player-status-badge.success{background:rgba(0,206,201,0.12);border-color:rgba(0,206,201,0.35);color:var(--secondary)}
+.player-status-badge.success .dot{background:var(--secondary);animation:none}
 .source-tabs{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;scrollbar-width:none;flex:1;min-width:0;align-items:center;height:100%}
 .source-tabs::-webkit-scrollbar{display:none}
 .source-tabs button{padding:6px 14px;border-radius:6px;border:none;background:rgba(255,255,255,0.05);color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;font-family:inherit;white-space:nowrap;flex-shrink:0;letter-spacing:-0.1px}
@@ -346,57 +351,90 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 .back-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text);font-size:14px;cursor:pointer;padding:10px 18px;display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;font-weight:600;transition:all .2s;font-family:inherit;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
 .back-btn:hover{background:rgba(255,255,255,0.1);transform:translateX(-4px);color:#fff;border-color:rgba(255,255,255,0.2)}
 .results-info{font-size:13px;color:var(--muted);margin-bottom:14px}
-.live-cats{display:flex;gap:6px;overflow-x:auto;padding:0 0 24px;-webkit-overflow-scrolling:touch}
-.live-cats::-webkit-scrollbar{height:2px}
-.live-cats button{padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;font-size:13px;font-weight:500;transition:all .25s;font-family:inherit;flex-shrink:0}
-.live-cats button:hover{border-color:var(--border-hover);color:var(--text)}
-.live-cats button.active{background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;border-color:transparent}
-.ch-letter-header{font-size:15px;font-weight:700;color:var(--primary);padding:16px 0 8px;position:sticky;top:0;background:var(--bg);z-index:2;border-bottom:1px solid var(--border)}
-.live-channel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;padding-bottom:16px}
-.live-channel-card{position:relative;cursor:pointer;border-radius:16px;padding:20px 16px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);transition:all .25s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;height:130px}
+.live-notice-banner{display:flex;align-items:flex-start;gap:14px;background:rgba(255,180,0,0.06);border:1px solid rgba(255,180,0,0.22);border-radius:14px;padding:14px 18px;margin-bottom:20px;backdrop-filter:blur(10px)}
+.live-notice-icon{color:#ffb400;flex-shrink:0;margin-top:2px}
+.live-notice-content strong{display:block;font-size:13px;color:#ffc837;font-weight:700;margin-bottom:3px;letter-spacing:-0.1px}
+.live-notice-content p{font-size:12px;color:rgba(255,255,255,0.72);line-height:1.55;margin:0}
+
+.live-filter-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.live-search-box{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:8px 14px;flex:1;max-width:380px;transition:all .2s}
+.live-search-box:focus-within{border-color:var(--primary);box-shadow:0 0 16px rgba(108,92,231,0.2)}
+.live-search-box svg{color:var(--muted);flex-shrink:0}
+.live-search-box input{background:none;border:none;outline:none;color:#fff;font-size:13px;font-family:inherit;width:100%}
+.live-search-box input::placeholder{color:var(--muted)}
+.live-search-box button{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:0;line-height:1}
+.live-search-box button:hover{color:#fff}
+.live-channel-count{font-size:12px;color:var(--muted);font-weight:600}
+
+.live-cats{display:flex;gap:8px;overflow-x:auto;padding:0 0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.live-cats::-webkit-scrollbar{display:none}
+.live-cats button{padding:8px 18px;border-radius:24px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;transition:all .25s;font-family:inherit;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.live-cats button:hover{border-color:var(--border-hover);color:var(--text);background:rgba(255,255,255,0.05)}
+.live-cats button.active{background:linear-gradient(135deg,var(--primary),#8b7cf7);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(108,92,231,0.3)}
+.ch-letter-header{padding:14px 0 8px;position:sticky;top:0;background:var(--bg);z-index:2;display:flex;align-items:center;gap:12px}
+.ch-letter-pill{display:inline-flex;align-items:center;justify-content:center;padding:4px 12px;background:rgba(108,92,231,0.15);color:var(--primary-light);border:1px solid rgba(108,92,231,0.3);border-radius:8px;font-size:12px;font-weight:700;letter-spacing:0.5px}
+.ch-letter-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(108,92,231,0.25),transparent)}
+.live-channel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;padding-bottom:16px}
+.live-channel-card{position:relative;cursor:pointer;border-radius:16px;padding:18px 14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);transition:all .25s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;height:130px}
 .live-channel-card:hover{border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);transform:translateY(-3px);box-shadow:0 12px 24px rgba(0,0,0,0.4)}
-.live-channel-card .ch-logo{width:56px;height:56px;object-fit:contain;border-radius:8px;flex-shrink:0;background:rgba(0,0,0,0.2);padding:4px}
+.live-channel-card .ch-logo{width:54px;height:54px;object-fit:contain;border-radius:8px;flex-shrink:0;background:rgba(0,0,0,0.2);padding:4px}
 .live-channel-card .ch-name{font-size:13px;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;color:#fff}
-.live-channel-card .ch-src-badge{position:absolute;top:10px;right:10px;font-size:9px;color:var(--secondary);flex-shrink:0;padding:2px 6px;border-radius:6px;background:rgba(0,206,201,0.1);border:1px solid rgba(0,206,201,0.2);font-weight:600}
+.live-channel-card .ch-src-badge{position:absolute;top:8px;right:8px;font-size:9px;color:var(--secondary);flex-shrink:0;padding:2px 6px;border-radius:6px;background:rgba(0,206,201,0.1);border:1px solid rgba(0,206,201,0.2);font-weight:600}
 
 /* Mobile */
 @media(max-width:900px){
   .container{padding:0 16px}
-  nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:12px 16px;height:auto;gap:12px;background:rgba(5,5,8,0.9);border-bottom:1px solid rgba(255,255,255,0.08)}
+  nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:12px 16px;height:auto;gap:12px;background:rgba(5,5,8,0.92);border-bottom:1px solid rgba(255,255,255,0.08)}
   .nav-left{display:contents}
   .logo{height:auto;padding:0;order:1}
   .nav-right{position:static;height:auto;order:2;gap:8px}
-  .nav-links{width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;display:flex;flex-wrap:nowrap;gap:12px;padding-bottom:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px;order:3}
+  .nav-links{width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;display:flex;flex-wrap:nowrap;gap:8px;padding-bottom:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:10px;order:3}
   .nav-links::-webkit-scrollbar{display:none}
   .nav-links button{font-size:13px;padding:6px 14px;height:auto;flex-shrink:0;background:rgba(255,255,255,0.04);border-radius:24px;border:1px solid rgba(255,255,255,0.05)}
   .nav-links button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
   #desktopSearch{display:none}
   .search-toggle{display:flex}
   .nav-icon-btn{width:36px;height:36px}
-  .spotlight{grid-template-columns:1fr;min-height:auto;display:flex;flex-direction:column;border:none;background:none;box-shadow:none;margin-top:12px;margin-bottom:24px}
-  .spotlight-bg{position:absolute;inset:0;opacity:0.4;border-radius:24px;filter:saturate(1.2)}
-  .spotlight-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,var(--bg) 15%,rgba(5,5,8,0.7) 50%,transparent 100%);border-radius:24px}
-  .spotlight-poster{position:relative;min-height:auto;padding:32px 24px 0;z-index:2}
-  .spotlight-poster .poster-img{width:65%;max-width:220px;margin:0 auto;box-shadow:0 12px 32px rgba(0,0,0,0.6)}
-  .spotlight-info{padding:24px;text-align:center;align-items:center}
-  .spotlight-info h1{font-size:26px;text-shadow:0 2px 8px rgba(0,0,0,0.8)}
-  .spotlight-desc{-webkit-line-clamp:3;text-shadow:0 1px 4px rgba(0,0,0,0.8)}
-  .spotlight-meta{justify-content:center}
-  .bento{grid-template-columns:1fr 1fr;gap:8px}
-  .bento-wide{min-height:180px}
+  
+  /* Mobile Spotlight Hero */
+  .spotlight{grid-template-columns:1fr;min-height:360px;display:flex;flex-direction:column;justify-content:flex-end;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);background:#08080f;box-shadow:0 16px 40px rgba(0,0,0,0.6);margin:14px 0 24px;position:relative}
+  .spotlight-bg{position:absolute;inset:0;opacity:0.75;background-size:cover;background-position:center top;filter:saturate(1.15)}
+  .spotlight-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,8,0.1) 0%,rgba(5,5,8,0.7) 48%,#050508 100%)}
+  .spotlight-poster{display:none}
+  .spotlight-info{position:relative;z-index:2;padding:22px 18px 20px;text-align:left;display:flex;flex-direction:column;gap:8px}
+  .spotlight-badge{margin-bottom:2px}
+  .spotlight-info h1{font-size:24px;font-weight:800;line-height:1.2;letter-spacing:-0.4px;text-shadow:0 2px 12px rgba(0,0,0,0.9)}
+  .spotlight-meta{justify-content:flex-start;gap:6px;margin-bottom:6px}
+  .spotlight-meta span{font-size:11px;padding:3px 10px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px)}
+  .spotlight-desc{display:-webkit-box;-webkit-line-clamp:2;font-size:13px;line-height:1.5;color:rgba(255,255,255,0.75);margin-bottom:12px;text-shadow:0 1px 4px rgba(0,0,0,0.8)}
+  .spotlight-actions{display:flex;gap:10px;width:100%}
+  .spotlight-actions .btn-play{flex:1.4;justify-content:center;padding:11px 18px;font-size:13px}
+  .spotlight-actions .btn-secondary{flex:1;justify-content:center;padding:11px 14px;font-size:13px}
+
+  .section-header{margin:28px 0 14px}
+  .section-header h2{font-size:17px}
+  .bento{grid-template-columns:1fr 1fr;gap:10px}
+  .bento-wide{min-height:160px;grid-column:span 2}
+  .bento-card{min-height:130px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px}
+  .card .info{padding:12px 10px}
+  .card .info h3{font-size:13px}
+
   .detail-overlay{flex-direction:column;align-items:center;padding:28px 20px}
   .detail-poster{width:150px}
   .detail-info h1{font-size:22px;text-align:center}
   .detail-meta,.genre-tags{justify-content:center}
   .detail-actions{justify-content:center}
   .overview{text-align:center;margin:0 auto}
-  .grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
   .episodes-grid{grid-template-columns:1fr}
   .episode-card{flex-direction:column}
   .episode-thumb{width:100%;height:120px}
-  .player-header{height:auto;flex-wrap:wrap;padding:10px 14px;gap:10px}
-  .player-header h3{max-width:calc(100% - 46px);margin:0;font-size:14px;order:1}
-  .player-close{margin-left:auto;order:2;width:32px;height:32px}
+
+  .player-header{height:auto;flex-wrap:wrap;padding:10px 14px;gap:8px}
+  .player-header-left{display:flex;align-items:center;gap:8px;flex:1;min-width:0;order:1}
+  .player-header h3{max-width:160px;margin:0;font-size:14px}
+  .player-status-badge{font-size:10px;padding:2px 8px}
+  .player-close{margin-left:auto;order:2;width:34px;height:34px}
   .source-tabs{width:100%;flex:0 0 100%;padding-bottom:2px;order:3}
   .player-body{padding:0}
 }
@@ -408,8 +446,10 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
   .logo-icon{width:26px;height:26px;}
   .nav-right{height:36px}
   .nav-icon-btn{width:32px;height:32px}
+  .spotlight{min-height:330px}
+  .spotlight-info h1{font-size:21px}
   .bento{grid-template-columns:1fr 1fr;gap:6px}
-  .bento-wide{min-height:150px}
+  .bento-wide{min-height:140px}
   .grid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}
   .detail-hero{min-height:340px}
   .detail-poster{width:130px}
@@ -537,7 +577,24 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
   <div id="livePage" class="detail-page">
     <button class="back-btn" onclick="goHome()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
     <div class="section-header"><h2>Live TV</h2></div>
+    <div class="live-notice-banner">
+      <div class="live-notice-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="live-notice-content">
+        <strong>Public Broadcast Stream Notice</strong>
+        <p>All TV servers and channel streams are provided via open public broadcasts. Due to high public load and third-party host availability, some channels may experience temporary downtime or buffering. Alternate server feeds are listed where available.</p>
+      </div>
+    </div>
     <div class="live-cats" id="liveCats"></div>
+    <div class="live-filter-bar">
+      <div class="live-search-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="liveSearchInput" placeholder="Filter channels by name..." oninput="filterLiveCategory(this.value)">
+        <button id="liveSearchClear" onclick="clearLiveFilter()" style="display:none" aria-label="Clear filter">&times;</button>
+      </div>
+      <div class="live-channel-count" id="liveChannelCount"></div>
+    </div>
     <div id="liveArea"></div>
   </div>
 
@@ -636,10 +693,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 
 <div class="player-overlay" id="playerOverlay">
   <div class="player-header">
-    <h3 id="playerTitle">Now Playing</h3>
+    <div class="player-header-left">
+      <h3 id="playerTitle">Now Playing</h3>
+      <div id="playerStatusBadge" class="player-status-badge" style="display:none"></div>
+    </div>
     <div class="source-tabs" id="sourceTabs"></div>
     <button class="player-close" onclick="closePlayer()" aria-label="Close Player" title="Close">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
         <line x1="18" y1="6" x2="6" y2="18"></line>
         <line x1="6" y1="6" x2="18" y2="18"></line>
       </svg>
@@ -876,7 +936,8 @@ async function renderHome() {
       </div>
       <p class="spotlight-desc">${escapeHtml(desc)}</p>
       <div class="spotlight-actions">
-        <button class="btn-play" onclick="event.stopPropagation();navigate('#/${media}/${first.id}')">\u25B6 View Details</button>
+        <button class="btn-play" onclick="event.stopPropagation();currentItem={type:'${media}',id:${first.id},title:'${escapeHtml(title).replace(/'/g, "\\'")}'};playItem('${media}',${first.id})">\u25B6 Play Now</button>
+        <button class="btn-secondary" onclick="event.stopPropagation();navigate('#/${media}/${first.id}')">Details</button>
       </div>
     </div>
   </div>`
@@ -994,15 +1055,15 @@ async function renderAnimeHome() {
 
 // --- Live TV ---
 const LIVE_CATEGORIES = [
-  { id: 'news', name: 'News' },
-  { id: 'sports', name: 'Sports' },
-  { id: 'entertainment', name: 'Entertainment' },
-  { id: 'movies', name: 'Movies' },
-  { id: 'music', name: 'Music' },
-  { id: 'kids', name: 'Kids' },
-  { id: 'general', name: 'General' },
-  { id: 'documentary', name: 'Documentary' },
-  { id: 'education', name: 'Education' },
+  { id: 'news', name: 'News', icon: '📰' },
+  { id: 'sports', name: 'Sports', icon: '⚽' },
+  { id: 'movies', name: 'Movies', icon: '🍿' },
+  { id: 'entertainment', name: 'Entertainment', icon: '🎭' },
+  { id: 'music', name: 'Music', icon: '🎵' },
+  { id: 'kids', name: 'Kids', icon: '🧸' },
+  { id: 'general', name: 'General', icon: '📺' },
+  { id: 'documentary', name: 'Documentary', icon: '🌍' },
+  { id: 'education', name: 'Education', icon: '🎓' },
 ]
 
 const LIVE_SOURCES = [
@@ -1113,14 +1174,37 @@ async function ensureSourceCached(sourceId) {
   } catch(e) { return [] }
 }
 
+let currentCategoryChannels = []
+
 async function renderLiveTv() {
   showLive()
   document.title = 'Live TV - MediaHub'
-  const cats = $('liveCats'), area = $('liveArea')
+  const cats = $('liveCats')
   cats.innerHTML = LIVE_CATEGORIES.map((c, i) =>
-    '<button class="' + (i === 0 ? 'active' : '') + '" onclick="loadLiveCategory(\'' + c.id + '\',this)">' + c.name + '</button>'
+    '<button class="' + (i === 0 ? 'active' : '') + '" onclick="loadLiveCategory(\'' + c.id + '\',this)"><span class="cat-icon">' + c.icon + '</span> ' + c.name + '</button>'
   ).join('')
   loadLiveCategory(LIVE_CATEGORIES[0].id)
+}
+
+function filterLiveCategory(val) {
+  const q = (val || '').trim().toLowerCase()
+  const clearBtn = $('liveSearchClear')
+  if (clearBtn) clearBtn.style.display = q ? 'block' : 'none'
+  if (!currentCategoryChannels.length) return
+  if (!q) {
+    currentLiveChannels = currentCategoryChannels
+    renderLiveChannels(currentCategoryChannels, false)
+    return
+  }
+  const filtered = currentCategoryChannels.filter(c => c.name.toLowerCase().includes(q))
+  currentLiveChannels = filtered
+  renderLiveChannels(filtered, true)
+}
+
+function clearLiveFilter() {
+  const inp = $('liveSearchInput')
+  if (inp) inp.value = ''
+  filterLiveCategory('')
 }
 
 async function loadLiveCategory(cat, btn) {
@@ -1129,9 +1213,15 @@ async function loadLiveCategory(cat, btn) {
     btn.classList.add('active')
   }
   const area = $('liveArea')
+  const inp = $('liveSearchInput')
+  if (inp) inp.value = ''
+  const clearBtn = $('liveSearchClear')
+  if (clearBtn) clearBtn.style.display = 'none'
+
   if(liveChannelsCache[cat]) {
+    currentCategoryChannels = liveChannelsCache[cat]
     currentLiveChannels = liveChannelsCache[cat]
-    renderLiveChannels(currentLiveChannels)
+    renderLiveChannels(currentLiveChannels, false)
     return
   }
   area.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
@@ -1163,32 +1253,54 @@ async function loadLiveCategory(cat, btn) {
       }
     }
     liveChannelsCache[cat] = merged
+    currentCategoryChannels = merged
     currentLiveChannels = merged
-    renderLiveChannels(merged)
+    renderLiveChannels(merged, false)
   } catch(e) {
     area.innerHTML = '<div class="loading"><p style="color:var(--muted)">Error loading channels</p></div>'
   }
 }
 
-function renderLiveChannels(channels) {
+function renderLiveChannels(channels, isFilter = false) {
   const area = $('liveArea')
+  const countEl = $('liveChannelCount')
+  if (countEl) countEl.textContent = channels.length + (channels.length === 1 ? ' channel' : ' channels')
   if(!channels.length) {
-    area.innerHTML = '<div class="loading"><p style="color:var(--muted)">No channels found</p></div>'
+    area.innerHTML = '<div class="loading"><p style="color:var(--muted)">No channels found' + (isFilter ? ' matching your filter' : '') + '</p></div>'
     return
   }
   const sorted = [...channels].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+
+  if (isFilter) {
+    let html = '<div class="live-channel-grid">'
+    for (const ch of sorted) {
+      const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
+      html += '<div class="live-channel-card" onclick="playLiveStream(' + currentLiveChannels.indexOf(ch) + ')">' +
+        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+        '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
+        srcLabel +
+        '</div>'
+    }
+    html += '</div>'
+    area.innerHTML = html
+    return
+  }
+
   const groups = {}
   for (const ch of sorted) {
-    const letter = ch.name.charAt(0).toUpperCase()
-    if (!groups[letter]) groups[letter] = []
-    groups[letter].push(ch)
+    const firstChar = ch.name.charAt(0).toUpperCase()
+    const groupKey = /[0-9]/.test(firstChar) ? '#' : (/[A-Z]/.test(firstChar) ? firstChar : '#')
+    if (!groups[groupKey]) groups[groupKey] = []
+    groups[groupKey].push(ch)
   }
-  const letters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-  let html = '<div class="results-info" style="margin-bottom:4px">' + channels.length + ' channels</div>'
-  for (const letter of letters) {
-    if (!groups[letter]) continue
-    html += '<div class="ch-letter-header" id="ch-letter-' + letter + '">' + letter + '</div><div class="live-channel-grid">'
-    for (const ch of groups[letter]) {
+
+  const orderedKeys = ['#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')]
+  let html = ''
+  for (const key of orderedKeys) {
+    if (!groups[key] || !groups[key].length) continue
+    const label = key === '#' ? '# (0-9)' : key
+    html += '<div class="ch-letter-header" id="ch-letter-' + (key === '#' ? 'num' : key) + '"><span class="ch-letter-pill">' + label + '</span><span class="ch-letter-line"></span></div><div class="live-channel-grid">'
+    for (const ch of groups[key]) {
       const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
       html += '<div class="live-channel-card" onclick="playLiveStream(' + currentLiveChannels.indexOf(ch) + ')">' +
         (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
@@ -1198,7 +1310,6 @@ function renderLiveChannels(channels) {
     }
     html += '</div>'
   }
-  currentLiveChannels = sorted
   area.innerHTML = html
 }
 
@@ -1267,6 +1378,12 @@ function closePlayer() {
   $('livePlayer').style.display = 'none'
   const v = $('livePlayer'); v.pause(); v.src = ''
   if(liveHls) { liveHls.destroy(); liveHls = null }
+  if (probeAbort) { probeAbort.abort(); probeAbort = null }
+  clearTimeout(playerWatchdog); playerWatchdog = null
+  autoProbeActive = false
+  userManuallySwitched = false
+  const badge = $('playerStatusBadge')
+  if (badge) badge.style.display = 'none'
 }
 
 function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML }
@@ -1422,7 +1539,7 @@ async function renderDetail(type, id, season) {
   if(type === 'anime') {
     const d = await fetchAPI('/anime/' + id)
     if(!d) { dp.innerHTML = '<div class="loading"><p>Error loading</p></div>'; return }
-    currentItem = { type: 'anime', id, title: d.title?.romaji || d.title?.english || 'Untitled' }
+    currentItem = { type: 'anime', id, malId: d.idMal || id, title: d.title?.romaji || d.title?.english || 'Untitled' }
     document.title = currentItem.title + ' - MediaHub'
     const img = d.coverImage?.large || '', banner = d.bannerImage || '', desc = (d.description||'').replace(/<[^>]*>/g,'') || 'No description.'
     const characters = d.characters?.edges || []
@@ -1431,7 +1548,15 @@ async function renderDetail(type, id, season) {
       const vaName = c.voiceActors?.[0]?.name?.full || 'Unknown VA'
       return '<div class="cast-card" style="cursor:default;"><div class="cast-photo" style="background-image:url(\'' + charImg + '\')"></div><div class="cast-info-box"><strong>' + escapeHtml(charName) + '</strong><span>' + escapeHtml(vaName) + '</span></div></div>'
     }).join('') + '</div></div>' : ''
-    dp.innerHTML = '<button class="back-btn" onclick="history.back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button><div class="detail-hero"><div class="detail-bg" style="background-image:url(\'' + (banner || img || 'https://placehold.co/1280x720/0c0c1e/fff') + '\')"></div><div class="detail-overlay"><div class="detail-poster" style="background-image:url(\'' + (img || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')"></div><div class="detail-info"><h1>' + currentItem.title + '</h1><div class="detail-meta"><span>' + (d.format||'Anime') + '</span>' + (d.status ? '<span>' + d.status + '</span>' : '') + (d.episodes ? '<span>' + d.episodes + ' Episodes</span>' : '') + (d.averageScore ? '<span>\u2605 ' + (d.averageScore/10).toFixed(1) + '</span>' : '') + (d.startDate?.year ? '<span>' + d.startDate.year + '</span>' : '') + (d.duration ? '<span>' + d.duration + 'm</span>' : '') + '</div><p class="overview">' + desc + '</p><div class="genre-tags">' + (d.genres||[]).map(g => '<span>' + g + '</span>').join('') + '</div><div class="detail-actions" style="margin-top:16px"><button class="btn-play" onclick="playItem(\'anime\',' + id + ')">\u25B6 Play Now</button><button class="btn-secondary" onclick="goHome()">Browse</button></div></div></div></div><div class="detail-content">' + animeCastHtml + '</div>'
+    let animeEpisodesHtml = ''
+    if (d.episodes && d.episodes > 1) {
+      animeEpisodesHtml = '<div class="episodes-section" style="margin-top:28px"><h2 class="section-title">Episodes (' + d.episodes + ')</h2><div class="ep-selector-grid" style="display:flex;flex-wrap:wrap;gap:8px;max-height:220px;overflow-y:auto;padding:8px 0">'
+      for (let ep = 1; ep <= Math.min(d.episodes, 250); ep++) {
+        animeEpisodesHtml += '<button class="ep-btn" onclick="playItem(\'anime\',' + id + ',1,' + ep + ')" style="padding:8px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;transition:all 0.2s">EP ' + ep + '</button>'
+      }
+      animeEpisodesHtml += '</div></div>'
+    }
+    dp.innerHTML = '<button class="back-btn" onclick="history.back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button><div class="detail-hero"><div class="detail-bg" style="background-image:url(\'' + (banner || img || 'https://placehold.co/1280x720/0c0c1e/fff') + '\')"></div><div class="detail-overlay"><div class="detail-poster" style="background-image:url(\'' + (img || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')"></div><div class="detail-info"><h1>' + currentItem.title + '</h1><div class="detail-meta"><span>' + (d.format||'Anime') + '</span>' + (d.status ? '<span>' + d.status + '</span>' : '') + (d.episodes ? '<span>' + d.episodes + ' Episodes</span>' : '') + (d.averageScore ? '<span>\u2605 ' + (d.averageScore/10).toFixed(1) + '</span>' : '') + (d.startDate?.year ? '<span>' + d.startDate.year + '</span>' : '') + (d.duration ? '<span>' + d.duration + 'm</span>' : '') + '</div><p class="overview">' + desc + '</p><div class="genre-tags">' + (d.genres||[]).map(g => '<span>' + g + '</span>').join('') + '</div><div class="detail-actions" style="margin-top:16px"><button class="btn-play" onclick="playItem(\'anime\',' + id + ',1,1)">\u25B6 Play Now</button><button class="btn-secondary" onclick="goHome()">Browse</button></div></div></div></div><div class="detail-content">' + animeCastHtml + animeEpisodesHtml + '</div>'
   } else {
     const d = await fetchAPI('/' + type + '/' + id)
     if(!d) { dp.innerHTML = '<div class="loading"><p>Error loading</p></div>'; return }
@@ -1501,18 +1626,181 @@ async function loadEpisodes(tvId, season) {
 }
 
 // --- Player ---
+let probeAbort = null
+let playerWatchdog = null
+let autoProbeActive = false
+let userManuallySwitched = false
+
 async function playItem(type, id, season, episode) {
-  $('playerOverlay').classList.add('active'); $('playerTitle').textContent = currentItem?.title || 'Now Playing'
-  $('playerFrame').style.display = ''; $('livePlayer').style.display = 'none'
+  $('playerOverlay').classList.add('active')
+  $('playerTitle').textContent = currentItem?.title || 'Now Playing'
+  $('playerFrame').style.display = ''
+  $('livePlayer').style.display = 'none'
   if(liveHls) { liveHls.destroy(); liveHls = null }
   $('playerFrame').src = ''
-  const d = await fetchAPI('/sources?type=' + type + '&id=' + id + (type === 'tv' ? '&season=' + season + '&episode=' + episode : ''))
-  currentSources = d?.sources || []; currentSourceIdx = 0
-  const tabs = $('sourceTabs'); tabs.innerHTML = currentSources.map((s, i) => '<button class="' + (i === 0 ? 'active' : '') + '" onclick="switchSource(' + i + ',this)">' + s.name + '</button>').join('')
-  if(currentSources.length) loadSource(0)
+
+  if (probeAbort) { probeAbort.abort() }
+  probeAbort = new AbortController()
+  clearTimeout(playerWatchdog)
+  playerWatchdog = null
+  autoProbeActive = true
+  userManuallySwitched = false
+
+  const badge = $('playerStatusBadge')
+  if (badge) {
+    badge.className = 'player-status-badge'
+    badge.innerHTML = '<span class="dot"></span> Testing fastest stream...'
+    badge.style.display = 'inline-flex'
+  }
+
+  let q = '/sources?type=' + type + '&id=' + id
+  if (type === 'tv') q += '&season=' + (season || 1) + '&episode=' + (episode || 1)
+  if (type === 'anime') {
+    if (episode) q += '&episode=' + episode
+    const mId = currentItem?.malId || id
+    if (mId) q += '&malId=' + mId
+  }
+
+  const d = await fetchAPI(q)
+  currentSources = d?.sources || []
+  currentSourceIdx = 0
+
+  if (!currentSources.length) {
+    if (badge) {
+      badge.className = 'player-status-badge'
+      badge.innerHTML = 'No streams found'
+    }
+    return
+  }
+
+  const tabs = $('sourceTabs')
+  tabs.innerHTML = currentSources.map((s, i) =>
+    '<button class="' + (i === 0 ? 'active' : '') + '" onclick="switchSource(' + i + ',this,true)">' + s.name + '</button>'
+  ).join('')
+
+  loadSource(0)
+
+  if (currentSources.length > 1) {
+    probeAndAutoSelect(currentSources, probeAbort.signal)
+  } else {
+    if (badge) {
+      badge.className = 'player-status-badge success'
+      badge.innerHTML = '<span class="dot"></span> Connected: ' + currentSources[0].name
+      setTimeout(() => { if (!userManuallySwitched && badge) badge.style.display = 'none' }, 3000)
+    }
+  }
 }
-function switchSource(idx, btn) { if(btn) { document.querySelectorAll('#sourceTabs button').forEach(b => b.classList.remove('active')); btn.classList.add('active') } currentSourceIdx = idx; loadSource(idx) }
-function loadSource(idx) { const src = currentSources[idx]; if(!src) return; $('playerFrame').src = src.url }
+
+async function probeAndAutoSelect(sources, signal) {
+  const probeOne = async (source, index) => {
+    const t0 = performance.now()
+    try {
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3200))
+      const fetchPromise = fetch(source.url, { mode: 'no-cors', cache: 'no-store', signal })
+      await Promise.race([fetchPromise, timeoutPromise])
+      const latency = Math.round(performance.now() - t0)
+      return { index, latency, ok: true }
+    } catch (e) {
+      return { index, latency: 99999, ok: false }
+    }
+  }
+
+  try {
+    const results = await Promise.all(sources.map((s, i) => probeOne(s, i)))
+    if (signal.aborted || userManuallySwitched || !autoProbeActive) return
+
+    const successful = results.filter(r => r.ok).sort((a, b) => a.latency - b.latency)
+    const badge = $('playerStatusBadge')
+
+    if (successful.length > 0) {
+      const fastest = successful[0]
+      const fastestSource = sources[fastest.index]
+
+      if (fastest.index !== currentSourceIdx) {
+        currentSourceIdx = fastest.index
+        const tabs = document.querySelectorAll('#sourceTabs button')
+        tabs.forEach((b, idx) => b.classList.toggle('active', idx === fastest.index))
+        $('playerFrame').src = fastestSource.url
+      }
+
+      if (badge) {
+        badge.className = 'player-status-badge success'
+        badge.innerHTML = '<span class="dot"></span> Connected: ' + fastestSource.name + ' (' + fastest.latency + 'ms)'
+        setTimeout(() => {
+          if (!userManuallySwitched && badge) badge.style.display = 'none'
+        }, 3500)
+      }
+    } else {
+      if (badge) {
+        badge.className = 'player-status-badge'
+        badge.innerHTML = '<span class="dot"></span> Connected: ' + sources[currentSourceIdx].name
+        setTimeout(() => { if (badge) badge.style.display = 'none' }, 3000)
+      }
+    }
+  } catch(e) {}
+}
+
+function switchSource(idx, btn, manual = false) {
+  if (manual) {
+    userManuallySwitched = true
+    autoProbeActive = false
+    if (probeAbort) { probeAbort.abort(); probeAbort = null }
+    clearTimeout(playerWatchdog)
+    playerWatchdog = null
+    const badge = $('playerStatusBadge')
+    if (badge) {
+      badge.className = 'player-status-badge'
+      badge.innerHTML = 'Server: ' + (currentSources[idx]?.name || '')
+      badge.style.display = 'inline-flex'
+      setTimeout(() => { if (badge) badge.style.display = 'none' }, 2000)
+    }
+  }
+  if(btn) {
+    document.querySelectorAll('#sourceTabs button').forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+  } else {
+    const tabs = document.querySelectorAll('#sourceTabs button')
+    tabs.forEach((b, i) => b.classList.toggle('active', i === idx))
+  }
+  currentSourceIdx = idx
+  loadSource(idx)
+}
+
+function loadSource(idx) {
+  const src = currentSources[idx]
+  if(!src) return
+  const frame = $('playerFrame')
+
+  clearTimeout(playerWatchdog)
+  if (autoProbeActive && !userManuallySwitched && currentSources.length > 1) {
+    playerWatchdog = setTimeout(() => {
+      if (!userManuallySwitched && autoProbeActive) {
+        const nextIdx = (currentSourceIdx + 1) % currentSources.length
+        if (nextIdx !== 0) {
+          const badge = $('playerStatusBadge')
+          if (badge) {
+            badge.className = 'player-status-badge'
+            badge.innerHTML = '<span class="dot"></span> Server slow, switching to ' + currentSources[nextIdx].name + '...'
+            badge.style.display = 'inline-flex'
+          }
+          switchSource(nextIdx, null, false)
+        }
+      }
+    }, 7500)
+  }
+
+  frame.onload = () => {
+    clearTimeout(playerWatchdog)
+    const badge = $('playerStatusBadge')
+    if (badge && autoProbeActive && !userManuallySwitched) {
+      badge.className = 'player-status-badge success'
+      badge.innerHTML = '<span class="dot"></span> Ready: ' + src.name
+      setTimeout(() => { if (!userManuallySwitched && badge) badge.style.display = 'none' }, 3000)
+    }
+  }
+
+  frame.src = src.url
+}
 // --- Share / QR ---
 const SITE_URL = 'https://greatmedia.goelaarav.dpdns.org/'
 let qrInstance = null
@@ -1566,6 +1854,11 @@ async function loadRepoStats() {
 }
 
 const CHANGELOG = [
+  { date: '2026-10-09', msg: 'Added working anime embed sources (VidLink Sub/Dub, VidJoy, 2Embed, AutoEmbed) with episode selector' },
+  { date: '2026-10-09', msg: 'Smart auto-switch: concurrently probes all video servers on Play Now & connects to fastest stream' },
+  { date: '2026-10-09', msg: 'Player watchdog auto-fallback on stall, while preserving manual server switching' },
+  { date: '2026-10-09', msg: 'Mobile home redesign: cinematic backdrop spotlight hero, clean 2-column bento, streamlined cards' },
+  { date: '2026-10-09', msg: 'Live TV revamp: public streams notice banner, category icons, instant in-category search, cleaned letter headers' },
   { date: '2025-07-08', msg: 'Live TV: alphabetical grouping with letter headers, compact tile layout' },
   { date: '2025-07-08', msg: 'Multi-source Live TV with channel merging and fallback (iptv-org, Free-TV, TVLink)' },
   { date: '2025-07-08', msg: 'Service worker network-first strategy with versioned cache' },
@@ -1575,7 +1868,7 @@ const CHANGELOG = [
   { date: '2025-07-08', msg: 'Source tabs in player for channel fallback' },
   { date: '2025-07-08', msg: 'Initial release: MediaHub with Movies, TV, Anime, Live TV' },
 ]
-const CHANGELOG_VER = 8
+const CHANGELOG_VER = 9
 
 function checkUpdate() {
   const last = localStorage.getItem('changelogVer')
