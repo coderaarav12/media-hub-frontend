@@ -489,11 +489,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 <div class="container">
   <div id="homePage">
     <div id="spotlightArea"></div>
-    <div class="trend-tabs">
-      <button class="active" onclick="switchTrend('all',this)">All</button>
-      <button onclick="switchTrend('movie',this)">Movies</button>
-      <button onclick="switchTrend('tv',this)">TV</button>
-    </div>
     <div class="section-header"><h2>Trending Now</h2></div>
     <div id="bentoArea"></div>
     <div class="section-header"><h2>More to Watch</h2></div>
@@ -803,7 +798,7 @@ function handleRoute() {
 function goHome() {
   document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'))
   document.querySelector('.nav-links button[data-filter="all"]')?.classList.add('active')
-  if(trendType !== 'all') { trendType = 'all'; document.querySelectorAll('.trend-tabs button').forEach(b => b.classList.remove('active')); document.querySelector('.trend-tabs button')?.classList.add('active') }
+  trendType = 'all'
   navigate('#/')
 }
 
@@ -1271,10 +1266,8 @@ function closePlayer() {
 
 function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML }
 
-function switchTrend(type, btn) {
+function switchTrend(type) {
   trendType = type
-  document.querySelectorAll('.trend-tabs button').forEach(b => b.classList.remove('active'))
-  btn.classList.add('active')
   renderHome()
 }
 
