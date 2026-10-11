@@ -390,6 +390,34 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
 .live-channel-card .ch-name{font-size:13px;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;color:#fff}
 .live-channel-card .ch-src-badge{position:absolute;top:8px;right:8px;font-size:9px;color:var(--secondary);flex-shrink:0;padding:2px 6px;border-radius:6px;background:rgba(0,206,201,0.1);border:1px solid rgba(0,206,201,0.2);font-weight:600}
 
+/* Legal Pages */
+.legal-container{max-width:860px;margin:30px auto 60px;padding:0 20px;animation:fadeUp .3s ease}
+.legal-badge{display:inline-flex;align-items:center;gap:8px;padding:4px 14px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:14px}
+.legal-badge.terms{background:rgba(0,112,243,0.12);color:var(--primary-light);border:1px solid rgba(0,112,243,0.3)}
+.legal-badge.privacy{background:rgba(0,206,201,0.12);color:var(--secondary);border:1px solid rgba(0,206,201,0.3)}
+.legal-badge .dot{width:6px;height:6px;border-radius:50%}
+.legal-badge.terms .dot{background:var(--primary)}
+.legal-badge.privacy .dot{background:var(--secondary)}
+.legal-title{font-size:32px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;color:#fff}
+.legal-meta{font-size:13px;color:var(--muted);margin-bottom:28px}
+.legal-card{background:rgba(8,17,36,0.7);border:1px solid rgba(0,170,255,0.18);border-radius:20px;padding:36px;box-shadow:0 16px 48px rgba(0,0,0,0.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.legal-section{margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.legal-section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.legal-section h3{font-size:17px;font-weight:700;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:10px;letter-spacing:-0.2px}
+.legal-section h3 .sec-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;background:rgba(0,112,243,0.16);border:1px solid rgba(0,112,243,0.3);color:var(--primary-light);font-size:12px;font-weight:700;flex-shrink:0}
+.legal-section p{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:10px}
+.legal-section p:last-child{margin-bottom:0}
+.legal-section ul{margin:8px 0 12px 20px;color:var(--text2);font-size:14px;line-height:1.7}
+.legal-section li{margin-bottom:6px}
+.legal-highlight{background:rgba(0,112,243,0.08);border-left:3px solid var(--primary);padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+.legal-highlight p{color:#e6edf3;font-size:13.5px;margin:0}
+@media(max-width:768px){
+  .legal-container{padding:0 14px;margin:16px auto 40px}
+  .legal-card{padding:22px 18px}
+  .legal-title{font-size:24px}
+  .legal-section h3{font-size:15px}
+}
+
 /* Mobile */
 @media(max-width:900px){
   .container{padding:0 16px}
@@ -655,7 +683,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
     </div>
     <div class="footer-col">
       <div class="footer-title">Legal</div>
-      <a href="#/terms">Terms of Use</a>
+      <a href="#/terms">Terms of Service</a>
       <a href="#/privacy">Privacy Policy</a>
       <a href="https://github.com/coderaarav12/media-hub-frontend/issues" target="_blank" rel="noopener">Report Issue</a>
     </div>
@@ -667,8 +695,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
     </div>
   </div>
   <div class="footer-bottom">
-    <div>&copy; 2026 MediaHub. Not affiliated with TMDB or AniList.</div>
-    <div>Designed with &hearts; for the community.</div>
+    <div>&copy; 2026 MediaHub. All rights reserved. Not affiliated with TMDB or AniList.</div>
+    <div>All media content is provided by non-affiliated third-party streaming services.</div>
   </div>
 </footer>
 
@@ -1535,12 +1563,161 @@ async function renderSearch(q, type) {
 }
 // --- Legal Pages ---
 function renderTerms() {
-  showDetail(); document.title = 'Terms of Use - MediaHub'
-  $('detailPage').innerHTML = '<div style="max-width:800px;margin:40px auto;padding:0 20px;"><h1 style="font-size:32px;margin-bottom:24px;">Terms of Use</h1><p style="margin-bottom:16px;color:var(--text2)">Last updated: October 2026</p><h3 style="margin:24px 0 12px;font-size:20px;">1. Acceptance of Terms</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">By accessing and using MediaHub, you accept and agree to be bound by the terms and provision of this agreement. MediaHub acts merely as an aggregator and does not host any media content on its own servers.</p><h3 style="margin:24px 0 12px;font-size:20px;">2. Content Disclaimer</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">MediaHub indexes content available publicly on the internet. We do not control or take responsibility for the nature, content, and availability of third-party streams or sites linked through our app.</p><h3 style="margin:24px 0 12px;font-size:20px;">3. User Conduct</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">You agree to use MediaHub only for lawful purposes. You are prohibited from violating or attempting to violate the security of the application or using it to distribute malicious software.</p></div>'
+  showDetail();
+  document.title = 'Terms of Service - MediaHub';
+  window.scrollTo({top: 0, behavior: 'instant'});
+  $('detailPage').innerHTML = `
+    <div class="legal-container">
+      <button class="back-btn" onclick="if(history.length>1){history.back()}else{location.hash='#/'}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+      </button>
+      <div class="legal-badge terms"><span class="dot"></span>Legal Agreement</div>
+      <h1 class="legal-title">Terms of Service</h1>
+      <div class="legal-meta">Last Updated: October 2026 &bull; Version 2.0</div>
+      <div class="legal-card">
+        <div class="legal-section">
+          <h3><span class="sec-num">1</span> Acceptance of Terms</h3>
+          <p>By accessing, browsing, or utilizing MediaHub (&quot;the Service&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;), you acknowledge that you have read, understood, and agreed to be legally bound by these Terms of Service in full, along with our Privacy Policy. If you do not agree with any part of these Terms, you must immediately cease accessing and using the Service.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">2</span> Non-Hosting &amp; Aggregator Status (Disclaimer)</h3>
+          <div class="legal-highlight">
+            <p><strong>Notice:</strong> MediaHub is exclusively a client-side search indexing catalog and directory. MediaHub does not host, upload, store, encode, or transmit any video, audio, or multimedia content on any server under our ownership or control.</p>
+          </div>
+          <p>All video streams, television broadcasts, movies, anime episodes, and media files displayed or played through MediaHub are hosted on and delivered by independent, non-affiliated third-party servers. MediaHub simply provides automated hyperlinks and standard iframe embeds that reference publicly discoverable media locations on the internet.</p>
+          <p>MediaHub has no control over the nature, content, availability, security, or legal status of third-party streaming sources.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">3</span> DMCA &amp; Copyright Infringement Policy</h3>
+          <p>MediaHub respects the intellectual property rights of copyright holders worldwide and complies with the provisions of the Digital Millennium Copyright Act (17 U.S.C. &sect; 512) and applicable international copyright treaties.</p>
+          <p>Because MediaHub does not host, store, or cache any copyrighted video or media files, requests to remove the underlying video files must be directed to the third-party web host or video delivery service responsible for storing the content.</p>
+          <p>However, if you are a copyright owner or an authorized representative and believe that any index link, thumbnail, or metadata record on MediaHub infringes upon your copyright, you may submit a written notice containing:</p>
+          <ul>
+            <li>Identification of the copyrighted work claimed to have been infringed.</li>
+            <li>Direct URL link(s) on MediaHub to the page containing the reference or embed.</li>
+            <li>Sufficient contact information (name, address, telephone number, and email address).</li>
+            <li>A statement that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law.</li>
+            <li>A statement made under penalty of perjury that the information in the notification is accurate and that you are authorized to act on behalf of the copyright owner.</li>
+          </ul>
+          <p>Notices may be submitted through our official repository issue tracker or designated communication channels. Verified infringing links will be purged from our search index promptly.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">4</span> Permitted Use &amp; License</h3>
+          <p>Subject to your continuous compliance with these Terms, you are granted a limited, personal, non-exclusive, non-transferable, revocable license to access and browse MediaHub for personal, non-commercial entertainment and informational purposes only.</p>
+          <p>You agree not to reverse engineer, decompile, scrape at scale, resell, repackage, or distribute any portion of the MediaHub interface, codebase, or proprietary assets without express written consent.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">5</span> User Conduct &amp; Prohibited Activities</h3>
+          <p>You agree not to engage in any of the following prohibited behaviors while using the Service:</p>
+          <ul>
+            <li>Interfering with or disrupting the functionality, integrity, or security of the Service, servers, or networks.</li>
+            <li>Using automated bots, web crawlers, spiders, or scripts in a manner that creates an unreasonable or disproportionately heavy load on API endpoints.</li>
+            <li>Circumventing or modifying any security, sandbox, popup blocker, or rate-limiting features incorporated into MediaHub.</li>
+            <li>Using the Service for any unlawful, fraudulent, or malicious purpose.</li>
+          </ul>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">6</span> Third-Party Content &amp; Advertisements</h3>
+          <p>When you initiate playback on external video embeds, those third-party hosts may present advertisements, pop-ups, trackers, or separate terms of service. MediaHub implements client-side protection measures where practical, but takes no responsibility and incurs no liability for third-party advertisements, malware, cookies, or external transactions.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">7</span> Disclaimer of Warranties</h3>
+          <p>MediaHub is provided on an <strong>&quot;AS IS&quot;</strong> and <strong>&quot;AS AVAILABLE&quot;</strong> basis, without warranties of any kind, whether express, statutory, or implied. To the maximum extent permitted under applicable law, MediaHub disclaims all warranties, including but not limited to merchantability, fitness for a particular purpose, non-infringement, stream continuity, uptime, and metadata accuracy.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">8</span> Limitation of Liability</h3>
+          <p>In no event shall MediaHub, its developers, maintainers, contributors, or partners be liable for any direct, indirect, incidental, consequential, special, exemplary, or punitive damages, including loss of data, loss of goodwill, device damage, or interruption of service arising out of or in connection with the use or inability to use MediaHub or third-party streaming links.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">9</span> Modifications &amp; Severability</h3>
+          <p>We reserve the right to amend or update these Terms of Service at our sole discretion at any time. Any changes will become effective immediately upon posting to this page. If any provision of these Terms is determined to be unlawful or unenforceable, that provision shall be severed without affecting the validity and enforceability of the remaining provisions.</p>
+        </div>
+      </div>
+    </div>`;
 }
 function renderPrivacy() {
-  showDetail(); document.title = 'Privacy Policy - MediaHub'
-  $('detailPage').innerHTML = '<div style="max-width:800px;margin:40px auto;padding:0 20px;"><h1 style="font-size:32px;margin-bottom:24px;">Privacy Policy</h1><p style="margin-bottom:16px;color:var(--text2)">Last updated: October 2026</p><h3 style="margin:24px 0 12px;font-size:20px;">1. Information Collection</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">MediaHub is designed to be privacy-first. We do not require you to create an account, and we do not collect personally identifiable information (PII) such as your name, email, or address.</p><h3 style="margin:24px 0 12px;font-size:20px;">2. Local Storage</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">We may use your browser\'s local storage to save your preferences, search history, or customized settings locally on your device. This data is not transmitted to our servers.</p><h3 style="margin:24px 0 12px;font-size:20px;">3. Third-Party Services</h3><p style="margin-bottom:16px;line-height:1.7;color:var(--text2)">MediaHub utilizes external APIs (such as TMDB) to fetch metadata. These third-party services may log your IP address according to their own privacy policies when requests are made directly from your browser.</p></div>'
+  showDetail();
+  document.title = 'Privacy Policy - MediaHub';
+  window.scrollTo({top: 0, behavior: 'instant'});
+  $('detailPage').innerHTML = `
+    <div class="legal-container">
+      <button class="back-btn" onclick="if(history.length>1){history.back()}else{location.hash='#/'}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+      </button>
+      <div class="legal-badge privacy"><span class="dot"></span>Data Protection &amp; Privacy</div>
+      <h1 class="legal-title">Privacy Policy</h1>
+      <div class="legal-meta">Last Updated: October 2026 &bull; Version 2.0</div>
+      <div class="legal-card">
+        <div class="legal-section">
+          <h3><span class="sec-num">1</span> Privacy-First Principles</h3>
+          <p>MediaHub is built on fundamental privacy-by-design principles. We believe that accessing public media metadata and discovering entertainment should not require sacrificing your personal privacy.</p>
+          <div class="legal-highlight">
+            <p><strong>Zero PII Collection:</strong> MediaHub does not require account creation, registration, usernames, email addresses, phone numbers, or passwords. We do not collect or maintain a database of Personally Identifiable Information (PII).</p>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">2</span> Local Browser Storage (Client-Side Only)</h3>
+          <p>To deliver convenient personalization features without central data collection, MediaHub utilizes your browser&apos;s HTML5 <code>localStorage</code> API. The following items are stored exclusively on your local device:</p>
+          <ul>
+            <li><strong>Watchlist &amp; Bookmarks:</strong> Titles you choose to save for later viewing.</li>
+            <li><strong>Watch History:</strong> Titles you have recently watched, along with last-played episodes.</li>
+            <li><strong>Playback Preferences:</strong> Audio/subtitle language preferences and volume levels.</li>
+            <li><strong>UI Settings:</strong> Dark/light mode theme selection and filter preferences.</li>
+          </ul>
+          <p>This data is never sent to, collected by, or synchronized with any remote server owned by MediaHub. You have full control over this data and may clear it at any time through your browser settings or the clear history button in MediaHub.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">3</span> Third-Party Metadata Providers</h3>
+          <p>MediaHub fetches title information, posters, synopses, cast lists, and release dates via direct client-side requests to public metadata APIs:</p>
+          <ul>
+            <li><strong>The Movie Database (TMDB):</strong> Used for movie and TV series metadata.</li>
+            <li><strong>AniList:</strong> Used for anime metadata, episode listings, and character information.</li>
+          </ul>
+          <p>When your browser makes these requests, standard HTTP headers (such as your IP address and User-Agent) are transmitted directly from your client to these services. These third-party APIs process requests in accordance with their respective privacy policies.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">4</span> External Media Players &amp; Embedded Content</h3>
+          <p>When playing a stream, MediaHub embeds external video players from independent third-party streaming providers inside iframes. When interacting with an embedded player:</p>
+          <ul>
+            <li>Your browser establishes a direct connection with the third-party streaming host.</li>
+            <li>The external host may set cookies, collect IP addresses, and enforce its own terms and privacy practices.</li>
+            <li>MediaHub does not possess access to cookies or session data handled by third-party iframe players.</li>
+          </ul>
+          <p>We advise users to review the privacy policies of any third-party streaming services they engage with.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">5</span> Cookies, Tracking &amp; Telemetry</h3>
+          <p>MediaHub itself does <strong>not</strong> set tracking cookies, session cookies, or marketing beacons. We do not utilize commercial analytics platforms (such as Google Analytics, Mixpanel, or Meta Pixel) and do not employ browser fingerprinting techniques.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">6</span> Children&apos;s Online Privacy</h3>
+          <p>MediaHub does not knowingly target, solicit, or collect personal information from children under the age of 13 (or under 16 in the European Economic Area). Because our service does not collect personal data from any user, no children&apos;s data is stored or processed on our servers.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">7</span> Security Standards</h3>
+          <p>MediaHub is delivered over secure Transport Layer Security (TLS / HTTPS) protocols, ensuring that communication between your browser and our static hosting CDN is encrypted and tamper-resistant.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">8</span> Changes to this Policy &amp; Inquiries</h3>
+          <p>We may update this Privacy Policy from time to time to reflect operational, technological, or legal developments. The updated date at the top of this page indicates the most recent revision. If you have questions regarding this Privacy Policy, please reach out via our GitHub repository.</p>
+        </div>
+      </div>
+    </div>`;
 }
 async function renderPerson(id) {
   showDetail(); document.title = 'Loading...'
