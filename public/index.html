@@ -1880,6 +1880,24 @@ function clearIssueChat() {
   }
 }
 
+let issueDevClicks = 0;
+let issueDevClickTimer = null;
+
+function handleIssueBadgeClick() {
+  issueDevClicks++;
+  clearTimeout(issueDevClickTimer);
+  issueDevClickTimer = setTimeout(() => {
+    issueDevClicks = 0;
+  }, 2500);
+
+  if (issueDevClicks >= 5) {
+    issueDevClicks = 0;
+    isIssueDevMode = !isIssueDevMode;
+    localStorage.setItem('mediahub_issue_dev_active', isIssueDevMode ? 'true' : 'false');
+    renderReportIssue();
+  }
+}
+
 function toggleIssueDevMode() {
   isIssueDevMode = !isIssueDevMode;
   localStorage.setItem('mediahub_issue_dev_active', isIssueDevMode ? 'true' : 'false');
@@ -1933,10 +1951,10 @@ function renderReportIssue() {
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
       </button>
 
-      <div class="legal-badge issue-badge" id="issueDeskBadge" onclick="toggleIssueDevMode()" style="cursor:pointer;user-select:none" title="Support Desk">
+      <div class="legal-badge issue-badge" id="issueDeskBadge" onclick="handleIssueBadgeClick()" style="cursor:pointer;user-select:none;${isIssueDevMode ? 'border-color:var(--secondary);box-shadow:0 0 12px rgba(0,206,201,0.3);' : ''}">
         <span class="dot" style="background:${isIssueDevMode ? '#00f2fe' : '#00c6ff'};box-shadow:0 0 8px #00f2fe"></span>
         Support Desk
-        <span id="secretLockIcon" style="opacity:${isIssueDevMode ? '1' : '0.35'};margin-left:6px;font-size:11px;color:${isIssueDevMode ? '#00f2fe' : 'inherit'}">${isIssueDevMode ? '🔓 DEV ACTIVE' : '🔒'}</span>
+        ${isIssueDevMode ? '<span style="opacity:1;margin-left:6px;font-size:10.5px;color:var(--secondary);font-weight:700;">🔓 DEV ACTIVE</span>' : ''}
       </div>
 
       <h1 class="legal-title">Report an Issue</h1>
@@ -1947,7 +1965,6 @@ function renderReportIssue() {
           <div class="issue-online-status">
             <span class="status-dot"></span>
             <span>Issue Desk Online</span>
-            <button id="stealthDevTrigger" onclick="toggleIssueDevMode()" style="background:none;border:none;color:rgba(255,255,255,0.18);cursor:pointer;font-size:12px;padding:2px 4px;margin-left:2px" title="System">&bull;</button>
           </div>
           <div style="display:flex;align-items:center;gap:12px">
             <a href="https://github.com/coderaarav12/media-hub-frontend/issues" target="_blank" rel="noopener" style="font-size:12px;color:var(--primary-light);text-decoration:none;display:inline-flex;align-items:center;gap:4px">
