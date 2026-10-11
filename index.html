@@ -456,29 +456,29 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
   .detail-info h1{font-size:20px}
 }
 
-/* Peeka 3D Bot Companion */
-.peeka-widget{position:fixed;bottom:24px;right:24px;z-index:9990;pointer-events:none;transition:opacity 0.3s ease,transform 0.2s cubic-bezier(0.16,1,0.3,1);user-select:none;-webkit-user-select:none}
+/* Peeka 2.0 Kawaii Chibi Mascot */
+.peeka-widget{position:fixed;bottom:24px;right:24px;z-index:9990;pointer-events:none;transition:opacity 0.3s ease;user-select:none;-webkit-user-select:none}
 .peeka-widget.player-ducked{opacity:0.22;transform:scale(0.85);pointer-events:none}
 .peeka-widget.player-ducked:hover{opacity:0.8;pointer-events:auto}
-.peeka-body-wrap{width:110px;height:120px;position:relative;cursor:grab;pointer-events:auto;touch-action:none;transition:transform 0.15s cubic-bezier(0.175,0.885,0.32,1.275);filter:drop-shadow(0 12px 24px rgba(0,112,243,0.22))}
+.peeka-body-wrap{width:115px;height:125px;position:relative;cursor:grab;pointer-events:auto;touch-action:none;transition:transform 0.15s cubic-bezier(0.175,0.885,0.32,1.275);filter:drop-shadow(0 14px 28px rgba(0,112,243,0.3))}
 .peeka-body-wrap:hover .peeka-controls{opacity:1;pointer-events:auto}
 .peeka-controls{position:absolute;top:2px;right:10px;opacity:0;transition:opacity 0.2s ease;pointer-events:none;z-index:10}
-.peeka-ctrl-btn{width:22px;height:22px;border-radius:50%;background:rgba(8,17,36,0.85);border:1px solid rgba(0,170,255,0.3);color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s ease;padding:0}
+.peeka-ctrl-btn{width:22px;height:22px;border-radius:50%;background:rgba(8,17,36,0.88);border:1px solid rgba(0,170,255,0.35);color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s ease;padding:0}
 .peeka-ctrl-btn:hover{background:var(--primary);color:#fff;border-color:var(--secondary);transform:scale(1.1)}
 .peeka-svg{width:100%;height:100%;display:block;overflow:visible}
-.peeka-bubble{position:absolute;bottom:calc(100% + 14px);right:0;width:max-content;max-width:260px;background:rgba(8,17,36,0.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(0,170,255,0.35);border-radius:14px;padding:10px 30px 10px 14px;color:#fff;font-size:12.5px;font-weight:500;line-height:1.45;box-shadow:0 12px 32px rgba(0,0,0,0.6),0 0 20px rgba(0,112,243,0.25);pointer-events:auto;animation:fadeUp 0.25s cubic-bezier(0.16,1,0.3,1);z-index:12}
-.peeka-bubble-close{position:absolute;top:5px;right:7px;background:none;border:none;color:var(--text2);font-size:16px;cursor:pointer;line-height:1;padding:2px 4px;border-radius:4px;transition:color 0.2s}
+.peeka-bubble{position:absolute;bottom:calc(100% + 14px);right:0;width:max-content;max-width:270px;background:rgba(8,17,36,0.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(0,170,255,0.4);border-radius:16px;padding:10px 32px 10px 14px;color:#fff;font-size:12.5px;font-weight:500;line-height:1.45;box-shadow:0 12px 32px rgba(0,0,0,0.6),0 0 24px rgba(0,112,243,0.3);pointer-events:auto;animation:fadeUp 0.25s cubic-bezier(0.16,1,0.3,1);z-index:12}
+.peeka-bubble-close{position:absolute;top:6px;right:8px;background:none;border:none;color:var(--text2);font-size:16px;cursor:pointer;line-height:1;padding:2px 4px;border-radius:4px;transition:color 0.2s}
 .peeka-bubble-close:hover{color:#fff}
-.peeka-bubble-tail{position:absolute;bottom:-6px;right:45px;width:10px;height:10px;background:rgba(8,17,36,0.92);border-right:1px solid rgba(0,170,255,0.35);border-bottom:1px solid rgba(0,170,255,0.35);transform:rotate(45deg)}
-.peeka-min-badge{position:relative;background:rgba(8,17,36,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(0,170,255,0.4);box-shadow:0 6px 20px rgba(0,0,0,0.5),0 0 15px rgba(0,112,243,0.3);border-radius:30px;padding:7px 14px;display:flex;align-items:center;gap:7px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;pointer-events:auto;transition:all 0.2s ease}
-.peeka-min-badge:hover{background:rgba(0,112,243,0.25);border-color:var(--secondary);transform:scale(1.05)}
+.peeka-bubble-tail{position:absolute;bottom:-6px;right:45px;width:10px;height:10px;background:rgba(8,17,36,0.94);border-right:1px solid rgba(0,170,255,0.4);border-bottom:1px solid rgba(0,170,255,0.4);transform:rotate(45deg)}
+.peeka-min-badge{position:relative;background:rgba(8,17,36,0.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(0,170,255,0.45);box-shadow:0 6px 20px rgba(0,0,0,0.5),0 0 18px rgba(0,112,243,0.35);border-radius:30px;padding:7px 15px;display:flex;align-items:center;gap:7px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;pointer-events:auto;transition:all 0.2s ease}
+.peeka-min-badge:hover{background:rgba(0,112,243,0.28);border-color:var(--secondary);transform:scale(1.05)}
 .peeka-min-eyes{color:var(--secondary);font-size:11px;letter-spacing:1px;animation:glowPulse 2s infinite}
 .peeka-bounce{animation:peekaBounce 0.4s ease}
-@keyframes peekaBounce{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+@keyframes peekaBounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
 @media(max-width:480px){
   .peeka-widget{bottom:16px;right:16px}
-  .peeka-body-wrap{width:90px;height:100px}
-  .peeka-bubble{max-width:200px;font-size:11.5px;padding:8px 26px 8px 12px}
+  .peeka-body-wrap{width:92px;height:102px}
+  .peeka-bubble{max-width:210px;font-size:11.5px;padding:8px 28px 8px 12px}
 }
 </style>
 </head>
@@ -1879,7 +1879,7 @@ async function loadRepoStats() {
 }
 
 const CHANGELOG = [
-  { date: '2026-10-11', msg: 'Added Peeka: Procedural interactive 3D bot companion (Yrzhe/peeka inspired) with spherical gaze tracking, humorous quips, and theater mode auto-ducking' },
+  { date: '2026-10-11', msg: 'Peeka 2.0: Cute chibi mascot redesign with wiggling cat ears, star bobble, interactive flight on clicks, and genre-smart humor (Romance, Horror, Comedy, Sci-Fi, etc.)' },
   { date: '2026-10-11', msg: 'Full UI theme overhaul: Sleek obsidian black with electric blue & neon cyan glow accents' },
   { date: '2026-10-09', msg: 'Added working anime embed sources (VidLink Sub/Dub, VidJoy, 2Embed, AutoEmbed) with episode selector' },
   { date: '2026-10-09', msg: 'Smart auto-switch: concurrently probes all video servers on Play Now & connects to fastest stream' },
@@ -1895,7 +1895,7 @@ const CHANGELOG = [
   { date: '2025-07-08', msg: 'Source tabs in player for channel fallback' },
   { date: '2025-07-08', msg: 'Initial release: MediaHub with Movies, TV, Anime, Live TV' },
 ]
-const CHANGELOG_VER = 10
+const CHANGELOG_VER = 11
 
 function checkUpdate() {
   const last = localStorage.getItem('changelogVer')
