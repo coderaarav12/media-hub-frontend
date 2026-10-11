@@ -1,5 +1,5 @@
-const CACHE = 'mediahub-v4'
-const URLS = ['/','/index.html','/manifest.json']
+const CACHE = 'mediahub-v5'
+const URLS = ['/','/index.html','/manifest.json','/peeka.js']
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(URLS)).then(() => self.skipWaiting()))
 })
