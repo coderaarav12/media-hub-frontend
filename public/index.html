@@ -1948,22 +1948,40 @@ document.querySelectorAll('.custom-select-wrapper').forEach(wrap => {
 })
 document.addEventListener('click', () => { document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open')) })
 
-// --- Popup Blocker (Allows legitimate links like IMDb) ---
+// --- Popup Blocker (Allows legitimate links like GitHub, IMDb, AniList) ---
 ;(function(){
   const _realOpen = window.open
+  const isAllowedUrl = (url) => {
+    if (typeof url !== 'string') return false
+    return url.includes('github.com') || 
+           url.includes('imdb.com') || 
+           url.includes('themoviedb.org') || 
+           url.includes('anilist.co') ||
+           url.includes('twitter.com') ||
+           url.includes('x.com')
+  }
+
   window.open = function(url, target, features){
-    if (typeof url === 'string' && (url.includes('imdb.com') || url.includes('themoviedb.org'))) {
+    if (isAllowedUrl(url)) {
       return _realOpen ? _realOpen.call(window, url, target, features) : null
     }
     return null
   }
+
   document.addEventListener('click', function(e){
-    const a = e.target.closest('a[target="_blank"]')
-    if(a){
-      if(a.href && (a.href.includes('imdb.com') || a.href.includes('themoviedb.org'))){
+    const a = e.target.closest('a')
+    if(a && a.href){
+      // Always allow github, imdb, tmdb, anilist or relative app navigation
+      if(isAllowedUrl(a.href) || a.href.startsWith('#') || a.href.startsWith(location.origin)){
         return
       }
-      e.preventDefault(); e.stopPropagation(); return false
+      // If inside legitimate UI containers, allow
+      if(a.closest('.site-footer, .gh-repo-card, .share-modal, .changelog-modal, .detail-actions, .extended-info')){
+        return
+      }
+      if(a.target === '_blank'){
+        e.preventDefault(); e.stopPropagation(); return false
+      }
     }
   }, true)
 })()
