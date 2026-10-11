@@ -290,38 +290,25 @@
 
   let dom = {};
 
-  // --- Strobi-style Eye Expression Shapes ---
-  // All are FILLED shapes matching the bible-strong.app blob avatar style
-  const EYE_SHAPES = {
-    normal: null,   // plain ellipse — rendered directly, no override
-    happy:    { type: 'ellipse', rx: 7, ry: 3,   fill: '#050f25' },   // ^.^ squish
-    excited:  { type: 'circle',  r: 9.5,          fill: '#050f25' },   // wide-open
-    love:     { type: 'path', d: 'M 0,-3 A 3.5,3.5 0 0,0 -7,-3 Q -7,2 0,8 Q 7,2 7,-3 A 3.5,3.5 0 0,0 0,-3 Z', fill: '#ff4d88' },
-    dizzy:    { type: 'path', d: 'M -6,-6 L 6,6 M 6,-6 L -6,6', stroke: '#050f25', strokeWidth: 3.5, fill: 'none' },
-    sleepy:   { type: 'rect', x: -7, y: -2, width: 14, height: 4, rx: 2, fill: '#050f25' },
-    detective:{ type: 'ellipse', rx: 7, ry: 4, fill: '#050f25' },
-    angry:    { type: 'path', d: 'M -7,0 Q 0,8 7,0 Z', fill: '#050f25' },
-    scared:   { type: 'ellipse', rx: 8, ry: 11, fill: '#050f25' },
-    cinema:   null,
+  // --- SVG Paths for Cute Eye Morphing ---
+  const EYE_PATHS = {
+    normal: '',
+    happy: 'M -13,3 Q 0,-8 13,3', // Inverted happy crescent
+    love: 'M 0,-4 A 4.2,4.2 0 0,0 -8.4,-4 Q -8.4,4 0,9.5 Q 8.4,4 8.4,-4 A 4.2,4.2 0 0,0 0,-4 Z', // Heart
+    dizzy: 'M 0,0 m -8,0 a 8,8 0 1,0 16,0 a 8,8 0 1,0 -16,0 M -4,0 a 4,4 0 1,0 8,0 a 4,4 0 1,0 -8,0', // Spiral
+    sleepy: 'M -13,0 L 13,0', // Flat sleepy line
+    detective: 'M -12,-12 L 12,-12 L 12,12 L -12,12 Z M -12,0 L 12,0' // Reticle scanner
   };
-  // Compatibility alias
-  const EYE_PATHS = {};
 
   // --- Initialization ---
   function init() {
     createDOM();
-    // Apply position BEFORE loop starts to prevent top-left flash
-    applyInitialPosition();
     bindEvents();
+    loadPersistedPosition();
     startLoop();
-    hookIntoMediaHub();
 
-    // Fade in smoothly after position is set
-    dom.container.style.opacity = '0';
-    requestAnimationFrame(() => {
-      dom.container.style.transition = 'opacity 0.5s ease';
-      dom.container.style.opacity = '1';
-    });
+    // Hook into global MediaHub actions
+    hookIntoMediaHub();
 
     // Initial greeting after 1.8s
     setTimeout(() => {
@@ -352,139 +339,159 @@
           </button>
         </div>
 
-        <svg id="peekaSvg" class="peeka-svg" viewBox="-80 -90 160 180">
+        <svg id="peekaSvg" class="peeka-svg" viewBox="-120 -120 240 240">
           <defs>
-            <!-- Main blob body gradient - dark navy blue -->
-            <radialGradient id="pkBodyGrad" cx="38%" cy="30%" r="70%">
-              <stop offset="0%" stop-color="#1e3f72"/>
-              <stop offset="50%" stop-color="#0d2248"/>
-              <stop offset="100%" stop-color="#050f25"/>
+            <!-- Cute Pear/Mochi Chassis Gradient -->
+            <linearGradient id="pkChassisGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#0f294d"/>
+              <stop offset="45%" stop-color="#091c38"/>
+              <stop offset="100%" stop-color="#030c1a"/>
+            </linearGradient>
+            <!-- Luminous Rim Glow -->
+            <radialGradient id="pkRimGlow" cx="50%" cy="25%" r="75%">
+              <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.6"/>
+              <stop offset="45%" stop-color="#0070f3" stop-opacity="0.3"/>
+              <stop offset="100%" stop-color="#00183b" stop-opacity="0"/>
             </radialGradient>
-            <!-- Subtle rim glow around blob -->
-            <radialGradient id="pkRimGrad" cx="50%" cy="20%" r="75%">
-              <stop offset="0%" stop-color="#4da6ff" stop-opacity="0.35"/>
-              <stop offset="60%" stop-color="#0066cc" stop-opacity="0.15"/>
-              <stop offset="100%" stop-color="#000e2a" stop-opacity="0"/>
+            <!-- Forehead Gloss Highlight -->
+            <linearGradient id="pkGlossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.28"/>
+              <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+            </linearGradient>
+            <!-- Visor Screen -->
+            <linearGradient id="pkVisorGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#020713"/>
+              <stop offset="100%" stop-color="#071730"/>
+            </linearGradient>
+            <!-- Kawaii Chibi Anime Eye Glow -->
+            <radialGradient id="pkEyeGlow" cx="45%" cy="35%" r="65%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="25%" stop-color="#38bdf8"/>
+              <stop offset="65%" stop-color="#0070f3"/>
+              <stop offset="100%" stop-color="#00224d"/>
             </radialGradient>
-            <!-- Forehead gloss -->
-            <radialGradient id="pkGlossGrad" cx="42%" cy="20%" r="55%">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.22"/>
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-            </radialGradient>
-            <!-- Neon glow filter -->
-            <filter id="pkGlow" x="-35%" y="-35%" width="170%" height="170%">
-              <feGaussianBlur stdDeviation="3" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            <!-- Ear Glow Gradient -->
+            <linearGradient id="pkEarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#0070f3" stop-opacity="0.35"/>
+            </linearGradient>
+            <filter id="pkNeonGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="3.2" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
             </filter>
-            <!-- Soft shadow filter -->
-            <filter id="pkShadowFilt" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="5" result="blur"/>
-            </filter>
-            <!-- Antenna glow -->
-            <filter id="pkAntennaGlow" x="-60%" y="-60%" width="220%" height="220%">
-              <feGaussianBlur stdDeviation="4" result="blur"/>
-              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-            </filter>
+            <clipPath id="pkVisorClip">
+              <rect x="-56" y="-28" width="112" height="58" rx="28" ry="28"/>
+            </clipPath>
           </defs>
 
-          <!-- Soft drop shadow -->
-          <ellipse id="pkShadow" cx="0" cy="75" rx="42" ry="8" fill="#000d26" opacity="0.45" filter="url(#pkShadowFilt)"/>
+          <!-- Floor Shadow -->
+          <ellipse id="pkShadow" cx="0" cy="100" rx="55" ry="12" fill="rgba(0, 112, 243, 0.28)" filter="blur(6px)"/>
 
-          <!-- Main float group -->
-          <g id="pkFloatGroup">
+          <!-- Floating Chibi Mascot Group -->
+          <g id="pkFloatGroup" transform="translate(0, 0)">
 
-            <!-- === ANTENNA === -->
+            <!-- Left Kawaii Cat/Fin Ear -->
+            <g id="pkLeftEar" transform="translate(0, 0)">
+              <path d="M -46,-34 C -68,-64 -50,-76 -32,-48 Z" fill="#0b2244" stroke="rgba(0,180,255,0.5)" stroke-width="2"/>
+              <path d="M -44,-36 C -60,-60 -48,-68 -34,-48 Z" fill="url(#pkEarGrad)"/>
+            </g>
+
+            <!-- Right Kawaii Cat/Fin Ear -->
+            <g id="pkRightEar" transform="translate(0, 0)">
+              <path d="M 46,-34 C 68,-64 50,-76 32,-48 Z" fill="#0b2244" stroke="rgba(0,180,255,0.5)" stroke-width="2"/>
+              <path d="M 44,-36 C 60,-60 48,-68 34,-48 Z" fill="url(#pkEarGrad)"/>
+            </g>
+
+            <!-- Bouncy Antenna with Star Bobble -->
             <g id="pkAntennaGroup">
-              <path id="pkAntennaStem" d="M -4,-54 Q 2,-68 0,-82" stroke="#4da6ff" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.85"/>
-              <!-- Pulsing antenna orb -->
-              <circle id="pkAntennaLed" cx="0" cy="-82" r="6.5" fill="#00d4ff" filter="url(#pkAntennaGlow)"/>
-              <circle cx="0" cy="-82" r="3" fill="#ffffff" opacity="0.9"/>
+              <path id="pkAntennaStem" d="M 0,-56 Q 5,-72 0,-85" stroke="#0090ff" stroke-width="3" stroke-linecap="round" fill="none"/>
+              <circle id="pkAntennaLed" cx="0" cy="-85" r="6" fill="#00f0ff" filter="url(#pkNeonGlow)"/>
+              <path d="M 0,-89 L 1.5,-86.5 L 4,-85 L 1.5,-83.5 L 0,-81 L -1.5,-83.5 L -4,-85 L -1.5,-86.5 Z" fill="#ffffff"/>
             </g>
 
-            <!-- === BLOB BODY === -->
-            <!-- Asymmetric cute blob shape - slightly pear-shaped, chunky, squishable -->
-            <path id="pkBlob" d="M 0,-56 C 28,-58 52,-38 54,-10 C 56,18 46,50 20,60 C 8,65 -8,65 -20,60 C -46,50 -56,18 -54,-10 C -52,-38 -28,-58 0,-56 Z"
-              fill="url(#pkBodyGrad)" stroke="rgba(77,166,255,0.4)" stroke-width="1.8"/>
-            <!-- Rim glow overlay -->
-            <path d="M 0,-56 C 28,-58 52,-38 54,-10 C 56,18 46,50 20,60 C 8,65 -8,65 -20,60 C -46,50 -56,18 -54,-10 C -52,-38 -28,-58 0,-56 Z"
-              fill="url(#pkRimGrad)"/>
-            <!-- Forehead gloss -->
-            <ellipse cx="-8" cy="-36" rx="22" ry="14" fill="url(#pkGlossGrad)"/>
+            <!-- Chubby Mochi Body Chassis -->
+            <path id="pkChassis" d="M 0,-56 C 46,-56 66,-28 66,12 C 66,54 48,70 0,70 C -48,70 -66,54 -66,12 C -66,-28 -46,-56 0,-56 Z" fill="url(#pkChassisGrad)" stroke="rgba(0,180,255,0.5)" stroke-width="2"/>
+            <path id="pkRim" d="M 0,-56 C 46,-56 66,-28 66,12 C 66,54 48,70 0,70 C -48,70 -66,54 -66,12 C -66,-28 -46,-56 0,-56 Z" fill="url(#pkRimGlow)"/>
 
-            <!-- === CAT EAR NUBS (tiny, cute) === -->
-            <g id="pkLeftEar">
-              <path d="M -36,-50 C -50,-72 -38,-80 -24,-58 Z" fill="#0d2248" stroke="rgba(77,166,255,0.5)" stroke-width="1.5"/>
-              <path d="M -34,-52 C -44,-68 -36,-72 -26,-58 Z" fill="#4da6ff" opacity="0.4"/>
+            <!-- Cute Forehead Gloss Highlight -->
+            <path d="M -30,-48 C -15,-54 15,-54 30,-48 C 20,-42 -20,-42 -30,-48 Z" fill="url(#pkGlossGrad)"/>
+
+            <!-- Cute Visor Screen -->
+            <rect x="-56" y="-28" width="112" height="58" rx="28" fill="url(#pkVisorGrad)" stroke="rgba(0,190,255,0.4)" stroke-width="1.8"/>
+
+            <!-- Eyes Layer (Clipped inside Visor) -->
+            <g id="pkEyesLayer" clip-path="url(#pkVisorClip)">
+              <!-- Left Eye -->
+              <g id="pkLeftEyeGroup" transform="translate(-24, 0)">
+                <ellipse id="pkLeftEye" cx="0" cy="0" rx="16" ry="18" fill="url(#pkEyeGlow)" filter="url(#pkNeonGlow)"/>
+                <circle id="pkLeftPupil" cx="0" cy="0" r="7.5" fill="#001226"/>
+                <!-- Primary Kawaii Sparkle -->
+                <circle id="pkLeftSparkle" cx="-4.5" cy="-5" r="4.2" fill="#ffffff"/>
+                <!-- Secondary Kawaii Glint -->
+                <circle id="pkLeftSparkle2" cx="3.5" cy="4" r="2.2" fill="#ffffff"/>
+                <!-- Twinkle starlet -->
+                <circle id="pkLeftSparkle3" cx="4" cy="-3.5" r="1.2" fill="#a5f3fc"/>
+                <!-- Morphing eye shape overlay -->
+                <path id="pkLeftShape" d="" stroke="#00f0ff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" style="display:none;"/>
+              </g>
+
+              <!-- Right Eye -->
+              <g id="pkRightEyeGroup" transform="translate(24, 0)">
+                <ellipse id="pkRightEye" cx="0" cy="0" rx="16" ry="18" fill="url(#pkEyeGlow)" filter="url(#pkNeonGlow)"/>
+                <circle id="pkRightPupil" cx="0" cy="0" r="7.5" fill="#001226"/>
+                <!-- Primary Kawaii Sparkle -->
+                <circle id="pkRightSparkle" cx="-4.5" cy="-5" r="4.2" fill="#ffffff"/>
+                <!-- Secondary Kawaii Glint -->
+                <circle id="pkRightSparkle2" cx="3.5" cy="4" r="2.2" fill="#ffffff"/>
+                <!-- Twinkle starlet -->
+                <circle id="pkRightSparkle3" cx="4" cy="-3.5" r="1.2" fill="#a5f3fc"/>
+                <!-- Morphing eye shape overlay -->
+                <path id="pkRightShape" d="" stroke="#00f0ff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none" style="display:none;"/>
+              </g>
             </g>
-            <g id="pkRightEar">
-              <path d="M 36,-50 C 50,-72 38,-80 24,-58 Z" fill="#0d2248" stroke="rgba(77,166,255,0.5)" stroke-width="1.5"/>
-              <path d="M 34,-52 C 44,-68 36,-72 26,-58 Z" fill="#4da6ff" opacity="0.4"/>
+
+            <!-- Cute Blushing Cheeks -->
+            <ellipse id="pkCheekL" cx="-40" cy="18" rx="8" ry="4.5" fill="#ff4d88" opacity="0.45" filter="url(#pkNeonGlow)"/>
+            <ellipse id="pkCheekR" cx="40" cy="18" rx="8" ry="4.5" fill="#ff4d88" opacity="0.45" filter="url(#pkNeonGlow)"/>
+
+            <!-- Adorable Mouth -->
+            <path id="pkMouth" d="M -7,22 Q 0,27 7,22" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+            <path id="pkMouthOpen" d="M -7,21 Q 0,31 7,21 Z" fill="#ff4d88" stroke="#38bdf8" stroke-width="1.8" style="display:none;"/>
+
+            <!-- Cute Floating Nubby Paws -->
+            <g id="pkLeftPaw" transform="translate(-56, 36)">
+              <ellipse cx="0" cy="0" rx="9" ry="12" transform="rotate(-15)" fill="#0c1f3d" stroke="rgba(0,180,255,0.45)" stroke-width="1.8"/>
+              <ellipse cx="-1" cy="2" rx="4" ry="5" fill="#00f0ff" opacity="0.3"/>
+            </g>
+            <g id="pkRightPaw" transform="translate(56, 36)">
+              <ellipse cx="0" cy="0" rx="9" ry="12" transform="rotate(15)" fill="#0c1f3d" stroke="rgba(0,180,255,0.45)" stroke-width="1.8"/>
+              <ellipse cx="1" cy="2" rx="4" ry="5" fill="#00f0ff" opacity="0.3"/>
             </g>
 
-            <!-- === EYES - Strobi-style expressive === -->
-            <!-- Each eye is a group containing the main eye shape + overlay shapes for expressions -->
-
-            <!-- Left eye group -->
-            <g id="pkLeftEyeGroup" transform="translate(-18, -14)">
-              <!-- Normal eye: filled rounded oval -->
-              <ellipse id="pkLeftEye" cx="0" cy="0" rx="7" ry="9" fill="#050f25"/>
-              <!-- Eye shine (always visible) -->
-              <circle id="pkLeftShine" cx="-2" cy="-3" r="2.5" fill="#ffffff" opacity="0.9"/>
-              <circle cx="-1" cy="2" r="1" fill="#ffffff" opacity="0.4"/>
-              <!-- Expression overlay (for moods - hidden by default) -->
-              <path id="pkLeftShape" d="" fill="#050f25" stroke="none" style="display:none;"/>
-            </g>
-
-            <!-- Right eye group -->
-            <g id="pkRightEyeGroup" transform="translate(18, -14)">
-              <ellipse id="pkRightEye" cx="0" cy="0" rx="7" ry="9" fill="#050f25"/>
-              <circle id="pkRightShine" cx="-2" cy="-3" r="2.5" fill="#ffffff" opacity="0.9"/>
-              <circle cx="-1" cy="2" r="1" fill="#ffffff" opacity="0.4"/>
-              <path id="pkRightShape" d="" fill="#050f25" stroke="none" style="display:none;"/>
-            </g>
-
-            <!-- Left pupil (for tracking) -->
-            <circle id="pkLeftPupil" cx="-18" cy="-14" r="3.5" fill="#1a4a8a" style="display:none;"/>
-            <!-- Right pupil -->
-            <circle id="pkRightPupil" cx="18" cy="-14" r="3.5" fill="#1a4a8a" style="display:none;"/>
-
-            <!-- === CHEEKS (blush) === -->
-            <ellipse id="pkCheekL" cx="-34" cy="4" rx="11" ry="7" fill="#ff6b9d" opacity="0" filter="url(#pkGlow)"/>
-            <ellipse id="pkCheekR" cx="34" cy="4" rx="11" ry="7" fill="#ff6b9d" opacity="0" filter="url(#pkGlow)"/>
-
-            <!-- === MOUTH === -->
-            <!-- Subtle smile line - Strobi style has no mouth usually, but tiny one is cute -->
-            <path id="pkMouth" d="M -7,22 Q 0,27 7,22" stroke="#1a3a6b" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.6"/>
-            <path id="pkMouthOpen" d="M -9,20 Q 0,32 9,20 Z" fill="#1a2a50" stroke="rgba(77,166,255,0.3)" stroke-width="1.2" style="display:none;"/>
-            <!-- Tiny happy teeth -->
-            <path id="pkMouthHappy" d="M -8,20 Q 0,30 8,20" stroke="none" fill="none" style="display:none;"/>
-
-            <!-- === CINEMA GLASSES === -->
+            <!-- 3D Cinema Glasses (pops on in cinema mode) -->
             <g id="pkCinemaGlasses" style="display:none;">
-              <rect x="-38" y="-24" width="30" height="22" rx="7" fill="rgba(255,30,80,0.6)" stroke="#ffffff" stroke-width="1.5"/>
-              <rect x="8" y="-24" width="30" height="22" rx="7" fill="rgba(0,229,255,0.6)" stroke="#ffffff" stroke-width="1.5"/>
-              <line x1="-8" y1="-13" x2="8" y2="-13" stroke="#ffffff" stroke-width="2"/>
+              <rect x="-54" y="-18" width="46" height="34" rx="8" fill="rgba(255, 30, 80, 0.55)" stroke="#fff" stroke-width="2"/>
+              <rect x="8" y="-18" width="46" height="34" rx="8" fill="rgba(0, 229, 255, 0.55)" stroke="#fff" stroke-width="2"/>
+              <line x1="-8" y1="-2" x2="8" y2="-2" stroke="#fff" stroke-width="2.5"/>
             </g>
 
-            <!-- === POPCORN ACCESSORY === -->
-            <g id="pkPopcornAcc" transform="translate(38, 18) scale(0.6)" style="display:none;">
-              <polygon points="0,0 22,0 18,28 4,28" fill="#c0392b" stroke="#ffffff" stroke-width="1.5"/>
-              <polygon points="4,0 8,0 7,28 3,28" fill="#ffffff" opacity="0.8"/>
-              <polygon points="14,0 18,0 17,28 13,28" fill="#ffffff" opacity="0.8"/>
-              <circle cx="5" cy="-5" r="4" fill="#f1c40f"/>
-              <circle cx="11" cy="-7" r="4.5" fill="#e67e22"/>
-              <circle cx="17" cy="-5" r="4" fill="#f1c40f"/>
+            <!-- Popcorn Tub (accessory) -->
+            <g id="pkPopcornAcc" transform="translate(36, 30) scale(0.68)" style="display:none;">
+              <polygon points="0,0 24,0 20,28 4,28" fill="#e74c3c" stroke="#fff" stroke-width="1.5"/>
+              <polygon points="5,0 9,0 8,28 4,28" fill="#fff"/>
+              <polygon points="15,0 19,0 18,28 14,28" fill="#fff"/>
+              <circle cx="6" cy="-4" r="4.5" fill="#f1c40f"/>
+              <circle cx="12" cy="-6" r="5" fill="#f39c12"/>
+              <circle cx="18" cy="-4" r="4.5" fill="#f1c40f"/>
             </g>
-
-            <!-- Ambient orbit ring (pulses gently) -->
-            <ellipse id="pkRingOuter" cx="0" cy="66" rx="50" ry="7" fill="none" stroke="rgba(77,166,255,0.18)" stroke-width="1.5"/>
-            <ellipse id="pkRingInner" cx="0" cy="68" rx="32" ry="4" fill="none" stroke="rgba(77,166,255,0.12)" stroke-width="1"/>
-
-          </g><!-- end pkFloatGroup -->
+          </g>
         </svg>
       </div>
 
-      <!-- Minimized pill badge -->
+      <!-- Minimized Edge Badge -->
       <div id="peekaMinBadge" class="peeka-min-badge" style="display:none;">
         <span class="peeka-min-eyes">◉ ◉</span>
         <span class="peeka-min-label">Peeka</span>
@@ -507,12 +514,18 @@
     dom.rightEar = document.getElementById('pkRightEar');
     dom.antennaStem = document.getElementById('pkAntennaStem');
     dom.antennaLed = document.getElementById('pkAntennaLed');
+    dom.leftPaw = document.getElementById('pkLeftPaw');
+    dom.rightPaw = document.getElementById('pkRightPaw');
     dom.leftEye = document.getElementById('pkLeftEye');
     dom.rightEye = document.getElementById('pkRightEye');
-    dom.leftShine = document.getElementById('pkLeftShine');
-    dom.rightShine = document.getElementById('pkRightShine');
     dom.leftPupil = document.getElementById('pkLeftPupil');
     dom.rightPupil = document.getElementById('pkRightPupil');
+    dom.leftSparkle = document.getElementById('pkLeftSparkle');
+    dom.leftSparkle2 = document.getElementById('pkLeftSparkle2');
+    dom.leftSparkle3 = document.getElementById('pkLeftSparkle3');
+    dom.rightSparkle = document.getElementById('pkRightSparkle');
+    dom.rightSparkle2 = document.getElementById('pkRightSparkle2');
+    dom.rightSparkle3 = document.getElementById('pkRightSparkle3');
     dom.leftShape = document.getElementById('pkLeftShape');
     dom.rightShape = document.getElementById('pkRightShape');
     dom.leftEyeGroup = document.getElementById('pkLeftEyeGroup');
@@ -523,38 +536,15 @@
     dom.cheekR = document.getElementById('pkCheekR');
     dom.cinemaGlasses = document.getElementById('pkCinemaGlasses');
     dom.popcornAcc = document.getElementById('pkPopcornAcc');
-    dom.ringOuter = document.getElementById('pkRingOuter');
-    dom.ringInner = document.getElementById('pkRingInner');
-    // Legacy aliases for compat
-    dom.leftSparkle = dom.leftShine;
-    dom.leftSparkle2 = null;
-    dom.leftSparkle3 = null;
-    dom.rightSparkle = dom.rightShine;
-    dom.rightSparkle2 = null;
-    dom.rightSparkle3 = null;
-    dom.leftPaw = null;
-    dom.rightPaw = null;
-    dom.leftArm = null;
-    dom.rightArm = null;
-    dom.heartDot = null;
-    dom.ledL = null; dom.ledM = null; dom.ledR = null;
   }
 
-
-
   // --- Persistence & Layout Positioning ---
-  function applyInitialPosition() {
-    // Determine the default position first
-    const defaultX = window.innerWidth - 135;
-    const defaultY = window.innerHeight - 145;
-
-    // Load minimized state
+  function loadPersistedPosition() {
     const isMin = localStorage.getItem(STORAGE_KEY_MIN) === 'true';
     if (isMin) {
       setMinimized(true, false);
     }
 
-    // Load saved position or use default
     const savedPos = localStorage.getItem(STORAGE_KEY_POS);
     if (savedPos) {
       try {
@@ -563,31 +553,23 @@
         const maxY = window.innerHeight - 120;
         state.x = Math.max(10, Math.min(maxX, x));
         state.y = Math.max(10, Math.min(maxY, y));
-      } catch (e) {
-        state.x = defaultX;
-        state.y = defaultY;
-      }
-    } else {
-      state.x = defaultX;
-      state.y = defaultY;
+        dom.container.style.left = state.x + 'px';
+        dom.container.style.top = state.y + 'px';
+        dom.container.style.right = 'auto';
+        dom.container.style.bottom = 'auto';
+        return;
+      } catch (e) {}
     }
 
-    // Apply immediately to container so there's NO flash at 0,0
-    dom.container.style.left = state.x + 'px';
-    dom.container.style.top = state.y + 'px';
-    dom.container.style.right = 'auto';
-    dom.container.style.bottom = 'auto';
-  }
-
-  function loadPersistedPosition() {
-    applyInitialPosition();
+    // Default positioning in bottom-right
+    state.x = window.innerWidth - 125;
+    state.y = window.innerHeight - 135;
   }
 
   function savePosition() {
     const rect = dom.container.getBoundingClientRect();
     localStorage.setItem(STORAGE_KEY_POS, JSON.stringify({ x: rect.left, y: rect.top }));
   }
-
 
   // --- Smooth Flying & Vantage Point Navigation ---
   function flyTo(targetX, targetY, duration = 650) {
@@ -834,67 +816,7 @@
     dom.bubble.style.display = 'none';
   }
 
-  // --- Strobi-style Expressions ---
-  // Helper: apply an EYE_SHAPES spec to an SVG <ellipse> element by rebuilding its attrs
-  function applyEyeShape(eyeEl, shineEl, spec) {
-    if (!eyeEl) return;
-    const ns = 'http://www.w3.org/2000/svg';
-    const parent = eyeEl.parentNode;
-
-    // Remove any old expression overlays
-    const old = parent.querySelectorAll('.pk-eye-expr');
-    old.forEach(o => o.remove());
-
-    if (!spec) {
-      // Normal — restore the ellipse
-      eyeEl.style.display = '';
-      if (shineEl) shineEl.style.display = '';
-      return;
-    }
-
-    // Hide base ellipse and shine for non-normal expressions
-    eyeEl.style.display = 'none';
-    if (shineEl) shineEl.style.display = 'none';
-
-    let el;
-    if (spec.type === 'ellipse') {
-      el = document.createElementNS(ns, 'ellipse');
-      el.setAttribute('cx', '0');
-      el.setAttribute('cy', '0');
-      el.setAttribute('rx', spec.rx);
-      el.setAttribute('ry', spec.ry);
-      el.setAttribute('fill', spec.fill || '#050f25');
-      if (spec.transform) el.setAttribute('transform', spec.transform);
-    } else if (spec.type === 'circle') {
-      el = document.createElementNS(ns, 'circle');
-      el.setAttribute('cx', '0');
-      el.setAttribute('cy', '0');
-      el.setAttribute('r', spec.r);
-      el.setAttribute('fill', spec.fill || '#050f25');
-    } else if (spec.type === 'rect') {
-      el = document.createElementNS(ns, 'rect');
-      el.setAttribute('x', spec.x);
-      el.setAttribute('y', spec.y);
-      el.setAttribute('width', spec.width);
-      el.setAttribute('height', spec.height);
-      el.setAttribute('rx', spec.rx || 0);
-      el.setAttribute('fill', spec.fill || '#050f25');
-    } else if (spec.type === 'path') {
-      el = document.createElementNS(ns, 'path');
-      el.setAttribute('d', spec.d);
-      el.setAttribute('fill', spec.fill || 'none');
-      if (spec.stroke) {
-        el.setAttribute('stroke', spec.stroke);
-        el.setAttribute('stroke-width', spec.strokeWidth || 2.5);
-        el.setAttribute('stroke-linecap', 'round');
-      }
-    }
-    if (el) {
-      el.classList.add('pk-eye-expr');
-      parent.appendChild(el);
-    }
-  }
-
+  // --- Expressions & Accessories ---
   function setExpression(expr, duration = 3000) {
     clearTimeout(state.expressionTimeout);
     state.expression = expr;
@@ -903,42 +825,79 @@
     dom.cinemaGlasses.style.display = isCinema ? 'block' : 'none';
     dom.popcornAcc.style.display = (isCinema || expr === 'happy') ? 'block' : 'none';
 
-    // Map incoming mood names to EYE_SHAPES keys
-    const moodMap = {
-      happy: 'happy', love: 'love', dizzy: 'dizzy', sleepy: 'sleepy',
-      detective: 'detective', angry: 'angry', scared: 'scared',
-      normal: null, cinema: null, excited: 'excited'
-    };
-    const shapeKey = moodMap[expr] || null;
-    const spec = shapeKey ? EYE_SHAPES[shapeKey] : null;
+    const sparkles = [
+      dom.leftSparkle, dom.leftSparkle2, dom.leftSparkle3,
+      dom.rightSparkle, dom.rightSparkle2, dom.rightSparkle3
+    ];
 
-    applyEyeShape(dom.leftEye, dom.leftShine, spec);
-    applyEyeShape(dom.rightEye, dom.rightShine, spec);
+    if (expr === 'happy' || expr === 'love' || expr === 'dizzy' || expr === 'sleepy' || expr === 'detective') {
+      const pathD = EYE_PATHS[expr] || '';
+      dom.leftShape.setAttribute('d', pathD);
+      dom.rightShape.setAttribute('d', pathD);
+      dom.leftShape.style.display = 'block';
+      dom.rightShape.style.display = 'block';
 
-    // Blush + mouth
-    const isWarm = expr === 'happy' || expr === 'love' || expr === 'excited';
-    dom.cheekL.setAttribute('opacity', isWarm ? '0.7' : '0');
-    dom.cheekR.setAttribute('opacity', isWarm ? '0.7' : '0');
-    if (dom.mouth) dom.mouth.style.display = isWarm ? 'none' : 'block';
-    if (dom.mouthOpen) dom.mouthOpen.style.display = isWarm ? 'block' : 'none';
+      dom.leftPupil.style.display = 'none';
+      dom.rightPupil.style.display = 'none';
+      sparkles.forEach(s => { if (s) s.style.display = 'none'; });
+
+      if (expr === 'love') {
+        dom.leftShape.setAttribute('fill', '#ff4d88');
+        dom.rightShape.setAttribute('fill', '#ff4d88');
+        dom.leftShape.setAttribute('stroke', 'none');
+        dom.rightShape.setAttribute('stroke', 'none');
+      } else {
+        dom.leftShape.setAttribute('fill', 'none');
+        dom.rightShape.setAttribute('fill', 'none');
+        dom.leftShape.setAttribute('stroke', '#00f0ff');
+        dom.rightShape.setAttribute('stroke', '#00f0ff');
+      }
+    } else {
+      dom.leftShape.style.display = 'none';
+      dom.rightShape.style.display = 'none';
+      dom.leftPupil.style.display = '';
+      dom.rightPupil.style.display = '';
+      sparkles.forEach(s => { if (s) s.style.display = ''; });
+    }
+
+    // Blushing & open mouth when happy or in love
+    if (expr === 'happy' || expr === 'love') {
+      dom.cheekL.setAttribute('opacity', '0.85');
+      dom.cheekR.setAttribute('opacity', '0.85');
+      dom.mouth.style.display = 'none';
+      dom.mouthOpen.style.display = 'block';
+    } else {
+      dom.cheekL.setAttribute('opacity', '0.45');
+      dom.cheekR.setAttribute('opacity', '0.45');
+      dom.mouth.style.display = 'block';
+      dom.mouthOpen.style.display = 'none';
+    }
 
     if (duration > 0) {
-      state.expressionTimeout = setTimeout(() => resetExpression(), duration);
+      state.expressionTimeout = setTimeout(() => {
+        resetExpression();
+      }, duration);
     }
   }
 
   function resetExpression() {
     state.expression = 'normal';
-    // Restore both eyes to normal ellipse
-    applyEyeShape(dom.leftEye, dom.leftShine, null);
-    applyEyeShape(dom.rightEye, dom.rightShine, null);
+    dom.leftShape.style.display = 'none';
+    dom.rightShape.style.display = 'none';
+    dom.leftPupil.style.display = '';
+    dom.rightPupil.style.display = '';
+    const sparkles = [
+      dom.leftSparkle, dom.leftSparkle2, dom.leftSparkle3,
+      dom.rightSparkle, dom.rightSparkle2, dom.rightSparkle3
+    ];
+    sparkles.forEach(s => { if (s) s.style.display = ''; });
 
     dom.cinemaGlasses.style.display = 'none';
     dom.popcornAcc.style.display = 'none';
-    dom.cheekL.setAttribute('opacity', '0');
-    dom.cheekR.setAttribute('opacity', '0');
-    if (dom.mouth) dom.mouth.style.display = 'block';
-    if (dom.mouthOpen) dom.mouthOpen.style.display = 'none';
+    dom.cheekL.setAttribute('opacity', '0.45');
+    dom.cheekR.setAttribute('opacity', '0.45');
+    dom.mouth.style.display = 'block';
+    dom.mouthOpen.style.display = 'none';
   }
 
   // --- Joyful Poke Reaction (Cute 360 Spin & Squish) ---
@@ -1069,12 +1028,12 @@
     const shadowScale = 1 - (floatY / 30);
     dom.shadow.setAttribute('transform', `scale(${shadowScale})`);
 
-    // Ear wiggles (updated pivot for new head geometry)
+    // Ear wiggles
     if (state.earWiggle > 0) {
       state.earWiggle -= 0.025;
       const wiggleAngle = Math.sin(timestamp * 0.035) * 14 * state.earWiggle;
-      dom.leftEar.setAttribute('transform', `rotate(${-wiggleAngle}, -24, -62)`);
-      dom.rightEar.setAttribute('transform', `rotate(${wiggleAngle}, 24, -62)`);
+      dom.leftEar.setAttribute('transform', `rotate(${-wiggleAngle}, -32, -48)`);
+      dom.rightEar.setAttribute('transform', `rotate(${wiggleAngle}, 32, -48)`);
     } else {
       dom.leftEar.setAttribute('transform', '');
       dom.rightEar.setAttribute('transform', '');
@@ -1082,85 +1041,42 @@
 
     // Antenna sway
     const antennaSway = (state.currentGazeX * 7) + (state.isFlying ? 10 : Math.sin(state.floatTime * 1.6) * 3);
-    if (dom.antennaStem) dom.antennaStem.setAttribute('d', `M 0,-60 Q ${antennaSway},-76 2,-92`);
-    if (dom.antennaLed) dom.antennaLed.setAttribute('cx', 2 + antennaSway * 0.6);
+    dom.antennaStem.setAttribute('d', `M 0,-56 Q ${antennaSway},-72 0,-85`);
+    dom.antennaLed.setAttribute('cx', antennaSway * 0.7);
 
-    // ARM WAVE animations — left and right arms swing alternately
-    const armSwing = Math.sin(state.floatTime * 1.4) * 12;
-    const armBob   = Math.cos(state.floatTime * 1.2) * 4;
-    if (dom.leftArm) {
-      dom.leftArm.setAttribute('transform',
-        `translate(-54, ${36 + armBob}) rotate(${-armSwing}, 0, -18)`);
-    }
-    if (dom.rightArm) {
-      dom.rightArm.setAttribute('transform',
-        `translate(54, ${36 - armBob}) rotate(${armSwing}, 0, -18)`);
-    }
+    // Floating Paws Bobbing
+    const pawBob = Math.sin(state.floatTime * 1.8) * 3;
+    dom.leftPaw.setAttribute('transform', `translate(-56, ${36 + pawBob}) rotate(${-15 + (state.pawAngleL || 0)})`);
+    dom.rightPaw.setAttribute('transform', `translate(56, ${36 - pawBob}) rotate(${15 + (state.pawAngleR || 0)})`);
 
-    // Old paw refs (kept for backward compat if old SVG elements exist)
-    if (dom.leftPaw && dom.leftPaw !== dom.leftArm) {
-      const pawBob = Math.sin(state.floatTime * 1.8) * 3;
-      dom.leftPaw.setAttribute('transform', `translate(-56, ${36 + pawBob}) rotate(${-15 + (state.pawAngleL || 0)})`);
-      dom.rightPaw.setAttribute('transform', `translate(56, ${36 - pawBob}) rotate(${15 + (state.pawAngleR || 0)})`);
-    }
-
-    // LED pulse: cycle through colours at different phases
-    const ledPulse = (Math.sin(state.floatTime * 3) + 1) / 2;
-    if (dom.ledL) dom.ledL.setAttribute('opacity', (0.4 + ledPulse * 0.6).toFixed(2));
-    if (dom.ledM) dom.ledM.setAttribute('opacity', (0.4 + Math.sin(state.floatTime * 3 + 1) * 0.5 + 0.5 > 1 ? 1 : 0.4 + (Math.sin(state.floatTime * 3 + 1) + 1) / 2 * 0.6).toFixed(2));
-    if (dom.ledR) dom.ledR.setAttribute('opacity', (0.4 + (Math.sin(state.floatTime * 3 + 2) + 1) / 2 * 0.6).toFixed(2));
-
-    // Ambient pulse rings
-    const ringPulse = (Math.sin(state.floatTime * 0.9) + 1) / 2;
-    if (dom.ringOuter) {
-      dom.ringOuter.setAttribute('opacity', (0.2 + ringPulse * 0.45).toFixed(2));
-      dom.ringOuter.setAttribute('rx', (72 + ringPulse * 6).toFixed(1));
-    }
-    if (dom.ringInner) {
-      dom.ringInner.setAttribute('opacity', (0.3 + ringPulse * 0.4).toFixed(2));
-      dom.ringInner.setAttribute('rx', (48 + ringPulse * 4).toFixed(1));
-    }
-
-    // Belly heartbeat dot pulse
-    if (dom.heartDot) {
-      const heartbeat = Math.abs(Math.sin(state.floatTime * 2.2));
-      dom.heartDot.setAttribute('r', (3.5 + heartbeat * 2.5).toFixed(1));
-      dom.heartDot.setAttribute('opacity', (0.45 + heartbeat * 0.55).toFixed(2));
-    }
-
-    // Ambient ring pulse (decorative, subtle)
-    const ringPulse2 = (Math.sin(state.floatTime * 0.9) + 1) / 2;
-    if (dom.ringOuter) {
-      dom.ringOuter.setAttribute('stroke-opacity', (0.08 + ringPulse2 * 0.22).toFixed(2));
-    }
-    if (dom.ringInner) {
-      dom.ringInner.setAttribute('stroke-opacity', (0.05 + ringPulse2 * 0.15).toFixed(2));
-    }
-
-    // 7. Strobi-style Eye Tracking
-    // Eyes move as whole groups (the Strobi look — whole dot shifts left/right/up/down)
-    const eyeTX = state.currentGazeX * 10;
-    const eyeTY = state.currentGazeY * 7;
-    const baseLeftX  = -18 + eyeTX;
-    const baseRightX =  18 + eyeTX;
-    const baseEyeY   = -14 + eyeTY;
-
-    dom.leftEyeGroup.setAttribute('transform',  `translate(${baseLeftX.toFixed(1)}, ${baseEyeY.toFixed(1)})`);
-    dom.rightEyeGroup.setAttribute('transform', `translate(${baseRightX.toFixed(1)}, ${baseEyeY.toFixed(1)})`);
-
-    // Blink: squish the normal ellipse ry to 0 and back
+    // 7. Eye Position & Shape Rendering
     if (state.expression === 'normal' || state.expression === 'cinema') {
-      const baseRy = 9;
-      const blinkRy = Math.max(0.8, baseRy * (1 - state.blinkProgress * 0.96));
-      if (dom.leftEye.style.display !== 'none')  dom.leftEye.setAttribute('ry',  blinkRy.toFixed(2));
-      if (dom.rightEye.style.display !== 'none') dom.rightEye.setAttribute('ry', blinkRy.toFixed(2));
+      const eyeTravelX = state.currentGazeX * 15;
+      const eyeTravelY = state.currentGazeY * 11;
 
-      // Shine follows eye
-      if (dom.leftShine)  { dom.leftShine.setAttribute('cx', '-2'); dom.leftShine.setAttribute('cy', '-3'); }
-      if (dom.rightShine) { dom.rightShine.setAttribute('cx', '-2'); dom.rightShine.setAttribute('cy', '-3'); }
+      dom.leftEyeGroup.setAttribute('transform', `translate(${-24 + eyeTravelX}, ${eyeTravelY})`);
+      dom.rightEyeGroup.setAttribute('transform', `translate(${24 + eyeTravelX}, ${eyeTravelY})`);
+
+      const baseRadiusY = 18;
+      const currentRadiusY = Math.max(1.2, baseRadiusY * (1 - state.blinkProgress * 0.94));
+      dom.leftEye.setAttribute('ry', currentRadiusY);
+      dom.rightEye.setAttribute('ry', currentRadiusY);
+
+      const pupilX = state.currentGazeX * 4;
+      const pupilY = state.currentGazeY * 3.5;
+      dom.leftPupil.setAttribute('cx', pupilX);
+      dom.leftPupil.setAttribute('cy', pupilY);
+      dom.rightPupil.setAttribute('cx', pupilX);
+      dom.rightPupil.setAttribute('cy', pupilY);
+
+      if (dom.leftSparkle) {
+        dom.leftSparkle.setAttribute('cx', pupilX - 4.5);
+        dom.leftSparkle.setAttribute('cy', pupilY - 5);
+        dom.rightSparkle.setAttribute('cx', pupilX - 4.5);
+        dom.rightSparkle.setAttribute('cy', pupilY - 5);
+      }
     }
   }
-
 
   // --- Genre & Rating Humorous Intelligence ---
   function getGenreQuip(genresText, rating) {
