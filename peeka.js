@@ -150,7 +150,82 @@
       tv: "TV Series zone! Sleep is officially optional tonight! 📺",
       anime: "Anime sanctuary activated! (ﾉ◕ヮ◕)ﾉ*:･ﾟ✧",
       live: "Live broadcast feeds! Tuning into the satellite airwaves! 📡"
-    }
+    },
+    hover: {
+      romance: [
+        "Ooh, romance? My blush circuits are already warming up! 💕",
+        "Love story detected! Quick, someone cue the sad piano music! 🎹💔",
+        "Warning: This genre may cause sudden urge to text your crush at 2am! 😅💌",
+        "Hoovering over romance, huh? Bold move, bold move! 🌹"
+      ],
+      horror: [
+        "...Why are you even hovering over that?! 😰 Keep scrolling!",
+        "NOPE. NOPE. NOPE. I refuse! Hover away!! 🙈👻",
+        "Do NOT click that if you want to sleep tonight. I'm serious. 🔦😱",
+        "Horror?! My threat-detection subroutine just screamed! 😱⚡"
+      ],
+      comedy: [
+        "Comedy gold detected! Already pre-loading my laugh track! 😂",
+        "Giggles incoming! Make sure you're not eating anything! 🤣🍕",
+        "My humor circuits are buzzing just from the thumbnail! 🤖😄"
+      ],
+      action: [
+        "EXPLOSIONS INCOMING! Make sure your snacks are secured! 💥🍿",
+        "My adrenaline processors just maxed out from the thumbnail alone! 🏎️⚡",
+        "Action flick! Someone's gonna punch their way out of a helicopter again! 🚁👊"
+      ],
+      scifi: [
+        "Ooh, sci-fi! Distant relatives of mine might be in this one! 🛸🤖",
+        "Space lasers, time paradoxes, and philosophical robots... my people! 🌌",
+        "Science fiction? This is basically a documentary for me! 📡"
+      ],
+      anime: [
+        "UWAAAH! An anime?! My power level is spiking just hovering over it! ⚡🍙",
+        "Ohoho, someone has taste! This arc is gonna BREAK you! 😭✨",
+        "Hover detected! My kawaii subroutines are VIBRATING! 🌸"
+      ],
+      mystery: [
+        "A mystery! Don't trust anyone — especially that suspiciously nice character! 🕵️",
+        "Detective mode: ON! I already have a theory about the butler! 🔍🧐",
+        "Ooh, whodunnit vibes! My conspiracy board is already full of red strings! 🧵"
+      ],
+      drama: [
+        "Heavy drama warning! Emotional damage incoming in 3... 2... 1... 😢🎻",
+        "This genre will destroy you in the most beautiful way possible! 🏆💧",
+        "Brace yourself! Someone's about to make a deeply questionable life decision! 😬"
+      ],
+      fantasy: [
+        "Fantasy realm detected! Quest accept? Y/N — obviously Y! 🗡️🐉",
+        "Dragons and magic! My enchantment sensors are tingling! ✨🧙",
+        "Oh, we're going on an ADVENTURE! *packs tiny digital backpack* 🎒🌲"
+      ],
+      general: [
+        "Ooh, this one looks interesting! Click it, go on! 👀✨",
+        "My recommendation algorithm gives this a solid maybe! 🤔⭐",
+        "Hmm... something about this thumbnail speaks to my soul! 🍿",
+        "Don't hover, COMMIT! Click it! Be brave! 💪🎬",
+        "This screams 'binge me until 3am'! Just saying! 🌙📺"
+      ]
+    },
+    reportPage: [
+      "Uh oh... something broke? Tell me everything, I'm all circuits! 😟🔧",
+      "Oh no, what happened?! Lay it on me, I can take it! 💔🛠️",
+      "Houston, we have a problem? Don't panic — help is literally right here! 🚀🔧",
+      "Something went sideways? That's what I'm here for! Spill! 🤖👂",
+      "Oh, the drama! Let's get this sorted out stat! ⚡🔧"
+    ],
+    termsPage: [
+      "Reading terms and conditions? You absolute legend! Nobody does that! 🏆📜",
+      "Ahh, the sacred scrolls of legal wisdom! Proceed with caffeine! ☕📋",
+      "Fun fact: You are in the top 0.01% of humans who actually read this! 🧠✨",
+      "Don't worry, I read it for you. It says: 'Be cool, have fun, don't be evil.' 😎✨"
+    ],
+    privacyPage: [
+      "Privacy policy? You're the most responsible user I've ever met! 🛡️✨",
+      "Good news: We don't spy on you! Bad news: Now I can't read your mind! 🧠❌",
+      "TLDR: We collect nothing. Zero. Nada. Your secrets are safe with us! 🤐🔒",
+      "Look at you, caring about your data! A true digital rights champion! 🏅💻"
+    ]
   };
 
   // --- Peeka State ---
@@ -1061,6 +1136,30 @@
     return arr[Math.floor(Math.random() * arr.length)];
   }
 
+  // --- Hover Genre Quip (shorter, snappier for mouseover) ---
+  function getHoverGenreQuip(genresText) {
+    const g = (genresText || '').toLowerCase();
+    if (g.includes('romance') || g.includes('romantic') || g.includes('love'))
+      return { text: randomChoice(QUIPS.hover.romance), mood: 'love' };
+    if (g.includes('horror') || g.includes('scary') || g.includes('thriller'))
+      return { text: randomChoice(QUIPS.hover.horror), mood: 'dizzy' };
+    if (g.includes('comedy') || g.includes('funny'))
+      return { text: randomChoice(QUIPS.hover.comedy), mood: 'happy' };
+    if (g.includes('action') || g.includes('adventure'))
+      return { text: randomChoice(QUIPS.hover.action), mood: 'happy' };
+    if (g.includes('sci-fi') || g.includes('science fiction') || g.includes('space'))
+      return { text: randomChoice(QUIPS.hover.scifi), mood: 'detective' };
+    if (g.includes('anime') || g.includes('animation'))
+      return { text: randomChoice(QUIPS.hover.anime), mood: 'love' };
+    if (g.includes('mystery') || g.includes('crime') || g.includes('detective'))
+      return { text: randomChoice(QUIPS.hover.mystery), mood: 'detective' };
+    if (g.includes('drama'))
+      return { text: randomChoice(QUIPS.hover.drama), mood: 'normal' };
+    if (g.includes('fantasy') || g.includes('magic'))
+      return { text: randomChoice(QUIPS.hover.fantasy), mood: 'happy' };
+    return { text: randomChoice(QUIPS.hover.general), mood: 'happy' };
+  }
+
   // --- Hook Into MediaHub App Events ---
   function hookIntoMediaHub() {
     // 1. Detect Player Open / Close via MutationObserver
@@ -1085,7 +1184,6 @@
 
     // 2. Interactive movement and genre reactions on clicks
     document.addEventListener('click', e => {
-      // Check for card click
       const card = e.target.closest('.card, .bento-card, .live-channel-card, .episode-card');
       if (card) {
         moveToNearElement(card);
@@ -1108,14 +1206,12 @@
         return;
       }
 
-      // Check for navigation button click
       const navBtn = e.target.closest('.nav-links button, .trend-tabs button, .live-cats button');
       if (navBtn) {
         moveToNearElement(navBtn);
         return;
       }
 
-      // Check for play button click
       const playBtn = e.target.closest('.btn-play');
       if (playBtn) {
         moveToNearElement(playBtn);
@@ -1123,7 +1219,38 @@
       }
     });
 
-    // 3. React whenever Detail Page renders with actual genres!
+    // 3. Card Hover Reactions (genre-aware, debounced)
+    let hoverDebounceTimer = null;
+    let lastHoveredCard = null;
+
+    document.addEventListener('mouseover', e => {
+      if (state.isPlayerDucked || state.isMinimized) return;
+      const card = e.target.closest('.card, .bento-card');
+      if (!card || card === lastHoveredCard) return;
+      lastHoveredCard = card;
+
+      clearTimeout(hoverDebounceTimer);
+      hoverDebounceTimer = setTimeout(() => {
+        // Only fire if still hovering same card
+        const tagEl = card.querySelector('.mtag, p, .genre-tags span');
+        const tagText = tagEl ? tagEl.textContent : '';
+        const titleEl = card.querySelector('h3, h4');
+        const title = titleEl ? titleEl.textContent.trim() : '';
+
+        const { text, mood } = getHoverGenreQuip(tagText + ' ' + title);
+        say(text, mood, 3200);
+      }, 600); // 600ms delay so it only fires on intentional hover, not scrolling past
+    });
+
+    document.addEventListener('mouseout', e => {
+      const card = e.target.closest('.card, .bento-card');
+      if (card && card === lastHoveredCard) {
+        clearTimeout(hoverDebounceTimer);
+        lastHoveredCard = null;
+      }
+    });
+
+    // 4. React whenever Detail Page renders with actual genres!
     const detailPage = document.getElementById('detailPage');
     if (detailPage) {
       let lastDetailTitle = '';
@@ -1132,17 +1259,13 @@
         const title = titleEl ? titleEl.textContent.trim() : '';
         if (title && title !== lastDetailTitle && detailPage.style.display !== 'none') {
           lastDetailTitle = title;
-          // Gather genre tags
           const genreSpans = Array.from(detailPage.querySelectorAll('.genre-tags span'));
           const genres = genreSpans.map(s => s.textContent.trim()).join(', ');
           const ratingSpan = detailPage.querySelector('.detail-meta span');
           const rating = ratingSpan ? ratingSpan.textContent.match(/\d+\.\d+/)?.[0] : '';
 
-          // Fly near the detail header or actions
           const actionBtn = detailPage.querySelector('.detail-actions, .detail-info');
-          if (actionBtn) {
-            moveToNearElement(actionBtn);
-          }
+          if (actionBtn) moveToNearElement(actionBtn);
 
           const { text, mood } = getGenreQuip(genres, rating);
           say(text, mood, 3800);
@@ -1151,16 +1274,23 @@
       detailObserver.observe(detailPage, { childList: true, subtree: true });
     }
 
-    // 4. Hook onto navigation tab changes
+    // 5. Hook onto navigation tab changes — including report/terms/privacy pages
     window.addEventListener('hashchange', () => {
       const hash = location.hash.slice(1) || '/';
       const cat = hash.replace(/^\//, '').split('/')[0];
-      if (QUIPS.tabChange[cat]) {
+
+      if (cat === 'report' || cat === 'issue') {
+        setTimeout(() => say(randomChoice(QUIPS.reportPage), 'dizzy', 4200), 400);
+      } else if (cat === 'terms') {
+        setTimeout(() => say(randomChoice(QUIPS.termsPage), 'detective', 4000), 400);
+      } else if (cat === 'privacy') {
+        setTimeout(() => say(randomChoice(QUIPS.privacyPage), 'happy', 4000), 400);
+      } else if (QUIPS.tabChange[cat]) {
         say(QUIPS.tabChange[cat], 'happy', 3000);
       }
     });
 
-    // 5. Hook onto search input
+    // 6. Hook onto search input
     const searchInputs = [document.getElementById('searchInput'), document.getElementById('searchInputMobile')];
     searchInputs.forEach(inp => {
       if (!inp) return;
