@@ -418,6 +418,44 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
   .legal-section h3{font-size:15px}
 }
 
+/* Issue Chat & Support Desk */
+.issue-card{background:rgba(8,17,36,0.78);border:1px solid rgba(0,170,255,0.2);border-radius:20px;padding:24px;box-shadow:0 18px 50px rgba(0,0,0,0.5);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;flex-direction:column;gap:18px}
+.issue-header-bar{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;gap:10px}
+.issue-online-status{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);font-weight:600}
+.issue-online-status .status-dot{width:7px;height:7px;border-radius:50%;background:#00f2fe;box-shadow:0 0 8px #00f2fe}
+.issue-chat-stream{height:360px;max-height:55vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:12px 6px 12px 0;scrollbar-width:thin}
+.issue-chat-stream::-webkit-scrollbar{width:6px}
+.issue-chat-stream::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px}
+.issue-msg{display:flex;flex-direction:column;max-width:85%;animation:fadeUp .2s ease}
+.issue-msg.user{align-self:flex-end;align-items:flex-end}
+.issue-msg.admin{align-self:flex-start;align-items:flex-start}
+.issue-msg-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-bottom:4px;padding:0 4px}
+.issue-msg-cat{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;background:rgba(0,112,243,0.2);color:var(--primary-light);border:1px solid rgba(0,112,243,0.3)}
+.issue-bubble{padding:12px 16px;border-radius:16px;font-size:13.5px;line-height:1.55;word-break:break-word}
+.issue-msg.user .issue-bubble{background:linear-gradient(135deg,rgba(0,112,243,0.32),rgba(0,170,255,0.2));border:1px solid rgba(0,170,255,0.35);color:#fff;border-bottom-right-radius:4px}
+.issue-msg.admin .issue-bubble{background:rgba(0,206,201,0.12);border:1px solid rgba(0,206,201,0.35);color:#e6fbf9;border-bottom-left-radius:4px}
+.dev-badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:700;background:rgba(0,206,201,0.18);color:var(--secondary);border:1px solid rgba(0,206,201,0.35)}
+.issue-categories{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.issue-categories::-webkit-scrollbar{display:none}
+.issue-cat-btn{padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:inherit}
+.issue-cat-btn:hover{background:rgba(255,255,255,0.08);color:#fff}
+.issue-cat-btn.selected{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 10px rgba(0,112,243,0.35)}
+.issue-input-wrap{display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px;transition:border-color .2s}
+.issue-input-wrap:focus-within{border-color:var(--primary);box-shadow:0 0 16px rgba(0,112,243,0.2)}
+.issue-textarea{background:transparent;border:none;outline:none;color:#fff;font-family:inherit;font-size:13.5px;resize:vertical;min-height:64px;width:100%;line-height:1.5}
+.issue-textarea::placeholder{color:var(--muted)}
+.issue-input-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.issue-send-btn{padding:8px 20px;font-size:13px;border-radius:10px;display:inline-flex;align-items:center;gap:6px}
+
+/* Dev Response Panel */
+.issue-dev-panel{background:rgba(0,206,201,0.06);border:1px dashed rgba(0,206,201,0.4);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;animation:fadeUp .25s ease}
+.issue-dev-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.issue-dev-title{font-size:12px;font-weight:700;color:var(--secondary);display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px}
+.issue-canned-list{display:flex;gap:6px;flex-wrap:wrap}
+.issue-canned-btn{padding:4px 10px;border-radius:8px;border:1px solid rgba(0,206,201,0.25);background:rgba(0,206,201,0.1);color:#c1f9f6;font-size:11.5px;cursor:pointer;font-family:inherit;transition:all .2s;text-align:left}
+.issue-canned-btn:hover{background:rgba(0,206,201,0.22);color:#fff}
+.issue-dev-actions{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+
 /* Mobile */
 @media(max-width:900px){
   .container{padding:0 16px}
@@ -685,7 +723,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px
       <div class="footer-title">Legal</div>
       <a href="#/terms">Terms of Service</a>
       <a href="#/privacy">Privacy Policy</a>
-      <a href="https://github.com/coderaarav12/media-hub-frontend/issues" target="_blank" rel="noopener">Report Issue</a>
+      <a href="#/report">Report Issue</a>
     </div>
     <div class="footer-col">
       <div class="footer-title">Stats</div>
@@ -919,6 +957,7 @@ function handleRoute() {
   else if(parts[0] === 'person') renderPerson(parts[1])
   else if(parts[0] === 'terms') renderTerms()
   else if(parts[0] === 'privacy') renderPrivacy()
+  else if(parts[0] === 'report' || parts[0] === 'issue') renderReportIssue()
   else renderHome()
 }
 
@@ -1719,6 +1758,237 @@ function renderPrivacy() {
       </div>
     </div>`;
 }
+// --- Issue Support Center & Chat ---
+let selectedIssueCategory = '🚨 Broken Player';
+let isIssueDevMode = localStorage.getItem('mediahub_issue_dev_active') === 'true';
+
+const DEFAULT_ISSUE_MSGS = [
+  {
+    id: 'sys-welcome',
+    sender: 'admin',
+    name: 'Support Team',
+    text: '👋 Welcome to the MediaHub Issue Support Desk! Experiencing a broken video player, buffering issues, missing episodes, or want to suggest an improvement? Send a message below. All messages persist in your browser session so you can return here anytime to check for updates.',
+    time: 'System Notice',
+    category: 'Welcome'
+  }
+];
+
+function getIssueMessages() {
+  try {
+    const raw = localStorage.getItem('mediahub_issue_chat_messages');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  return [...DEFAULT_ISSUE_MSGS];
+}
+
+function saveIssueMessages(msgs) {
+  try {
+    localStorage.setItem('mediahub_issue_chat_messages', JSON.stringify(msgs));
+  } catch(e) {}
+}
+
+function formatIssueTime(d) {
+  const dt = d instanceof Date ? d : new Date(d);
+  const m = dt.toLocaleString('en-US', { month: 'short' });
+  const day = dt.getDate();
+  const hrs = String(dt.getHours()).padStart(2, '0');
+  const mins = String(dt.getMinutes()).padStart(2, '0');
+  return `${m} ${day}, ${hrs}:${mins}`;
+}
+
+function selectIssueCategory(cat) {
+  selectedIssueCategory = cat;
+  document.querySelectorAll('.issue-cat-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.cat === cat);
+  });
+}
+
+function renderIssueChatStream() {
+  const stream = $('issueChatStream');
+  if (!stream) return;
+  const msgs = getIssueMessages();
+  stream.innerHTML = msgs.map(m => {
+    const isUser = m.sender === 'user';
+    return `
+      <div class="issue-msg ${isUser ? 'user' : 'admin'}">
+        <div class="issue-msg-meta">
+          ${isUser ? `<span class="issue-msg-cat">${escapeHtml(m.category || 'Issue')}</span><span>${escapeHtml(m.name || 'You')}</span>` : `<span class="dev-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Developer / Support</span>`}
+          <span>&bull;</span>
+          <span>${escapeHtml(m.time || '')}</span>
+        </div>
+        <div class="issue-bubble">${escapeHtml(m.text).replace(/\n/g, '<br>')}</div>
+      </div>
+    `;
+  }).join('');
+  setTimeout(() => { stream.scrollTop = stream.scrollHeight; }, 10);
+}
+
+function sendUserIssue() {
+  const input = $('issueUserInput');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const msgs = getIssueMessages();
+  msgs.push({
+    id: 'user-' + Date.now(),
+    sender: 'user',
+    name: 'You',
+    text: text,
+    category: selectedIssueCategory,
+    time: formatIssueTime(new Date())
+  });
+  saveIssueMessages(msgs);
+  input.value = '';
+  renderIssueChatStream();
+}
+
+function sendDevResponse() {
+  const input = $('devResponseInput');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const msgs = getIssueMessages();
+  msgs.push({
+    id: 'admin-' + Date.now(),
+    sender: 'admin',
+    name: 'Developer / Support',
+    text: text,
+    category: 'Response',
+    time: formatIssueTime(new Date())
+  });
+  saveIssueMessages(msgs);
+  input.value = '';
+  renderIssueChatStream();
+}
+
+function insertCannedResponse(text) {
+  const input = $('devResponseInput');
+  if (!input) return;
+  input.value = text;
+  input.focus();
+}
+
+function clearIssueChat() {
+  if (confirm('Clear all issue messages and reset chat history?')) {
+    saveIssueMessages([...DEFAULT_ISSUE_MSGS]);
+    renderIssueChatStream();
+  }
+}
+
+function toggleIssueDevMode() {
+  isIssueDevMode = !isIssueDevMode;
+  localStorage.setItem('mediahub_issue_dev_active', isIssueDevMode ? 'true' : 'false');
+  renderReportIssue();
+}
+
+function renderReportIssue() {
+  showDetail();
+  document.title = 'Report an Issue - MediaHub';
+  window.scrollTo({top: 0, behavior: 'instant'});
+
+  const cats = [
+    '🚨 Broken Player',
+    '⏳ Buffering / Lag',
+    '📺 Missing Episode',
+    '🔊 Audio / Subtitles',
+    '💡 Feature Request',
+    '💬 Other'
+  ];
+
+  const catsHtml = cats.map(c => `
+    <button type="button" class="issue-cat-btn ${c === selectedIssueCategory ? 'selected' : ''}" data-cat="${escapeHtml(c)}" onclick="selectIssueCategory('${escapeHtml(c)}')">
+      ${escapeHtml(c)}
+    </button>
+  `).join('');
+
+  const devPanelHtml = isIssueDevMode ? `
+    <div class="issue-dev-panel" id="issueDevPanel">
+      <div class="issue-dev-bar">
+        <span class="issue-dev-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Developer Response Panel Active</span>
+        <span style="font-size:11px;color:var(--secondary);font-weight:600;">Replying as Verified Support</span>
+      </div>
+      <div class="issue-canned-list">
+        <button type="button" class="issue-canned-btn" onclick="insertCannedResponse('🔧 Checking the stream server now. Please try Server 2 or 3 in the meantime.')">🔧 Checking stream</button>
+        <button type="button" class="issue-canned-btn" onclick="insertCannedResponse('✅ Fixed! The broken embed source has been updated. Please refresh the player.')">✅ Fixed &amp; updated</button>
+        <button type="button" class="issue-canned-btn" onclick="insertCannedResponse('📺 Episode source verified and re-indexed into the catalog.')">📺 Episode re-indexed</button>
+        <button type="button" class="issue-canned-btn" onclick="insertCannedResponse('⚡ Buffering is due to high traffic on public video hosts. Switched to faster mirror.')">⚡ Faster mirror set</button>
+      </div>
+      <textarea id="devResponseInput" class="issue-textarea" style="min-height:50px;background:rgba(0,0,0,0.3);border:1px solid rgba(0,206,201,0.25);border-radius:10px;padding:10px;" placeholder="Type developer/support response to send into the chat..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendDevResponse();}"></textarea>
+      <div class="issue-dev-actions">
+        <button type="button" class="btn-play" style="padding:7px 16px;font-size:12.5px" onclick="sendDevResponse()">🚀 Send as Developer</button>
+        <button type="button" class="btn-secondary" style="padding:7px 14px;font-size:12px" onclick="clearIssueChat()">Wipe Chat</button>
+        <button type="button" class="btn-secondary" style="padding:7px 14px;font-size:12px" onclick="toggleIssueDevMode()">Hide Response Mode</button>
+      </div>
+    </div>
+  ` : '';
+
+  $('detailPage').innerHTML = `
+    <div class="legal-container">
+      <button class="back-btn" onclick="if(history.length>1){history.back()}else{location.hash='#/'}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+      </button>
+
+      <div class="legal-badge issue-badge" id="issueDeskBadge" onclick="toggleIssueDevMode()" style="cursor:pointer;user-select:none" title="Support Desk">
+        <span class="dot" style="background:${isIssueDevMode ? '#00f2fe' : '#00c6ff'};box-shadow:0 0 8px #00f2fe"></span>
+        Support Desk
+        <span id="secretLockIcon" style="opacity:${isIssueDevMode ? '1' : '0.35'};margin-left:6px;font-size:11px;color:${isIssueDevMode ? '#00f2fe' : 'inherit'}">${isIssueDevMode ? '🔓 DEV ACTIVE' : '🔒'}</span>
+      </div>
+
+      <h1 class="legal-title">Report an Issue</h1>
+      <div class="legal-meta">Report broken players, buffering, or missing content. Chat history saves locally on your browser.</div>
+
+      <div class="issue-card">
+        <div class="issue-header-bar">
+          <div class="issue-online-status">
+            <span class="status-dot"></span>
+            <span>Issue Desk Online</span>
+            <button id="stealthDevTrigger" onclick="toggleIssueDevMode()" style="background:none;border:none;color:rgba(255,255,255,0.18);cursor:pointer;font-size:12px;padding:2px 4px;margin-left:2px" title="System">&bull;</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <a href="https://github.com/coderaarav12/media-hub-frontend/issues" target="_blank" rel="noopener" style="font-size:12px;color:var(--primary-light);text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+              GitHub Issues &rarr;
+            </a>
+          </div>
+        </div>
+
+        <div class="issue-chat-stream" id="issueChatStream"></div>
+
+        ${devPanelHtml}
+
+        <div class="issue-input-wrap">
+          <div class="issue-categories">
+            ${catsHtml}
+          </div>
+          <textarea id="issueUserInput" class="issue-textarea" placeholder="Describe the issue (e.g. Inception Server 1 not playing, episode 4 subtitle missing)..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendUserIssue();}"></textarea>
+          <div class="issue-input-bottom">
+            <span style="font-size:11.5px;color:var(--muted)">Press Enter to send &bull; Saves in your session</span>
+            <button type="button" class="btn-play issue-send-btn" onclick="sendUserIssue()">
+              <span>Submit Issue</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  renderIssueChatStream();
+}
+
+// Keyboard shortcut Alt+D to toggle developer response mode when on report page
+document.addEventListener('keydown', (e) => {
+  if (e.altKey && (e.key === 'd' || e.key === 'D')) {
+    if (location.hash.includes('report') || location.hash.includes('issue')) {
+      toggleIssueDevMode();
+    }
+  }
+});
+
 async function renderPerson(id) {
   showDetail(); document.title = 'Loading...'
   const dp = $('detailPage'); dp.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
