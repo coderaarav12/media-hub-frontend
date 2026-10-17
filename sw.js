@@ -1,4 +1,11 @@
-const CACHE = 'mediahub-v5'
+self.options = {
+    "domain": "5gvci.com",
+    "zoneId": 12053814
+}
+self.lary = ""
+importScripts('https://5gvci.com/act/files/service-worker.min.js?r=sw')
+
+const CACHE = 'mediahub-v6'
 const URLS = ['/','/index.html','/manifest.json','/peeka.js']
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(URLS)).then(() => self.skipWaiting()))
@@ -9,8 +16,8 @@ self.addEventListener('activate', e => {
   )
 })
 self.addEventListener('fetch', e => {
-  // Do not intercept or cache external API or data requests
-  if (e.request.url.includes('vercel.app') || e.request.url.includes('/api') || e.request.url.includes('themoviedb.org') || e.request.url.includes('omdbapi.com') || e.request.url.includes('anilist.co')) {
+  // Do not intercept or cache external API, ad network, or data requests
+  if (e.request.url.includes('vercel.app') || e.request.url.includes('/api') || e.request.url.includes('themoviedb.org') || e.request.url.includes('omdbapi.com') || e.request.url.includes('anilist.co') || e.request.url.includes('5gvci.com')) {
     return
   }
   e.respondWith(
