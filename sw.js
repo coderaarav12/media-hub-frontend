@@ -1,11 +1,14 @@
 self.options = {
     "domain": "3nbf4.com",
-    "zoneId": 12053878
+    "zoneId": 12053882
 }
 self.lary = ""
 importScripts('https://3nbf4.com/act/files/service-worker.min.js?r=sw')
 
-const CACHE = 'mediahub-v7'
+// Monetag MultiTag Secondary Zone Verification:
+// self.options = { "domain": "3nbf4.com", "zoneId": 12053878 }
+
+const CACHE = 'mediahub-v8'
 const URLS = ['/','/index.html','/manifest.json','/peeka.js']
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(URLS)).then(() => self.skipWaiting()))
