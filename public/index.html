@@ -1,0 +1,2819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MediaHub - Premium Movies, TV Shows, Anime & Live TV</title>
+<meta name="description" content="MediaHub is your ultimate destination to watch movies, TV shows, anime, and live TV. Discover trending content, read biographies, and stream seamlessly.">
+<meta name="keywords" content="movies, tv shows, anime, live tv, streaming, mediahub, watch online">
+<meta name="author" content="Aarav">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="MediaHub - Unlimited Streaming">
+<meta property="og:description" content="Watch your favorite movies, TV shows, and anime with MediaHub's premium interface.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://greatmedia.goelaarav.dpdns.org">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MediaHub - Unlimited Streaming">
+<meta name="twitter:description" content="Watch your favorite movies, TV shows, and anime with MediaHub's premium interface.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230070f3'/%3E%3Cstop offset='100%25' stop-color='%2300f2fe'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='20' fill='%23020409'/%3E%3Cpath d='M35 30v40l30-20z' fill='url(%23g)'/%3E%3C/svg%3E">
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="config.js"></script>
+<link rel="manifest" href="/manifest.json">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#02040a;--bg2:#060b18;--card:#081124;--card2:#0d1a33;--border:rgba(0,140,255,0.14);--border-hover:rgba(0,170,255,0.45);--primary:#0070f3;--primary-light:#38bdf8;--secondary:#00e5ff;--accent:#00f0ff;--text:#f0f6fc;--text2:#8ba3c7;--muted:#546e96;--radius:20px;--radius-sm:12px;--glow:0 0 35px rgba(0,112,243,0.25)}
+html{scroll-behavior:smooth}
+body{font-family:'Space Grotesk',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.6;letter-spacing:-0.2px;font-size:15px;font-weight:400}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--card2);border-radius:6px}::-webkit-scrollbar-thumb:hover{background:var(--primary)}
+.container{max-width:1800px;margin:0 auto;padding:0 40px;width:100%}
+
+/* Ambient bg glow (Black with Blue) */
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 15% 20%,rgba(0,102,255,0.14),transparent 55%),radial-gradient(ellipse at 85% 75%,rgba(0,210,255,0.08),transparent 50%),radial-gradient(ellipse at 50% 0%,rgba(14,165,233,0.11),transparent 45%);pointer-events:none;z-index:-1}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.92)}to{opacity:1;transform:scale(1)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,112,243,0.4)}50%{box-shadow:0 0 0 12px rgba(0,112,243,0)}}
+@keyframes glowPulse{0%,100%{opacity:0.6}50%{opacity:1}}
+@keyframes borderGlow{0%,100%{border-color:rgba(0,112,243,0.15)}50%{border-color:rgba(0,112,243,0.45)}}
+
+/* Nav */
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:70px;position:sticky;top:0;z-index:100;background:rgba(5,5,8,0.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.05);width:100%;max-width:none}
+.nav-left{display:flex;align-items:center;gap:40px;height:100%}
+.logo{font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:12px;flex-shrink:0;letter-spacing:-0.5px;}
+.logo-icon{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff}
+.nav-links{display:flex;align-items:center;gap:8px;height:100%}
+.nav-links button{background:none;border:none;color:var(--text2);cursor:pointer;font-size:14.5px;padding:0 12px;height:36px;border-radius:18px;transition:all .25s;font-weight:500;font-family:inherit;display:flex;align-items:center}
+.nav-links button:hover{color:#fff;background:rgba(255,255,255,0.05)}
+.nav-links button.active{color:#fff;font-weight:600;background:rgba(255,255,255,0.08)}
+.nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.nav-icon-btn{background:none;border:none;color:var(--text2);width:40px;height:40px;border-radius:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.nav-icon-btn:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.search-wrap{display:flex;align-items:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:30px;padding:4px 6px;position:relative;transition:all .25s}
+.search-wrap:focus-within{border-color:rgba(0,112,243,0.5);background:rgba(0,0,0,0.4);box-shadow:0 0 0 4px rgba(0,112,243,0.15)}
+.search-wrap input{flex:1;background:none;border:none;padding:8px 12px;color:#fff;font-size:14px;outline:none;font-family:inherit;min-width:400px;max-width:600px}
+.search-wrap input::placeholder{color:var(--muted)}
+.search-wrap input[type="search"]::-webkit-search-cancel-button{-webkit-appearance:none}
+.custom-select-wrapper{position:relative;user-select:none;border-left:1px solid rgba(255,255,255,0.1)}
+.custom-select-trigger{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 14px;color:var(--text2);font-size:13px;cursor:pointer;min-width:85px;font-weight:500;transition:all .2s}
+.custom-select-trigger:hover{color:#fff}
+.custom-select-options{position:absolute;top:calc(100% + 12px);right:0;background:#0d0d16;border:1px solid rgba(255,255,255,0.1);border-radius:12px;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,0.6);opacity:0;visibility:hidden;transform:translateY(-10px);transition:all .2s;min-width:130px;z-index:200}
+.custom-select-wrapper.open .custom-select-options{opacity:1;visibility:visible;transform:translateY(0)}
+.custom-option{padding:12px 16px;font-size:13px;color:var(--text2);cursor:pointer;transition:background .2s,color .2s;border-bottom:1px solid rgba(255,255,255,0.03)}
+.custom-option:last-child{border-bottom:none}
+.custom-option:hover{background:rgba(255,255,255,0.06);color:#fff}
+.custom-option.selected{color:var(--primary-light);background:rgba(0,112,243,0.18);font-weight:600}
+.search-wrap button{background:var(--primary);border:none;color:#fff;padding:8px 18px;border-radius:20px;cursor:pointer;font-size:13px;font-weight:600;transition:all .25s;font-family:inherit;white-space:nowrap;margin-left:6px}
+.search-wrap button:hover{background:#00c6ff;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,112,243,0.35)}
+
+/* Autocomplete */
+.ac-dropdown{position:absolute;top:calc(100% + 8px);left:0;right:0;background:rgba(15,15,22,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.1);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,0.6);z-index:200;max-height:400px;overflow-y:auto;display:none;flex-direction:column;padding:8px}
+.ac-dropdown.active{display:flex}
+.ac-dropdown::-webkit-scrollbar{width:6px}
+.ac-dropdown::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}
+.ac-item{display:flex;align-items:center;gap:14px;padding:8px;border-radius:10px;cursor:pointer;transition:background .2s;text-decoration:none}
+.ac-item:hover{background:rgba(255,255,255,0.06)}
+.ac-poster{width:42px;height:62px;background-size:cover;background-position:center;border-radius:6px;background-color:#1a1a2e;flex-shrink:0}
+.ac-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.ac-title{font-size:14px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.ac-meta{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:8px}
+.ac-meta span{background:rgba(255,255,255,0.06);padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:0.3px}
+
+
+/* Mobile search toggle */
+.search-toggle{display:none}
+.search-mobile{display:none;padding:16px 20px 20px;background:#050508;border-bottom:1px solid rgba(255,255,255,0.05);position:relative;z-index:99}
+.search-mobile.active{display:block;animation:fadeUp 0.3s ease forwards}
+.search-mobile .search-wrap{width:100%;border-color:rgba(0,112,243,0.4);box-shadow:0 0 20px rgba(0,112,243,0.1)}
+.search-mobile .search-wrap input{min-width:0;flex:1}
+
+/* Section header */
+.section-header{display:flex;justify-content:space-between;align-items:center;margin:40px 0 24px}
+.section-header h2{font-size:18px;font-weight:700;letter-spacing:-0.2px;display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,var(--text),var(--primary-light));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.section-header h2::before{content:'';display:block;width:4px;height:22px;border-radius:4px;background:linear-gradient(180deg,var(--primary),var(--secondary))}
+.section-header .see-all{color:var(--text2);font-size:12px;cursor:pointer;font-weight:500;transition:all .2s;padding:5px 14px;border-radius:8px;border:1px solid var(--border);background:rgba(255,255,255,0.02)}
+.section-header .see-all:hover{color:var(--text);border-color:var(--border-hover);background:rgba(0,112,243,0.08)}
+
+/* Trend tabs */
+.trend-tabs{display:flex;gap:6px;margin-bottom:28px}
+.trend-tabs button{padding:8px 22px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;font-size:13px;font-weight:500;transition:all .25s;font-family:inherit;letter-spacing:0.2px}
+.trend-tabs button.active{background:linear-gradient(135deg,var(--primary),#00c6ff);color:#fff;border-color:transparent;box-shadow:0 4px 20px rgba(0,112,243,0.3)}
+.trend-tabs button:hover:not(.active){border-color:var(--border-hover);color:var(--text)}
+
+/* Spotlight */
+.spotlight{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:var(--radius);overflow:hidden;margin:28px 0 40px;min-height:400px;background:var(--card);border:1px solid var(--border);transition:all .4s}
+.spotlight:hover{border-color:var(--border-hover);box-shadow:var(--glow)}
+.spotlight-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0.12;filter:saturate(1.2)}
+.spotlight-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,var(--card) 30%,transparent 70%)}
+.spotlight-poster{position:relative;display:flex;align-items:center;justify-content:center;padding:32px;min-height:400px}
+.spotlight-poster .poster-img{width:260px;aspect-ratio:2/3;border-radius:12px;background-size:cover;background-position:center;box-shadow:0 20px 60px rgba(0,0,0,0.5);transition:transform .4s cubic-bezier(.16,1,.3,1);transform:perspective(800px) rotateY(-2deg)}
+.spotlight:hover .spotlight-poster .poster-img{transform:perspective(800px) rotateY(0deg) scale(1.02)}
+.spotlight-info{position:relative;display:flex;flex-direction:column;justify-content:center;padding:40px 40px 40px 0;z-index:2}
+.spotlight-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 14px;border-radius:20px;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;background:linear-gradient(135deg,rgba(0,112,243,0.2),rgba(0,229,255,0.15));color:var(--primary-light);border:1px solid rgba(0,140,255,0.3);margin-bottom:14px;width:fit-content}
+.spotlight-badge::before{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--secondary);animation:glowPulse 2s infinite}
+.spotlight-info h1{font-size:38px;font-weight:700;letter-spacing:-1px;line-height:1.2;margin-bottom:12px}
+.spotlight-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.spotlight-meta span{padding:4px 14px;border-radius:20px;font-size:12px;font-weight:600;background:rgba(255,255,255,0.06);color:var(--text);border:1px solid var(--border)}
+.spotlight-meta .rating{color:var(--accent);border-color:rgba(0,240,255,0.25);background:rgba(0,240,255,0.1)}
+.spotlight-desc{color:var(--text2);font-size:15px;line-height:1.7;margin-bottom:24px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.spotlight-actions{display:flex;gap:10px}
+.spotlight-actions .btn-play{padding:11px 28px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--primary),#00c6ff);color:#fff;transition:all .25s;display:inline-flex;align-items:center;gap:8px;font-family:inherit}
+.spotlight-actions .btn-play:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,112,243,0.35)}
+.spotlight-actions .btn-secondary{padding:11px 22px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);font-size:13px;cursor:pointer;transition:all .25s;font-weight:500;font-family:inherit}
+.spotlight-actions .btn-secondary:hover{background:rgba(255,255,255,0.05);border-color:var(--border-hover);color:var(--text)}
+
+/* Bento grid */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:8px}
+.bento-card{position:relative;border-radius:var(--radius);overflow:hidden;cursor:pointer;background:var(--card);min-height:180px;transition:all .45s cubic-bezier(.16,1,.3,1);border:1px solid var(--border)}
+.bento-card:hover{transform:translateY(-3px);border-color:var(--border-hover);box-shadow:var(--glow)}
+.bento-card .bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .5s}
+.bento-card:hover .bg{transform:scale(1.05)}
+.bento-card .grad{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(5,5,8,0.92) 100%)}
+.bento-card .content{position:absolute;bottom:0;left:0;right:0;padding:16px 18px}
+.bento-card .content h3{font-size:14px;font-weight:600;line-height:1.3;margin-bottom:2px}
+.bento-card .content p{font-size:11px;color:var(--text2)}
+.bento-card .play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.7);width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .35s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 20px rgba(0,112,243,0.35);z-index:3}
+.bento-card:hover .play-btn{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.bento-card .rating-badge{position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.5);backdrop-filter:blur(8px);padding:2px 9px;border-radius:6px;font-size:10px;font-weight:600;color:var(--accent);z-index:2;border:1px solid rgba(0,240,255,0.2)}
+.bento-wide{grid-column:span 2;min-height:280px}
+.bento-wide .content h3{font-size:16px}
+.bento-wide .play-btn{width:46px;height:46px;font-size:16px}
+
+/* Standard grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:14px}
+.card{border-radius:16px;overflow:hidden;background:rgba(255,255,255,0.015);cursor:pointer;transition:all .4s cubic-bezier(.16,1,.3,1);position:relative;opacity:0;animation:slideUp .5s ease forwards;animation-delay:calc(var(--i,0)*0.035s);border:1px solid rgba(255,255,255,0.04)}
+.card:hover{transform:translateY(-8px);border-color:rgba(255,255,255,0.1);box-shadow:0 24px 48px rgba(0,0,0,0.5);background:rgba(255,255,255,0.03)}
+.card .poster{aspect-ratio:2/3;background-size:cover;background-position:center;position:relative;background-color:#050508;overflow:hidden;border-bottom:1px solid rgba(255,255,255,0.03)}
+.card .poster::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,#050508 0%,transparent 50%);opacity:0.6;transition:opacity .4s}
+.card:hover .poster::after{opacity:0.9}
+.card .poster .rating{position:absolute;top:12px;right:12px;background:rgba(0,0,0,0.6);backdrop-filter:blur(12px);padding:4px 10px;border-radius:8px;font-size:11px;font-weight:700;color:var(--accent);z-index:2;border:1px solid rgba(0,240,255,0.25)}
+.card .poster .eps-badge{position:absolute;bottom:12px;left:12px;background:rgba(0,206,201,0.15);backdrop-filter:blur(12px);padding:3px 8px;border-radius:6px;font-size:11px;color:var(--secondary);font-weight:700;z-index:2;border:1px solid rgba(0,206,201,0.2)}
+.card .hover-overlay{position:absolute;inset:0;opacity:0;transition:all .4s;display:flex;align-items:center;justify-content:center;z-index:3;flex-direction:column;gap:12px;background:rgba(0,0,0,0.2);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.card:hover .hover-overlay{opacity:1}
+.card .hover-overlay .pbtn{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;box-shadow:0 8px 24px rgba(0,112,243,0.4);transform:scale(0.8);transition:all .4s cubic-bezier(.16,1,.3,1)}
+.card:hover .hover-overlay .pbtn{transform:scale(1)}
+.card .hover-overlay .mtag{color:#fff;font-size:11px;font-weight:600;background:rgba(255,255,255,0.1);padding:4px 12px;border-radius:8px;letter-spacing:0.5px;border:1px solid rgba(255,255,255,0.15)}
+.card .info{padding:16px;position:relative;z-index:2;display:flex;flex-direction:column;gap:4px}
+.card .info h3{font-size:15px;font-weight:700;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;transition:color .3s;letter-spacing:-0.2px;color:#fff}
+.card:hover .info h3{color:var(--primary-light)}
+.card .info p{font-size:13px;color:var(--text2);font-weight:500;}
+
+/* Detail */
+.detail-page{display:none;padding-top:8px}
+.detail-hero{position:relative;border-radius:var(--radius);overflow:hidden;min-height:480px;margin-bottom:28px;border:1px solid var(--border)}
+.detail-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(0.3) saturate(0.9)}
+.detail-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(5,5,8,0.75),transparent 60%)}
+.detail-overlay{position:relative;padding:80px 44px 50px;display:flex;gap:44px;align-items:flex-end}
+.detail-poster{width:220px;border-radius:12px;aspect-ratio:2/3;background-size:cover;background-position:center;flex-shrink:0;box-shadow:0 20px 60px rgba(0,0,0,0.6);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+.detail-poster:hover{transform:scale(1.04) rotate(1.5deg)}
+.detail-info{flex:1}
+.detail-info h1{font-size:32px;font-weight:700;margin-bottom:12px;letter-spacing:-0.5px;line-height:1.15}
+.detail-meta{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.detail-meta span{padding:4px 14px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(255,255,255,0.04);color:var(--text2);border:1px solid var(--border)}
+.detail-info .overview{color:var(--text2);font-size:14px;line-height:1.7;max-width:620px;margin-bottom:18px}
+.detail-actions{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.btn-play{padding:12px 30px;border-radius:10px;border:none;font-size:14px;font-weight:600;cursor:pointer;background:linear-gradient(135deg,var(--primary),#00c6ff);color:#fff;transition:all .25s;display:inline-flex;align-items:center;gap:8px;font-family:inherit}
+.btn-play:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,112,243,0.35)}
+.btn-secondary{padding:12px 24px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);font-size:13px;cursor:pointer;transition:all .25s;font-weight:500;font-family:inherit;display:inline-flex;align-items:center;gap:8px}
+.btn-secondary:hover{background:rgba(255,255,255,0.05);border-color:var(--border-hover);color:var(--text)}
+.genre-tags{display:flex;flex-wrap:wrap;gap:4px}
+.genre-tags span{padding:3px 12px;border-radius:20px;font-size:11px;font-weight:500;background:rgba(0,112,243,0.12);color:var(--primary-light);border:1px solid rgba(0,112,243,0.25)}
+
+/* Extended Info */
+.extended-info{margin-top:40px; display:flex; flex-direction:column; gap:32px;}
+.section-title{font-size:20px;font-weight:600;margin-bottom:16px;color:var(--text);letter-spacing:-0.3px;}
+.cast-list{display:flex;overflow-x:auto;gap:14px;padding-bottom:12px;scroll-snap-type:x mandatory;}
+.cast-list::-webkit-scrollbar{height:4px;}
+.cast-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.cast-card{width:130px;flex-shrink:0;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);scroll-snap-align:start;cursor:pointer;transition:transform .2s,border-color .2s}
+.cast-card:hover{transform:translateY(-4px);border-color:var(--border-hover)}
+.cast-photo{width:100%;aspect-ratio:2/3;background-size:cover;background-position:center;background-color:#1a1a2e;}
+.cast-info-box{padding:12px 10px;text-align:center;}
+.cast-info-box strong{display:block;font-size:13px;color:var(--text);font-weight:600;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cast-info-box span{display:block;font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.similar-list{display:flex;overflow-x:auto;gap:16px;padding-bottom:12px;scroll-snap-type:x mandatory;}
+.similar-list::-webkit-scrollbar{height:4px;}
+.similar-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+.similar-list .card{width:160px;flex-shrink:0;scroll-snap-align:start;}
+
+
+/* Seasons */
+.season-tabs{display:flex;gap:6px;overflow-x:auto;padding:8px 0 16px}
+.season-tabs::-webkit-scrollbar{height:2px}
+.season-tabs button{padding:7px 18px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;white-space:nowrap;font-size:13px;font-weight:500;transition:all .25s;font-family:inherit}
+.season-tabs button:hover{border-color:var(--border-hover);color:var(--text)}
+.season-tabs button.active{background:linear-gradient(135deg,var(--primary),#00c6ff);color:#fff;border-color:transparent}
+
+/* Episodes */
+.episodes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+.episode-card{cursor:pointer;display:flex;gap:14px;padding:12px;border-radius:var(--radius-sm);background:var(--card);transition:all .3s;border:1px solid var(--border)}
+.episode-card:hover{background:var(--card2);border-color:var(--border-hover);transform:translateX(4px)}
+.episode-thumb{width:150px;height:85px;border-radius:8px;background-size:cover;background-position:center;flex-shrink:0;background-color:#0a0a14;position:relative;overflow:hidden}
+.episode-thumb::after{content:'\25B6';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);color:rgba(255,255,255,0.8);font-size:16px;opacity:0;transition:opacity .25s}
+.episode-card:hover .episode-thumb::after{opacity:1}
+.episode-info{flex:1;min-width:0}
+.episode-info h4{font-size:13px;font-weight:600;margin-bottom:3px;transition:color .2s}
+.episode-card:hover .episode-info h4{color:var(--secondary)}
+.episode-info p{font-size:12px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5}
+.episode-num{font-size:10px;color:var(--primary);font-weight:600;margin-bottom:2px;letter-spacing:0.5px}
+
+/* Player */
+.player-overlay{position:fixed;inset:0;background:#000;z-index:1000;display:none;flex-direction:column}
+.player-overlay.active{display:flex;animation:fadeUp 0.3s ease forwards}
+.player-header{display:flex;align-items:center;padding:0 20px;height:56px;background:#050508;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;gap:14px}
+.player-header-left{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.player-header h3{font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff;letter-spacing:-0.2px;max-width:190px}
+.player-status-badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(35,146,238,0.12);border:1px solid rgba(35,146,238,0.3);color:var(--primary-light);white-space:nowrap;transition:all 0.3s}
+.player-status-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--primary);animation:glowPulse 1.2s infinite;flex-shrink:0}
+.player-status-badge.success{background:rgba(0,206,201,0.12);border-color:rgba(0,206,201,0.35);color:var(--secondary)}
+.player-status-badge.success .dot{background:var(--secondary);animation:none}
+.source-tabs{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-shrink:0;scrollbar-width:none;flex:1;min-width:0;align-items:center;height:100%}
+.source-tabs::-webkit-scrollbar{display:none}
+.source-tabs button{padding:6px 14px;border-radius:6px;border:none;background:rgba(255,255,255,0.05);color:var(--text2);cursor:pointer;font-size:13px;font-weight:600;transition:all .2s;font-family:inherit;white-space:nowrap;flex-shrink:0;letter-spacing:-0.1px}
+.source-tabs button:hover{background:rgba(255,255,255,0.1);color:#fff}
+.source-tabs button.active{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(0,112,243,0.35)}
+.player-close{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:#fff;width:34px;height:34px;cursor:pointer;border-radius:50%;transition:all .2s;margin-left:auto;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.player-close:hover{color:#fff;background:rgba(255,255,255,0.2);transform:scale(1.06)}
+.player-body{flex:1;display:flex;padding:0;min-height:0;background:#000;align-items:center;justify-content:center}
+.player-body iframe,.player-body video{width:100%;height:auto;aspect-ratio:16/9;max-width:calc((100vh - 56px) * 1.7778);border:none;background:#000;margin:auto;box-shadow:0 0 40px rgba(0,0,0,0.8)}
+
+/* Share Modal */
+.share-overlay{position:fixed;inset:0;background:rgba(3,3,5,0.8);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);z-index:1000;display:none;align-items:center;justify-content:center;animation:fadeUp .3s ease}
+.share-overlay.active{display:flex}
+.share-modal{background:#0a0a10;border:1px solid rgba(255,255,255,0.08);border-radius:24px;width:380px;max-width:92vw;overflow:hidden;animation:scaleIn .3s cubic-bezier(0.16,1,0.3,1);box-shadow:0 24px 80px rgba(0,0,0,0.8)}
+.share-header{display:flex;justify-content:space-between;align-items:center;padding:24px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.share-header h3{font-size:17px;font-weight:700;}
+.share-header h3 .sh-1{color:var(--primary-light)}
+.share-header h3 .sh-2{color:var(--secondary)}
+.share-header button{background:none;border:none;color:var(--text2);font-size:20px;cursor:pointer;padding:4px;transition:all .2s;line-height:1;border-radius:8px;}
+.share-header button:hover{color:#fff;background:rgba(255,255,255,0.08)}
+.share-body{padding:32px 24px 24px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.qr-wrap{display:flex;justify-content:center;margin-bottom:24px;position:relative}
+.qr-wrap canvas{display:block;border-radius:12px;padding:12px;background:#fff;width:220px;height:220px;box-shadow:0 12px 32px rgba(0,0,0,0.5)}
+.qr-logo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;background:#050508;border-radius:14px;display:flex;align-items:center;justify-content:center;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,0.4);border:4px solid #fff}
+.qr-logo svg{width:36px;height:36px}
+.share-url{font-size:12px;color:var(--muted);word-break:break-all;margin-bottom:24px;padding:12px 16px;background:rgba(255,255,255,0.03);border-radius:12px;border:1px solid rgba(255,255,255,0.05);font-family:monospace;letter-spacing:0.5px;width:100%}
+.share-actions{display:flex;gap:12px;justify-content:center;width:100%;margin-bottom:20px}
+.share-actions button{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;font-weight:600;padding:12px 0;border-radius:12px;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.share-actions .btn-copy{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(0,112,243,0.35)}
+.share-actions .btn-copy:hover{background:#00c6ff;transform:translateY(-1px)}
+.share-actions .btn-share{background:rgba(255,255,255,0.05);color:var(--text);border:1px solid rgba(255,255,255,0.1)}
+.share-actions .btn-share:hover{background:rgba(255,255,255,0.08)}
+.share-hint{font-size:12px;color:var(--muted);font-weight:500;}
+/* Install Guide */
+.install-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.7);backdrop-filter:blur(16px);z-index:999;display:none;align-items:center;justify-content:center;animation:fadeUp .3s ease}
+.install-overlay.active{display:flex}
+.install-modal{background:linear-gradient(145deg,var(--card),#0d0d1a);border:1px solid var(--border);border-radius:20px;width:380px;max-width:90vw;overflow:hidden;animation:scaleIn .35s ease;box-shadow:0 24px 80px rgba(0,0,0,0.6)}
+.install-header{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1px solid var(--border)}
+.install-header h3{font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--primary),var(--secondary));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.install-header button{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;padding:0 4px;transition:all .2s;line-height:1;font-family:inherit}
+.install-header button:hover{color:var(--text)}
+.install-body{padding:24px}
+.install-step{display:flex;gap:14px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+.install-step:last-of-type{border-bottom:none}
+.install-step-num{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.install-step-text{font-size:13px;color:var(--text);line-height:1.6}
+.install-step-text strong{color:var(--primary)}
+.install-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:16px 0}
+.install-note{font-size:11px;color:var(--muted);text-align:center;line-height:1.6}
+@media(max-width:480px){.install-modal{border-radius:20px 20px 0 0;margin-top:auto}.install-overlay.active{align-items:flex-end}}
+
+@media(max-width:480px){
+  .share-modal{width:100%;max-width:100vw;border-radius:20px 20px 0 0;margin-top:auto}
+  .share-overlay.active{align-items:flex-end}
+}
+/* Update Banner */
+.update-banner{background:linear-gradient(135deg,var(--primary),#00c6ff);color:#fff;padding:10px 24px;font-size:13px;font-weight:500;cursor:pointer;display:none;align-items:center;justify-content:center;gap:10px;font-family:inherit;border:none;width:100%;transition:all .3s}
+.update-banner:hover{opacity:0.92}
+.update-banner .close-update{background:rgba(255,255,255,0.2);border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;flex-shrink:0}
+.update-banner .close-update:hover{background:rgba(255,255,255,0.3)}
+@media(max-width:480px){.update-banner{font-size:12px;padding:8px 16px}}
+
+/* Changelog Modal */
+.changelog-overlay{position:fixed;inset:0;background:rgba(5,5,8,0.7);backdrop-filter:blur(16px);z-index:999;display:none;align-items:center;justify-content:center;animation:fadeUp .3s ease}
+.changelog-overlay.active{display:flex}
+.changelog-modal{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);width:500px;max-width:90vw;max-height:80vh;overflow:hidden;animation:scaleIn .35s ease}
+.changelog-header{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;border-bottom:1px solid var(--border)}
+.changelog-header h3{font-size:16px;font-weight:600}
+.changelog-header button{background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;padding:0 4px;transition:all .2s;line-height:1;font-family:inherit}
+.changelog-header button:hover{color:var(--text)}
+.changelog-body{padding:20px 24px;overflow-y:auto;max-height:60vh}
+.changelog-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.changelog-item:last-child{border-bottom:none}
+.changelog-sha{font-size:11px;color:var(--primary);font-family:monospace;white-space:nowrap;min-width:80px}
+.changelog-msg{font-size:13px;color:var(--text);line-height:1.5}
+.changelog-date{font-size:10px;color:var(--muted);margin-top:2px}
+.changelog-loading{text-align:center;padding:40px;color:var(--muted)}
+/* GitHub Repo Card */
+.gh-repo-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;transition:all .3s}
+.gh-repo-card:hover{border-color:var(--border-hover)}
+.gh-left{display:flex;align-items:center;gap:14px}
+.gh-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#00c6ff);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gh-icon svg{width:22px;height:22px;fill:#fff}
+.gh-name{font-size:14px;font-weight:600;color:var(--text);text-decoration:none}
+.gh-name:hover{color:var(--primary)}
+.gh-desc{font-size:12px;color:var(--muted);margin-top:2px}
+.gh-stats{display:flex;gap:16px;flex-wrap:wrap}
+.gh-stat{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text2)}
+.gh-stat svg{width:14px;height:14px;fill:currentColor}
+.gh-stat-num{font-weight:600;color:var(--text)}
+.gh-loading{font-size:13px;color:var(--muted);padding:12px 0}
+@media(max-width:480px){.gh-repo-card{flex-direction:column;align-items:flex-start;padding:16px}}
+
+/* Footer */
+.site-footer{width:100%;margin-top:72px;padding:54px 0 36px;background:linear-gradient(180deg,rgba(6,11,24,0.4) 0%,rgba(2,4,10,0.85) 100%);border-top:1px solid rgba(0,140,255,0.12);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.footer-inner{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:40px;width:100%;max-width:1800px;margin:0 auto;padding:0 40px}
+.footer-col{display:flex;flex-direction:column;gap:12px;min-width:160px;flex:1}
+.footer-col.footer-brand{flex:1.8;max-width:440px;min-width:260px}
+.footer-logo{display:flex;align-items:center;gap:12px;font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px}
+.footer-logo svg{width:30px;height:30px}
+.footer-desc{color:var(--text2);font-size:14px;line-height:1.65;margin-top:8px}
+.footer-title{font-size:13px;font-weight:700;color:#fff;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.footer-col a{color:var(--text2);text-decoration:none;font-size:14px;transition:color 0.2s}
+.footer-col a:hover{color:var(--primary-light)}
+.footer-bottom{width:100%;max-width:1800px;margin:44px auto 0;padding:24px 40px 0;border-top:1px solid rgba(255,255,255,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--muted)}
+.github-btn{display:inline-flex;align-items:center;gap:8px;background:rgba(0,112,243,0.14);border:1px solid rgba(0,140,255,0.3);color:#fff!important;padding:8px 18px;border-radius:24px;font-weight:600;transition:all 0.3s!important;margin-top:12px;box-shadow:0 4px 14px rgba(0,112,243,0.15)}
+.github-btn:hover{background:var(--primary);border-color:var(--secondary);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,112,243,0.3)}
+@media(max-width:1100px){
+  .footer-inner{gap:32px;padding:0 24px}
+  .footer-bottom{padding:20px 24px 0}
+}
+@media(max-width:768px){
+  .footer-inner{flex-direction:column;gap:32px;padding:0 16px}
+  .footer-col.footer-brand{max-width:100%;width:100%}
+  .footer-bottom{flex-direction:column;text-align:center;padding:20px 16px 0}
+}
+
+@media(max-width:480px){.changelog-modal{max-height:90vh}.changelog-body{padding:16px}}
+
+.loading{text-align:center;padding:80px 20px;color:var(--muted)}
+.spinner{width:36px;height:36px;border:2px solid rgba(255,255,255,0.04);border-top:2px solid var(--primary);border-right:2px solid var(--secondary);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto 14px}
+.skeleton{background:linear-gradient(90deg,var(--card) 0%,var(--card2) 50%,var(--card) 100%);background-size:200% 100%;animation:shimmer 1.4s ease-in-out infinite;border-radius:var(--radius)}
+.skel-card{flex-shrink:0;width:100%;border-radius:var(--radius);overflow:hidden}
+.skel-card .skel-poster{aspect-ratio:2/3;width:100%}
+.skel-feat{flex-shrink:0;border-radius:var(--radius);overflow:hidden;min-height:280px;background:var(--card)}
+
+.back-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text);font-size:14px;cursor:pointer;padding:10px 18px;display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;font-weight:600;transition:all .2s;font-family:inherit;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.back-btn:hover{background:rgba(255,255,255,0.1);transform:translateX(-4px);color:#fff;border-color:rgba(255,255,255,0.2)}
+.results-info{font-size:13px;color:var(--muted);margin-bottom:14px}
+.live-notice-banner{display:flex;align-items:flex-start;gap:14px;background:rgba(255,180,0,0.06);border:1px solid rgba(255,180,0,0.22);border-radius:14px;padding:14px 18px;margin-bottom:20px;backdrop-filter:blur(10px)}
+.live-notice-icon{color:#ffb400;flex-shrink:0;margin-top:2px}
+.live-notice-content strong{display:block;font-size:13px;color:#ffc837;font-weight:700;margin-bottom:3px;letter-spacing:-0.1px}
+.live-notice-content p{font-size:12px;color:rgba(255,255,255,0.72);line-height:1.55;margin:0}
+
+.live-filter-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.live-search-box{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:8px 14px;flex:1;max-width:380px;transition:all .2s}
+.live-search-box:focus-within{border-color:var(--primary);box-shadow:0 0 16px rgba(0,112,243,0.3)}
+.live-search-box svg{color:var(--muted);flex-shrink:0}
+.live-search-box input{background:none;border:none;outline:none;color:#fff;font-size:13px;font-family:inherit;width:100%}
+.live-search-box input::placeholder{color:var(--muted)}
+.live-search-box button{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:0;line-height:1}
+.live-search-box button:hover{color:#fff}
+.live-channel-count{font-size:12px;color:var(--muted);font-weight:600}
+
+.live-cats{display:flex;gap:8px;overflow-x:auto;padding:0 0 16px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.live-cats::-webkit-scrollbar{display:none}
+.live-cats button{padding:8px 18px;border-radius:24px;border:1px solid var(--border);background:rgba(255,255,255,0.02);color:var(--text2);cursor:pointer;white-space:nowrap;font-size:13px;font-weight:600;transition:all .25s;font-family:inherit;flex-shrink:0;display:inline-flex;align-items:center;gap:6px}
+.live-cats button:hover{border-color:var(--border-hover);color:var(--text);background:rgba(255,255,255,0.05)}
+.live-cats button.active{background:linear-gradient(135deg,var(--primary),#00c6ff);color:#fff;border-color:transparent;box-shadow:0 4px 14px rgba(0,112,243,0.35)}
+.ch-letter-header{padding:14px 0 8px;position:sticky;top:0;background:var(--bg);z-index:2;display:flex;align-items:center;gap:12px}
+.ch-letter-pill{display:inline-flex;align-items:center;justify-content:center;padding:4px 12px;background:rgba(0,112,243,0.18);color:var(--primary-light);border:1px solid rgba(0,112,243,0.35);border-radius:8px;font-size:12px;font-weight:700;letter-spacing:0.5px}
+.ch-letter-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(0,112,243,0.35),transparent)}
+.live-channel-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:14px;padding-bottom:16px}
+.live-channel-card{position:relative;cursor:pointer;border-radius:16px;padding:18px 14px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);transition:all .25s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;height:130px}
+.live-channel-card:hover{border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);transform:translateY(-3px);box-shadow:0 12px 24px rgba(0,0,0,0.4)}
+.live-channel-card .ch-logo{width:54px;height:54px;object-fit:contain;border-radius:8px;flex-shrink:0;background:rgba(0,0,0,0.2);padding:4px}
+.live-channel-card .ch-name{font-size:13px;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3;color:#fff}
+.live-channel-card .ch-src-badge{position:absolute;top:8px;right:8px;font-size:9px;color:var(--secondary);flex-shrink:0;padding:2px 6px;border-radius:6px;background:rgba(0,206,201,0.1);border:1px solid rgba(0,206,201,0.2);font-weight:600}
+
+/* Legal Pages */
+.legal-container{max-width:860px;margin:30px auto 60px;padding:0 20px;animation:fadeUp .3s ease}
+.legal-badge{display:inline-flex;align-items:center;gap:8px;padding:4px 14px;border-radius:20px;font-size:11.5px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:14px}
+.legal-badge.terms{background:rgba(0,112,243,0.12);color:var(--primary-light);border:1px solid rgba(0,112,243,0.3)}
+.legal-badge.privacy{background:rgba(0,206,201,0.12);color:var(--secondary);border:1px solid rgba(0,206,201,0.3)}
+.legal-badge .dot{width:6px;height:6px;border-radius:50%}
+.legal-badge.terms .dot{background:var(--primary)}
+.legal-badge.privacy .dot{background:var(--secondary)}
+.legal-title{font-size:32px;font-weight:800;letter-spacing:-0.5px;margin-bottom:8px;color:#fff}
+.legal-meta{font-size:13px;color:var(--muted);margin-bottom:28px}
+.legal-card{background:rgba(8,17,36,0.7);border:1px solid rgba(0,170,255,0.18);border-radius:20px;padding:36px;box-shadow:0 16px 48px rgba(0,0,0,0.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.legal-section{margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.legal-section:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none}
+.legal-section h3{font-size:17px;font-weight:700;color:#fff;margin-bottom:12px;display:flex;align-items:center;gap:10px;letter-spacing:-0.2px}
+.legal-section h3 .sec-num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:6px;background:rgba(0,112,243,0.16);border:1px solid rgba(0,112,243,0.3);color:var(--primary-light);font-size:12px;font-weight:700;flex-shrink:0}
+.legal-section p{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:10px}
+.legal-section p:last-child{margin-bottom:0}
+.legal-section ul{margin:8px 0 12px 20px;color:var(--text2);font-size:14px;line-height:1.7}
+.legal-section li{margin-bottom:6px}
+.legal-highlight{background:rgba(0,112,243,0.08);border-left:3px solid var(--primary);padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0}
+.legal-highlight p{color:#e6edf3;font-size:13.5px;margin:0}
+@media(max-width:768px){
+  .legal-container{padding:0 14px;margin:16px auto 40px}
+  .legal-card{padding:22px 18px}
+  .legal-title{font-size:24px}
+  .legal-section h3{font-size:15px}
+}
+
+/* Issue Chat & Support Desk */
+.issue-card{background:rgba(8,17,36,0.78);border:1px solid rgba(0,170,255,0.2);border-radius:20px;padding:24px;box-shadow:0 18px 50px rgba(0,0,0,0.5);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:flex;flex-direction:column;gap:18px}
+.issue-header-bar{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid rgba(255,255,255,0.07);flex-wrap:wrap;gap:10px}
+.issue-online-status{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--text2);font-weight:600}
+.issue-online-status .status-dot{width:7px;height:7px;border-radius:50%;background:#00f2fe;box-shadow:0 0 8px #00f2fe}
+.issue-chat-stream{height:360px;max-height:55vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:12px 6px 12px 0;scrollbar-width:thin}
+.issue-chat-stream::-webkit-scrollbar{width:6px}
+.issue-chat-stream::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.12);border-radius:4px}
+.issue-msg{display:flex;flex-direction:column;max-width:85%;animation:fadeUp .2s ease}
+.issue-msg.user{align-self:flex-end;align-items:flex-end}
+.issue-msg.admin{align-self:flex-start;align-items:flex-start}
+.issue-msg-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-bottom:4px;padding:0 4px}
+.issue-msg-cat{padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;background:rgba(0,112,243,0.2);color:var(--primary-light);border:1px solid rgba(0,112,243,0.3)}
+.issue-bubble{padding:12px 16px;border-radius:16px;font-size:13.5px;line-height:1.55;word-break:break-word}
+.issue-msg.user .issue-bubble{background:linear-gradient(135deg,rgba(0,112,243,0.32),rgba(0,170,255,0.2));border:1px solid rgba(0,170,255,0.35);color:#fff;border-bottom-right-radius:4px}
+.issue-msg.admin .issue-bubble{background:rgba(0,206,201,0.12);border:1px solid rgba(0,206,201,0.35);color:#e6fbf9;border-bottom-left-radius:4px}
+.dev-badge{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:10px;font-size:10.5px;font-weight:700;background:rgba(0,206,201,0.18);color:var(--secondary);border:1px solid rgba(0,206,201,0.35)}
+.issue-categories{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.issue-categories::-webkit-scrollbar{display:none}
+.issue-cat-btn{padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.03);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:inherit}
+.issue-cat-btn:hover{background:rgba(255,255,255,0.08);color:#fff}
+.issue-cat-btn.selected{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 10px rgba(0,112,243,0.35)}
+.issue-input-wrap{display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px;transition:border-color .2s}
+.issue-input-wrap:focus-within{border-color:var(--primary);box-shadow:0 0 16px rgba(0,112,243,0.2)}
+.issue-textarea{background:transparent;border:none;outline:none;color:#fff;font-family:inherit;font-size:13.5px;resize:vertical;min-height:64px;width:100%;line-height:1.5}
+.issue-textarea::placeholder{color:var(--muted)}
+.issue-input-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.issue-send-btn{padding:8px 20px;font-size:13px;border-radius:10px;display:inline-flex;align-items:center;gap:6px}
+
+/* Dev Response Panel */
+.issue-dev-panel{background:rgba(0,206,201,0.06);border:1px dashed rgba(0,206,201,0.4);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px;animation:fadeUp .25s ease}
+.issue-dev-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.issue-dev-title{font-size:12px;font-weight:700;color:var(--secondary);display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:0.5px}
+.issue-canned-list{display:flex;gap:6px;flex-wrap:wrap}
+.issue-canned-btn{padding:4px 10px;border-radius:8px;border:1px solid rgba(0,206,201,0.25);background:rgba(0,206,201,0.1);color:#c1f9f6;font-size:11.5px;cursor:pointer;font-family:inherit;transition:all .2s;text-align:left}
+.issue-canned-btn:hover{background:rgba(0,206,201,0.22);color:#fff}
+.issue-dev-actions{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+
+/* Mobile */
+@media(max-width:900px){
+  .container{padding:0 16px}
+  nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:12px 16px;height:auto;gap:12px;background:rgba(5,5,8,0.92);border-bottom:1px solid rgba(255,255,255,0.08)}
+  .nav-left{display:contents}
+  .logo{height:auto;padding:0;order:1}
+  .nav-right{position:static;height:auto;order:2;gap:8px}
+  .nav-links{width:100%;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;display:flex;flex-wrap:nowrap;gap:8px;padding-bottom:4px;border-top:1px solid rgba(255,255,255,0.05);padding-top:10px;order:3}
+  .nav-links::-webkit-scrollbar{display:none}
+  .nav-links button{font-size:13px;padding:6px 14px;height:auto;flex-shrink:0;background:rgba(255,255,255,0.04);border-radius:24px;border:1px solid rgba(255,255,255,0.05)}
+  .nav-links button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+  #desktopSearch{display:none}
+  .search-toggle{display:flex}
+  .nav-icon-btn{width:36px;height:36px}
+  
+  /* Mobile Spotlight Hero */
+  .spotlight{grid-template-columns:1fr;min-height:360px;display:flex;flex-direction:column;justify-content:flex-end;border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);background:#08080f;box-shadow:0 16px 40px rgba(0,0,0,0.6);margin:14px 0 24px;position:relative}
+  .spotlight-bg{position:absolute;inset:0;opacity:0.75;background-size:cover;background-position:center top;filter:saturate(1.15)}
+  .spotlight-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,8,0.1) 0%,rgba(5,5,8,0.7) 48%,#050508 100%)}
+  .spotlight-poster{display:none}
+  .spotlight-info{position:relative;z-index:2;padding:22px 18px 20px;text-align:left;display:flex;flex-direction:column;gap:8px}
+  .spotlight-badge{margin-bottom:2px}
+  .spotlight-info h1{font-size:24px;font-weight:800;line-height:1.2;letter-spacing:-0.4px;text-shadow:0 2px 12px rgba(0,0,0,0.9)}
+  .spotlight-meta{justify-content:flex-start;gap:6px;margin-bottom:6px}
+  .spotlight-meta span{font-size:11px;padding:3px 10px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px)}
+  .spotlight-desc{display:-webkit-box;-webkit-line-clamp:2;font-size:13px;line-height:1.5;color:rgba(255,255,255,0.75);margin-bottom:12px;text-shadow:0 1px 4px rgba(0,0,0,0.8)}
+  .spotlight-actions{display:flex;gap:10px;width:100%}
+  .spotlight-actions .btn-play{flex:1.4;justify-content:center;padding:11px 18px;font-size:13px}
+  .spotlight-actions .btn-secondary{flex:1;justify-content:center;padding:11px 14px;font-size:13px}
+
+  .section-header{margin:28px 0 14px}
+  .section-header h2{font-size:17px}
+  .bento{grid-template-columns:1fr 1fr;gap:10px}
+  .bento-wide{min-height:160px;grid-column:span 2}
+  .bento-card{min-height:130px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px}
+  .card .info{padding:12px 10px}
+  .card .info h3{font-size:13px}
+
+  .detail-overlay{flex-direction:column;align-items:center;padding:28px 20px}
+  .detail-poster{width:150px}
+  .detail-info h1{font-size:22px;text-align:center}
+  .detail-meta,.genre-tags{justify-content:center}
+  .detail-actions{justify-content:center}
+  .overview{text-align:center;margin:0 auto}
+  .episodes-grid{grid-template-columns:1fr}
+  .episode-card{flex-direction:column}
+  .episode-thumb{width:100%;height:120px}
+
+  .player-header{height:auto;flex-wrap:wrap;padding:10px 14px;gap:8px}
+  .player-header-left{display:flex;align-items:center;gap:8px;flex:1;min-width:0;order:1}
+  .player-header h3{max-width:160px;margin:0;font-size:14px}
+  .player-status-badge{font-size:10px;padding:2px 8px}
+  .player-close{margin-left:auto;order:2;width:34px;height:34px}
+  .source-tabs{width:100%;flex:0 0 100%;padding-bottom:2px;order:3}
+  .player-body{padding:0}
+}
+@media(max-width:480px){
+  .container{padding:0 12px}
+  nav{padding:10px 12px 6px}
+  .nav-links button{font-size:12px;padding:0 10px;height:30px}
+  .logo{height:36px;font-size:20px;}
+  .logo-icon{width:26px;height:26px;}
+  .nav-right{height:36px}
+  .nav-icon-btn{width:32px;height:32px}
+  .spotlight{min-height:330px}
+  .spotlight-info h1{font-size:21px}
+  .bento{grid-template-columns:1fr 1fr;gap:6px}
+  .bento-wide{min-height:140px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}
+  .detail-hero{min-height:340px}
+  .detail-poster{width:130px}
+  .detail-info h1{font-size:20px}
+}
+
+/* Peeka 2.0 Kawaii Chibi Mascot */
+.peeka-widget{position:fixed;bottom:24px;right:24px;z-index:9990;pointer-events:none;transition:opacity 0.3s ease;user-select:none;-webkit-user-select:none}
+.peeka-widget.player-ducked{opacity:0.22;transform:scale(0.85);pointer-events:none}
+.peeka-widget.player-ducked:hover{opacity:0.8;pointer-events:auto}
+.peeka-body-wrap{width:115px;height:125px;position:relative;cursor:grab;pointer-events:auto;touch-action:none;transition:transform 0.15s cubic-bezier(0.175,0.885,0.32,1.275);filter:drop-shadow(0 14px 28px rgba(0,112,243,0.3))}
+.peeka-body-wrap:hover .peeka-controls{opacity:1;pointer-events:auto}
+.peeka-controls{position:absolute;top:2px;right:10px;opacity:0;transition:opacity 0.2s ease;pointer-events:none;z-index:10}
+.peeka-ctrl-btn{width:22px;height:22px;border-radius:50%;background:rgba(8,17,36,0.88);border:1px solid rgba(0,170,255,0.35);color:var(--text2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s ease;padding:0}
+.peeka-ctrl-btn:hover{background:var(--primary);color:#fff;border-color:var(--secondary);transform:scale(1.1)}
+.peeka-svg{width:100%;height:100%;display:block;overflow:visible}
+.peeka-bubble{position:absolute;bottom:calc(100% + 14px);right:0;width:max-content;max-width:270px;background:rgba(8,17,36,0.94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(0,170,255,0.4);border-radius:16px;padding:10px 32px 10px 14px;color:#fff;font-size:12.5px;font-weight:500;line-height:1.45;box-shadow:0 12px 32px rgba(0,0,0,0.6),0 0 24px rgba(0,112,243,0.3);pointer-events:auto;animation:fadeUp 0.25s cubic-bezier(0.16,1,0.3,1);z-index:12}
+.peeka-bubble-close{position:absolute;top:6px;right:8px;background:none;border:none;color:var(--text2);font-size:16px;cursor:pointer;line-height:1;padding:2px 4px;border-radius:4px;transition:color 0.2s}
+.peeka-bubble-close:hover{color:#fff}
+.peeka-bubble-tail{position:absolute;bottom:-6px;right:45px;width:10px;height:10px;background:rgba(8,17,36,0.94);border-right:1px solid rgba(0,170,255,0.4);border-bottom:1px solid rgba(0,170,255,0.4);transform:rotate(45deg)}
+.peeka-min-badge{position:relative;background:rgba(8,17,36,0.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(0,170,255,0.45);box-shadow:0 6px 20px rgba(0,0,0,0.5),0 0 18px rgba(0,112,243,0.35);border-radius:30px;padding:7px 15px;display:flex;align-items:center;gap:7px;color:#fff;font-size:12px;font-weight:600;cursor:pointer;pointer-events:auto;transition:all 0.2s ease}
+.peeka-min-badge:hover{background:rgba(0,112,243,0.28);border-color:var(--secondary);transform:scale(1.05)}
+.peeka-min-eyes{color:var(--secondary);font-size:11px;letter-spacing:1px;animation:glowPulse 2s infinite}
+.peeka-bounce{animation:peekaBounce 0.4s ease}
+@keyframes peekaBounce{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
+@media(max-width:480px){
+  .peeka-widget{bottom:16px;right:16px}
+  .peeka-body-wrap{width:92px;height:102px}
+  .peeka-bubble{max-width:210px;font-size:11.5px;padding:8px 28px 8px 12px}
+}
+
+/* Watch History & Continue Watching */
+.history-section{margin:28px 0 36px;animation:fadeUp .4s ease;position:relative}
+.history-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.history-title-wrap{display:flex;align-items:center;gap:12px}
+.history-title-wrap h2{font-size:22px;font-weight:700;color:#fff;letter-spacing:-0.4px;margin:0}
+.history-icon-badge{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(0,112,243,0.3),rgba(0,229,255,0.2));border:1px solid rgba(0,170,255,0.3);color:var(--secondary);display:flex;align-items:center;justify-content:center}
+.history-badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:12px;background:rgba(0,112,243,0.15);color:var(--primary-light);border:1px solid rgba(0,112,243,0.3)}
+.btn-clear-history{background:rgba(255,59,48,0.1);border:1px solid rgba(255,59,48,0.25);color:#ff6b6b;font-size:12.5px;font-weight:600;padding:7px 16px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;transition:all .2s;font-family:inherit}
+.btn-clear-history:hover{background:rgba(255,59,48,0.2);color:#fff;border-color:rgba(255,59,48,0.45);transform:translateY(-1px)}
+.history-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px}
+.history-card{position:relative;background:rgba(8,17,36,0.65);border:1px solid rgba(0,140,255,0.16);border-radius:16px;overflow:hidden;cursor:pointer;transition:all .35s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column}
+.history-card:hover{transform:translateY(-6px);border-color:rgba(0,210,255,0.4);box-shadow:0 16px 36px rgba(0,0,0,0.5),0 0 24px rgba(0,112,243,0.2)}
+.history-thumb-wrap{aspect-ratio:16/9;position:relative;overflow:hidden;background:#05050a}
+.history-thumb{width:100%;height:100%;background-size:cover;background-position:center;transition:transform .4s}
+.history-card:hover .history-thumb{transform:scale(1.05)}
+.history-thumb-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.2) 0%,rgba(5,5,8,0.85) 100%)}
+.history-delete-btn{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,0.65);border:1px solid rgba(255,255,255,0.18);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0.8;transition:all .2s;z-index:4}
+.history-delete-btn:hover{background:rgba(255,59,48,0.85);border-color:#ff3b30;opacity:1;transform:scale(1.1)}
+.history-time-badge{position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);border:1px solid rgba(0,240,255,0.25);color:var(--accent);font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;z-index:2;display:flex;align-items:center;gap:5px}
+.history-progress-track{position:absolute;bottom:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.15);z-index:3}
+.history-progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));box-shadow:0 0 8px rgba(0,229,255,0.6)}
+.history-play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.8);width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--secondary));color:#fff;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);box-shadow:0 4px 16px rgba(0,112,243,0.4);z-index:3}
+.history-card:hover .history-play-icon{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.history-info{padding:12px 14px;display:flex;flex-direction:column;gap:3px;flex:1}
+.history-title{font-size:14px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3}
+.history-sub{font-size:12px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.history-tag{font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 7px;border-radius:4px;background:rgba(0,112,243,0.2);color:var(--primary-light);border:1px solid rgba(0,112,243,0.3)}
+.history-no-preview{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted);font-size:11.5px;font-weight:600}
+.resume-pill{display:inline-flex;align-items:center;gap:8px;padding:3px 10px;border-radius:8px;background:rgba(0,112,243,0.18);border:1px solid rgba(0,112,243,0.35);font-size:12px;color:#fff}
+.resume-pill button{background:none;border:none;color:var(--secondary);font-size:11.5px;font-weight:700;cursor:pointer;text-decoration:underline;padding:0;margin-left:4px}
+
+@media(max-width:768px){
+  .history-grid{display:flex;overflow-x:auto;gap:14px;padding:4px 4px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .history-grid::-webkit-scrollbar{display:none}
+  .history-card{flex:0 0 240px;max-width:240px;scroll-snap-align:start}
+  .history-header{margin-bottom:14px}
+  .history-title-wrap h2{font-size:19px}
+}
+
+</style>
+</head>
+<body>
+<nav>
+    <div class="nav-left">
+      <div class="logo" onclick="goHome()" style="display:flex;align-items:center;gap:10px;">
+        <svg width="24" height="24" viewBox="0 0 100 100"><defs><linearGradient id="gfn" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0070f3"/><stop offset="100%" stop-color="#00f2fe"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="#02040a"/><path d="M35 28v44l34-22z" fill="url(#gfn)"/></svg>
+        <span>MediaHub</span>
+      </div>
+      <div class="nav-links">
+        <button class="active" data-filter="all" onclick="navFilter('all',this)">Home</button>
+        <button data-filter="movie" onclick="navFilter('movie',this)">Movies</button>
+        <button data-filter="tv" onclick="navFilter('tv',this)">TV</button>
+        <button data-filter="anime" onclick="navFilter('anime',this)">Anime</button>
+        <button data-filter="live" onclick="navFilter('live',this)">Live TV</button>
+      </div>
+    </div>
+  <div class="nav-right">
+    <button class="search-toggle nav-icon-btn" onclick="toggleMobileSearch()" title="Search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <div class="search-wrap" id="desktopSearch">
+      <input type="search" id="searchInput" placeholder="Search movies, shows, anime..." enterkeyhint="search" autocomplete="off">
+      <div class="custom-select-wrapper" id="typeDesktopWrapper">
+        <div class="custom-select-trigger"><span class="c-val">All</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+        <div class="custom-select-options">
+          <div class="custom-option selected" data-value="multi">All</div>
+          <div class="custom-option" data-value="movie">Movies</div>
+          <div class="custom-option" data-value="tv">TV</div>
+          <div class="custom-option" data-value="anime">Anime</div>
+          <div class="custom-option" data-value="live">Live TV</div>
+        </div>
+        <input type="hidden" id="searchType" value="multi">
+      </div>
+      <button onclick="triggerSearch()">Search</button>
+      <div class="ac-dropdown" id="desktopAcDropdown"></div>
+    </div>
+    <button class="nav-icon-btn" onclick="openShare()" title="Share" aria-label="Share">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    </button>
+    <button class="nav-icon-btn" id="installBtn" onclick="installApp()" title="Install App" aria-label="Install">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </button>
+  </div>
+</nav>
+<div class="search-mobile" id="mobileSearch">
+  <div class="search-wrap">
+    <input type="search" id="searchInputMobile" placeholder="Search movies, shows, anime..." enterkeyhint="search" autocomplete="off">
+      <div class="custom-select-wrapper" id="typeMobileWrapper">
+        <div class="custom-select-trigger"><span class="c-val">All</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></div>
+        <div class="custom-select-options">
+          <div class="custom-option selected" data-value="multi">All</div>
+          <div class="custom-option" data-value="movie">Movies</div>
+          <div class="custom-option" data-value="tv">TV</div>
+          <div class="custom-option" data-value="anime">Anime</div>
+          <div class="custom-option" data-value="live">Live TV</div>
+        </div>
+        <input type="hidden" id="searchTypeMobile" value="multi">
+      </div>
+    <button onclick="triggerMobileSearch()">Search</button>
+    <div class="ac-dropdown" id="mobileAcDropdown"></div>
+  </div>
+</div>
+
+<button class="update-banner" id="updateBanner">
+  <span onclick="openChangelog()">What's New? This app was updated</span>
+  <span class="footer-dot" style="color:rgba(255,255,255,0.3);font-size:16px;margin:0 6px">|</span>
+  <span onclick="event.stopPropagation();refreshApp()" style="text-decoration:underline;cursor:pointer;font-weight:600">Refresh</span>
+  <span class="close-update" onclick="event.stopPropagation();dismissUpdate()">&#10005;</span>
+</button>
+
+<div class="container">
+  <div id="homePage">
+        <div id="spotlightArea"></div>
+    <div id="historySection" class="history-section" style="display:none">
+      <div class="history-header">
+        <div class="history-title-wrap">
+          <div class="history-icon-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+          <h2>Continue Watching</h2>
+          <span id="historyCountBadge" class="history-badge">0</span>
+        </div>
+        <button class="btn-clear-history" onclick="clearWatchHistory()" title="Clear all watch history">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          Clear All
+        </button>
+      </div>
+      <div id="historyCardsGrid" class="history-grid"></div>
+    </div>
+    <div class="section-header"><h2>Trending Now</h2></div>
+    <div id="bentoArea"></div>
+    <div class="section-header"><h2>More to Watch</h2></div>
+    <div id="trendingArea"></div>
+    <div class="section-header"><h2>Latest Releases</h2></div>
+    <div id="latestArea"></div>
+    <div class="section-header"><h2>GitHub</h2></div>
+    <div id="ghRepoArea" class="gh-repo-card">
+      <div class="gh-loading">Loading...</div>
+    </div>
+  </div>
+
+  <div id="detailPage" class="detail-page"></div>
+
+  <div id="searchPage" class="detail-page">
+    <button class="back-btn" onclick="goHome()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
+    <div class="section-header"><h2 id="searchTitle">Search Results</h2></div>
+    <div class="results-info" id="searchInfo"></div>
+    <div id="searchGrid"></div>
+  </div>
+
+  <div id="moviePage" class="detail-page">
+    <button class="back-btn" onclick="goHome()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
+    <div class="section-header"><h2>Trending Movies</h2></div>
+    <div id="movieTrendingArea"></div>
+    <div class="section-header"><h2>Popular Movies</h2></div>
+    <div id="moviePopularArea"></div>
+  </div>
+
+  <div id="tvPage" class="detail-page">
+    <button class="back-btn" onclick="goHome()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
+    <div class="section-header"><h2>Trending TV</h2></div>
+    <div id="tvTrendingArea"></div>
+    <div class="section-header"><h2>Popular TV</h2></div>
+    <div id="tvPopularArea"></div>
+  </div>
+
+  <div id="animePage" class="detail-page">
+    <button class="back-btn" onclick="goHome()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
+    <div class="section-header"><h2>Trending Anime</h2></div>
+    <div id="animeTrendingArea"></div>
+    <div class="section-header"><h2>Most Popular</h2></div>
+    <div id="animePopularArea"></div>
+  </div>
+
+  <div id="livePage" class="detail-page">
+    <button class="back-btn" onclick="goHome()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button>
+    <div class="section-header"><h2>Live TV</h2></div>
+    <div class="live-notice-banner">
+      <div class="live-notice-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <div class="live-notice-content">
+        <strong>Public Broadcast Stream Notice</strong>
+        <p>All TV servers and channel streams are provided via open public broadcasts. Due to high public load and third-party host availability, some channels may experience temporary downtime or buffering. Alternate server feeds are listed where available.</p>
+      </div>
+    </div>
+    <div class="live-cats" id="liveCats"></div>
+    <div class="live-filter-bar">
+      <div class="live-search-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="liveSearchInput" placeholder="Filter channels by name..." oninput="filterLiveCategory(this.value)">
+        <button id="liveSearchClear" onclick="clearLiveFilter()" style="display:none" aria-label="Clear filter">&times;</button>
+      </div>
+      <div class="live-channel-count" id="liveChannelCount"></div>
+    </div>
+    <div id="liveArea"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-col footer-brand">
+      <a href="#/" class="footer-logo" style="text-decoration:none">
+        <svg viewBox="0 0 100 100"><defs><linearGradient id="gf" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0070f3"/><stop offset="100%" stop-color="#00f2fe"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="#02040a"/><path d="M35 28v44l34-22z" fill="url(#gf)"/></svg>
+        MediaHub
+      </a>
+      <p class="footer-desc">Your ultimate destination for premium streaming. Watch unlimited movies, TV shows, anime, and live TV completely free, anywhere, anytime.</p>
+      <a href="https://github.com/coderaarav12/media-hub-frontend" target="_blank" rel="noopener" class="github-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+        Star on GitHub
+      </a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-title">Navigation</div>
+      <a href="#/movies">Movies</a>
+      <a href="#/tv">TV Shows</a>
+      <a href="#/anime">Anime</a>
+      <a href="#/live">Live TV</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-title">Legal</div>
+      <a href="#/terms">Terms of Service</a>
+      <a href="#/privacy">Privacy Policy</a>
+      <a href="#/report">Report Issue</a>
+    </div>
+    <div class="footer-col">
+      <div class="footer-title">Stats</div>
+      <a href="#" style="pointer-events:none"><span id="footerStars">&#9733; --</span> GitHub Stars</a>
+      <a href="#" style="pointer-events:none"><span id="footerUpdated">Updated --</span></a>
+      <a href="#" onclick="event.preventDefault();openChangelog()">View Changelog</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>&copy; 2026 MediaHub. All rights reserved. Not affiliated with TMDB or AniList.</div>
+    <div>All media content is provided by non-affiliated third-party streaming services.</div>
+  </div>
+</footer>
+
+<div class="share-overlay" id="shareOverlay" onclick="if(event.target===this)closeShare()">
+  <div class="share-modal">
+    <div class="share-header">
+      <h3><span class="sh-1">Share</span> <span class="sh-2">MediaHub</span></h3>
+      <button onclick="closeShare()">&times;</button>
+    </div>
+    <div class="share-body">
+      <div class="qr-wrap" id="qrContainer">
+        <div class="qr-logo" id="qrLogo"><svg viewBox="0 0 100 100"><defs><linearGradient id="gf2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0070f3"/><stop offset="100%" stop-color="#00f2fe"/></linearGradient></defs><rect width="100" height="100" rx="24" fill="#02040a"/><path d="M35 28v44l34-22z" fill="url(#gf2)"/></svg></div>
+      </div>
+      <p class="share-url" id="shareUrl">https://greatmedia.goelaarav.dpdns.org/</p>
+      <div class="share-actions">
+        <button class="btn-copy" onclick="copyShareLink()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          Copy Link
+        </button>
+        <button class="btn-share" onclick="navigator.share?navigator.share({url:'https://greatmedia.goelaarav.dpdns.org/'}).catch(()=>{}):copyShareLink()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Share
+        </button>
+      </div>
+      <p class="share-hint" id="shareHint">Scan to open MediaHub on your device</p>
+    </div>
+  </div>
+</div>
+
+<div class="install-overlay" id="installOverlay" onclick="if(event.target===this)closeInstallGuide()">
+  <div class="install-modal">
+    <div class="install-header">
+      <h3>Install MediaHub</h3>
+      <button onclick="closeInstallGuide()">&times;</button>
+    </div>
+    <div class="install-body">
+      <div class="install-step">
+        <div class="install-step-num">1</div>
+        <div class="install-step-text">Open in <strong>Chrome</strong>, <strong>Edge</strong>, or <strong>Safari</strong></div>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">2</div>
+        <div class="install-step-text">
+          <span id="installDesktop" style="display:none">Click the <strong>install icon</strong> in the address bar</span>
+          <span id="installMobile">
+            <strong>Android:</strong> Tap the browser menu &gt; <strong>Add to Home screen</strong><br>
+            <strong>iPhone/iPad:</strong> Tap Share &gt; <strong>Add to Home Screen</strong>
+          </span>
+        </div>
+      </div>
+      <div class="install-divider"></div>
+      <p class="install-note">MediaHub works offline after installation. You get an app icon on your home screen just like a native app.</p>
+    </div>
+  </div>
+</div>
+
+<div class="player-overlay" id="playerOverlay">
+  <div class="player-header">
+    <div class="player-header-left">
+      <h3 id="playerTitle">Now Playing</h3>
+      <div id="playerStatusBadge" class="player-status-badge" style="display:none"></div>
+      <div id="playerResumeBadge" class="resume-pill" style="display:none"></div>
+    </div>
+    <div class="source-tabs" id="sourceTabs"></div>
+    <button class="player-close" onclick="closePlayer()" aria-label="Close Player" title="Close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  </div>
+  <div class="player-body">
+    <iframe id="playerFrame" allowfullscreen allow="autoplay;fullscreen"></iframe>
+    <video id="livePlayer" controls autoplay muted style="display:none"></video>
+  </div>
+</div>
+
+<div class="changelog-overlay" id="changelogOverlay" onclick="if(event.target===this)closeChangelog()">
+  <div class="changelog-modal">
+    <div class="changelog-header">
+      <h3>Recent Updates</h3>
+      <button onclick="closeChangelog()">&times;</button>
+    </div>
+    <div class="changelog-body" id="changelogBody">
+      <div class="changelog-loading"><div class="spinner"></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const IMG = 'https://image.tmdb.org/t/p'
+let currentItem = null, currentSeason = 1, currentSources = [], currentSourceIdx = 0, trendData = []
+
+const $ = id => document.getElementById(id)
+
+$('searchInput').addEventListener('keydown', e => { if(e.key === 'Enter') { $('desktopAcDropdown')?.classList.remove('active'); triggerSearch() } })
+$('searchInput').addEventListener('search', () => { if($('searchInput').value) { $('desktopAcDropdown')?.classList.remove('active'); triggerSearch() } })
+$('searchInputMobile').addEventListener('keydown', e => { if(e.key === 'Enter') { $('mobileAcDropdown')?.classList.remove('active'); triggerMobileSearch() } })
+
+let acTimeout;
+async function fetchAutocomplete(q, type, dropdownId) {
+  const dd = $(dropdownId);
+  if (!q.trim()) { dd.classList.remove('active'); return; }
+  dd.innerHTML = '<div class="ac-item" style="justify-content:center;color:var(--muted);background:none">Searching...</div>';
+  dd.classList.add('active');
+  try {
+    let itemsHtml = '';
+    const addLive = (list) => {
+      list.forEach(item => {
+        itemsHtml += `<div class="ac-item" onclick="playLiveStream(${currentLiveChannels.indexOf(item)}); $('${dropdownId}').classList.remove('active')"><div class="ac-poster" style="background-image:url('${item.logo || 'https://placehold.co/42x62/1a1a2e/666/?text=TV'}')"></div><div class="ac-info"><div class="ac-title">${escapeHtml(item.name)}</div><div class="ac-meta"><span>LIVE</span></div></div></div>`;
+      });
+    };
+    const addTMDB = (list, forcedType) => {
+      list.forEach(item => {
+        let m = item.media_type || forcedType || type;
+        if (!['movie', 'tv', 'anime'].includes(m)) m = 'movie';
+        const t = item.title || item.name || 'Untitled', date = item.release_date || item.first_air_date || '', y = date ? date.split('-')[0] : '';
+        const p = item.poster_path ? IMG + '/w154' + item.poster_path : 'https://placehold.co/42x62/1a1a2e/666/?text=No+Img';
+        itemsHtml += `<a class="ac-item" href="#/${m}/${item.id}" onclick="$('${dropdownId}').classList.remove('active')"><div class="ac-poster" style="background-image:url('${p}')"></div><div class="ac-info"><div class="ac-title">${escapeHtml(t)}</div><div class="ac-meta"><span>${m.toUpperCase()}</span>${y ? `<span>${y}</span>` : ''}</div></div></a>`;
+      });
+    };
+    const addAnime = (list) => {
+      list.forEach(item => {
+        const t = item.title?.romaji || item.title?.english || 'Untitled', y = item.startDate?.year || '';
+        const p = item.coverImage?.large || 'https://placehold.co/42x62/1a1a2e/666/?text=No+Img';
+        itemsHtml += `<a class="ac-item" href="#/anime/${item.id}" onclick="$('${dropdownId}').classList.remove('active')"><div class="ac-poster" style="background-image:url('${p}')"></div><div class="ac-info"><div class="ac-title">${escapeHtml(t)}</div><div class="ac-meta"><span>ANIME</span>${y ? `<span>${y}</span>` : ''}</div></div></a>`;
+      });
+    };
+
+    if (type === 'live') {
+      const all = currentLiveChannels.length ? currentLiveChannels : [];
+      addLive(all.filter(c => c.name.toLowerCase().includes(q.toLowerCase())).slice(0, 10));
+    } else if (type === 'anime') {
+      const d = await fetchAPI(`/anime/search?q=${encodeURIComponent(q)}`);
+      if (d && d.media) addAnime(d.media.slice(0, 8));
+    } else if (type === 'movie' || type === 'tv') {
+      const d = await fetchAPI(`/search?q=${encodeURIComponent(q)}&type=${type}`);
+      if (d && d.results) addTMDB(d.results.slice(0, 8), type);
+    } else {
+      // multi
+      const liveAll = currentLiveChannels.length ? currentLiveChannels : [];
+      const liveMatches = liveAll.filter(c => c.name.toLowerCase().includes(q.toLowerCase())).slice(0, 2);
+      
+      const [tmdbRes, animeRes] = await Promise.all([
+        fetchAPI(`/search?q=${encodeURIComponent(q)}&type=multi`).catch(()=>null),
+        fetchAPI(`/anime/search?q=${encodeURIComponent(q)}`).catch(()=>null)
+      ]);
+      const tmdbItems = (tmdbRes?.results || []).filter(x => x.media_type !== 'person').slice(0, 4);
+      const animeItems = (animeRes?.media || []).slice(0, 2);
+      
+      if(tmdbItems.length) { itemsHtml += `<div style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.05);margin-bottom:4px">Movies & TV</div>`; addTMDB(tmdbItems); }
+      if(animeItems.length) { itemsHtml += `<div style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.05);margin:4px 0">Anime</div>`; addAnime(animeItems); }
+      if(liveMatches.length) { itemsHtml += `<div style="padding:8px 12px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid rgba(255,255,255,0.05);margin:4px 0">Live TV</div>`; addLive(liveMatches); }
+    }
+
+    if (!itemsHtml) {
+      dd.innerHTML = '<div class="ac-item" style="justify-content:center;color:var(--muted);background:none">No results</div>';
+    } else {
+      dd.innerHTML = itemsHtml;
+    }
+  } catch (e) {
+    dd.innerHTML = '<div class="ac-item" style="justify-content:center;color:var(--muted);background:none">Error fetching results</div>';
+  }
+}
+$('searchInput').addEventListener('input', e => {
+  clearTimeout(acTimeout);
+  acTimeout = setTimeout(() => fetchAutocomplete(e.target.value, $('searchType').value, 'desktopAcDropdown'), 350);
+});
+$('searchInputMobile').addEventListener('input', e => {
+  clearTimeout(acTimeout);
+  acTimeout = setTimeout(() => fetchAutocomplete(e.target.value, $('searchTypeMobile').value, 'mobileAcDropdown'), 350);
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) {
+    $('desktopAcDropdown')?.classList.remove('active');
+    $('mobileAcDropdown')?.classList.remove('active');
+  }
+});
+
+
+// PWA Install
+let installPrompt = null
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); installPrompt = e })
+function installApp() {
+  if(installPrompt) { installPrompt.prompt(); installPrompt.userChoice.then(() => { installPrompt = null }) }
+  else { $('installOverlay').classList.add('active') }
+}
+window.addEventListener('appinstalled', () => { installPrompt = null })
+function closeInstallGuide() { $('installOverlay').classList.remove('active') }
+;(function() { if(!('ontouchstart' in window) && navigator.maxTouchPoints < 1) { var d = $('installDesktop'); if(d) d.style.display = 'inline'; var m = $('installMobile'); if(m) m.style.display = 'none' } })()
+
+// Register service worker
+if('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(() => {}) }) }
+
+function toggleMobileSearch() { const m = $('mobileSearch'); m.classList.toggle('active'); if(m.classList.contains('active')) $('searchInputMobile').focus() }
+
+function triggerMobileSearch() {
+  const q = $('searchInputMobile').value.trim(), type = $('searchTypeMobile').value
+  if(!q || !type) return
+  $('searchInput').value = q; $('searchType').value = type
+  $('mobileSearch').classList.remove('active')
+  navigate('#/search?q=' + encodeURIComponent(q) + '&type=' + type)
+}
+
+function navigate(hash) {
+  if(hash[0] !== '#') hash = '#' + hash
+  if(location.hash !== hash) location.hash = hash; else handleRoute()
+}
+window.addEventListener('hashchange', handleRoute)
+
+function handleRoute() {
+  window.scrollTo(0, 0)
+  const hash = location.hash.slice(1) || '/', [path, qs] = hash.split('?'), parts = path.split('/').filter(Boolean)
+  if(!parts[0]) renderHome()
+  else if(parts[0] === 'movies' && !parts[1]) renderMoviesHome()
+  else if(parts[0] === 'tv' && !parts[1]) renderTvHome()
+  else if(parts[0] === 'anime' && !parts[1]) renderAnimeHome()
+  else if(parts[0] === 'live') renderLiveTv()
+  else if(parts[0] === 'search') { const p = new URLSearchParams(qs||''); renderSearch(p.get('q')||'', p.get('type')||'multi') }
+  else if(['movie','tv','anime'].includes(parts[0])) renderDetail(parts[0], parts[1], parts[2]||null)
+  else if(parts[0] === 'person') renderPerson(parts[1])
+  else if(parts[0] === 'terms') renderTerms()
+  else if(parts[0] === 'privacy') renderPrivacy()
+  else if(parts[0] === 'report' || parts[0] === 'issue') renderReportIssue()
+  else renderHome()
+}
+
+function goHome() {
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'))
+  document.querySelector('.nav-links button[data-filter="all"]')?.classList.add('active')
+  trendType = 'all'
+  navigate('#/')
+}
+
+function navFilter(filter, btn) {
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'))
+  btn.classList.add('active')
+  if(filter === 'all') { navigate('#/') }
+  else if(filter === 'movie') { navigate('#/movies') }
+  else if(filter === 'tv') { navigate('#/tv') }
+  else if(filter === 'anime') { navigate('#/anime') }
+  else if(filter === 'live') { navigate('#/live') }
+}
+
+function triggerSearch() {
+  const q = $('searchInput').value.trim(), type = $('searchType').value
+  if(!q || !type) return; navigate('#/search?q=' + encodeURIComponent(q) + '&type=' + type)
+}
+
+function showHome() { $('homePage').style.display = 'block'; renderWatchHistory(); $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none'; document.title = 'MediaHub' }
+function showDetail() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'block'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none' }
+function showSearch() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'block'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none' }
+function showMovies() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'block'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none' }
+function showTv() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'block'; $('animePage').style.display = 'none'; $('livePage').style.display = 'none' }
+function showAnime() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'block'; $('livePage').style.display = 'none' }
+function showLive() { $('homePage').style.display = 'none'; $('detailPage').style.display = 'none'; $('searchPage').style.display = 'none'; $('moviePage').style.display = 'none'; $('tvPage').style.display = 'none'; $('animePage').style.display = 'none'; $('livePage').style.display = 'block' }
+
+async function fetchAPI(path) {
+  try {
+    let base = (typeof API_BASE !== 'undefined' ? API_BASE : '').trim().replace(/\/+$/, '')
+    if (base && !base.endsWith('/api')) base += '/api'
+    const cleanPath = path.startsWith('/') ? path : '/' + path
+    const r = await fetch((base ? base : '/api') + cleanPath)
+    const d = await r.json()
+    return (d && d.success === false) ? null : d
+  } catch(e) {
+    return null
+  }
+}
+
+// --- Home ---
+let trendType = 'all'
+async function renderHome() {
+  showHome(); document.title = 'MediaHub'
+  renderWatchHistory()
+  const area = $('trendingArea'), spot = $('spotlightArea'), bento = $('bentoArea')
+  area.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  trendData = (await fetchAPI('/trending?media=' + trendType))?.results?.slice(0, 20) || []
+  if(!trendData.length) { area.innerHTML = ''; spot.innerHTML = ''; bento.innerHTML = ''; return }
+
+  // Spotlight: first item
+  const first = trendData[0]
+  const bg = first.backdrop_path ? IMG + '/w1280' + first.backdrop_path : ''
+  const poster = first.poster_path ? IMG + '/w342' + first.poster_path : ''
+  const title = first.title || first.name || '', year = (first.release_date||first.first_air_date||'').split('-')[0]
+  const rating = first.vote_average ? first.vote_average.toFixed(1) : '';
+  let media = first.media_type || trendType;
+  if (!['movie', 'tv', 'anime'].includes(media)) media = 'movie';
+  const desc = first.overview || ''
+  spot.innerHTML = `<div class="spotlight" onclick="navigate('#/${media}/${first.id}')">
+    <div class="spotlight-bg" style="background-image:url('${bg||'https://placehold.co/1400x600/0a0a14/fff'}')"></div>
+    <div class="spotlight-poster">
+      <div class="poster-img" style="background-image:url('${poster||'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'}')"></div>
+    </div>
+    <div class="spotlight-info">
+      <div class="spotlight-badge">Featured</div>
+      <h1>${escapeHtml(title)}</h1>
+      <div class="spotlight-meta">
+        ${year ? '<span>'+year+'</span>' : ''}
+        ${rating ? '<span class="rating">\u2605 '+rating+'</span>' : ''}
+        <span>${media === 'movie' ? 'Movie' : 'TV'}</span>
+      </div>
+      <p class="spotlight-desc">${escapeHtml(desc)}</p>
+      <div class="spotlight-actions">
+        <button class="btn-play" onclick="event.stopPropagation();currentItem={type:'${media}',id:${first.id},title:'${escapeHtml(title).replace(/'/g, "\\'")}',poster:'${poster}',backdrop:'${bg}'};playItem('${media}',${first.id})">\u25B6 Play Now</button>
+        <button class="btn-secondary" onclick="event.stopPropagation();navigate('#/${media}/${first.id}')">Details</button>
+      </div>
+    </div>
+  </div>`
+
+  // Bento grid: items 1-6 (first 2 wide, next 4 normal)
+  const bentoItems = trendData.slice(1, 7)
+  bento.innerHTML = '<div class="bento">' + bentoItems.map((item, i) => {
+    const t = item.title || item.name || '', b = item.backdrop_path ? IMG + '/w780' + item.backdrop_path : ''
+    const r2 = item.vote_average ? item.vote_average.toFixed(1) : '';
+    let m = item.media_type || trendType;
+    if (!['movie', 'tv', 'anime'].includes(m)) m = 'movie';
+    const wide = i < 2
+    const img = item.backdrop_path ? b : (item.poster_path ? IMG + '/w342' + item.poster_path : '')
+    const cls = 'bento-card' + (wide ? ' bento-wide' : '')
+    return `<div class="${cls}" onclick="navigate('#/${m}/${item.id}')" style="animation:fadeUp .4s ease ${i*0.06}s both">
+      <div class="bg" style="background-image:url('${img||'https://placehold.co/800x400/0a0a14/fff'}')"></div>
+      <div class="grad"></div>
+      ${r2 ? '<span class="rating-badge">'+r2+'</span>' : ''}
+      <div class="play-btn">\u25B6</div>
+      <div class="content">
+        <h3>${escapeHtml(t)}</h3>
+        <p>${m === 'movie' ? 'Movie' : 'TV'}${item.release_date||item.first_air_date ? ' \u2022 '+(item.release_date||item.first_air_date).split('-')[0] : ''}</p>
+      </div>
+    </div>`
+  }).join('') + '</div>'
+
+  // Grid: rest
+  const rest = trendData.slice(7)
+  area.innerHTML = rest.length ? `<div class="grid">${rest.map((item, i) => {
+    const t = item.title || item.name || '', p = item.poster_path ? IMG + '/w342' + item.poster_path : ''
+    const r2 = item.vote_average ? item.vote_average.toFixed(1) : '', date = item.release_date||item.first_air_date||'', y = date ? date.split('-')[0] : '';
+    let m = item.media_type || trendType;
+    if (!['movie', 'tv', 'anime'].includes(m)) m = 'movie';
+    return `<div class="card" style="--i:${i}" onclick="navigate('#/${m}/${item.id}')">
+      <div class="poster" style="background-image:url('${p||'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'}')">
+        ${r2 ? '<span class="rating">\u2605 '+r2+'</span>' : ''}
+        <div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">${m === 'movie' ? 'Movie' : 'TV'}</span></div>
+      </div>
+      <div class="info"><h3>${escapeHtml(t)}</h3><p>${y?y+' ':' '}${m === 'movie' ? '\u2022 Movie' : '\u2022 TV'}</p></div>
+    </div>`
+  }).join('')}</div>` : ''
+
+  // Latest Releases
+  const latest = $('latestArea')
+  latest.innerHTML = '<div class="loading"><div class="spinner" style="width:28px;height:28px"></div></div>'
+  const movieTrend = await fetchAPI('/trending?media=movie')
+  const movies = (movieTrend?.results || []).slice(0, 12)
+  if(movies.length) {
+    latest.innerHTML = `<div class="grid">${movies.map((item, i) => {
+      const t = item.title || item.name || '', p = item.poster_path ? IMG + '/w342' + item.poster_path : ''
+      const r2 = item.vote_average ? item.vote_average.toFixed(1) : '', date = item.release_date||'', y = date ? date.split('-')[0] : ''
+      return `<div class="card" style="--i:${i}" onclick="navigate('#/movie/${item.id}')">
+        <div class="poster" style="background-image:url('${p||'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'}')">
+          ${r2 ? '<span class="rating">\u2605 '+r2+'</span>' : ''}
+          <div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">Movie</span></div>
+        </div>
+        <div class="info"><h3>${escapeHtml(t)}</h3><p>${y ? y+' \u2022 ' : ''}Movie</p></div>
+      </div>`
+    }).join('')}</div>`
+  } else { latest.innerHTML = '' }
+}
+
+// --- Category Pages ---
+function renderMediaGrid(data, mediaType) {
+  if(!data || !data.results || !data.results.length) return '<div class="loading"><p style="color:var(--muted)">No results</p></div>'
+  return '<div class="grid">' + data.results.map((item, i) => {
+    const t = item.title || item.name || 'Untitled', date = item.release_date || item.first_air_date || '', y = date ? date.split('-')[0] : ''
+    const rt = item.vote_average ? '\u2605 ' + item.vote_average.toFixed(1) : '', poster = item.poster_path ? IMG + '/w342' + item.poster_path : ''
+    return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/' + mediaType + '/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (rt ? '<span class="rating">' + rt + '</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">' + (mediaType === 'movie' ? 'Movie' : 'TV') + '</span></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + y + ' \u2022 ' + (mediaType === 'movie' ? 'Movie' : 'TV') + '</p></div></div>'
+  }).join('') + '</div>'
+}
+
+async function renderMoviesHome() {
+  showMovies(); document.title = 'Movies - MediaHub'
+  const trendArea = $('movieTrendingArea'), popArea = $('moviePopularArea')
+  trendArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  popArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  const [trend, popular] = await Promise.all([fetchAPI('/trending?media=movie'), fetchAPI('/movie/popular')])
+  trendArea.innerHTML = renderMediaGrid(trend, 'movie')
+  popArea.innerHTML = renderMediaGrid(popular, 'movie')
+}
+
+async function renderTvHome() {
+  showTv(); document.title = 'TV Shows - MediaHub'
+  const trendArea = $('tvTrendingArea'), popArea = $('tvPopularArea')
+  trendArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  popArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  const [trend, popular] = await Promise.all([fetchAPI('/trending?media=tv'), fetchAPI('/tv/popular')])
+  const noAnime = d => d && d.results ? { ...d, results: d.results.filter(r => !r.genre_ids?.includes(16)) } : d
+  trendArea.innerHTML = renderMediaGrid(noAnime(trend), 'tv')
+  popArea.innerHTML = renderMediaGrid(noAnime(popular), 'tv')
+}
+
+// --- Anime Home ---
+async function renderAnimeHome() {
+  showAnime(); document.title = 'Anime - MediaHub'
+  const trendArea = $('animeTrendingArea'), popArea = $('animePopularArea')
+  trendArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  popArea.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+
+  const trend = await fetchAPI('/anime/trending')
+  const popular = await fetchAPI('/anime/popular')
+
+  function renderAnimeGrid(data) {
+    if(!data || !data.media || !data.media.length) return '<div class="loading"><p style="color:var(--muted)">No anime found</p></div>'
+    return '<div class="grid">' + data.media.map((item, i) => {
+      const t = item.title?.romaji || item.title?.english || item.title?.native || 'Untitled', img = item.coverImage?.large || ''
+      return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/anime/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (img || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (item.averageScore ? '<span class="rating">\u2605 ' + (item.averageScore/10).toFixed(1) + '</span>' : '') + (item.episodes ? '<span class="eps-badge">' + item.episodes + ' eps</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + (item.format||'Anime') + (item.season ? ' \u2022 ' + item.season : '') + '</p></div></div>'
+    }).join('') + '</div>'
+  }
+
+  trendArea.innerHTML = renderAnimeGrid(trend)
+  popArea.innerHTML = renderAnimeGrid(popular)
+}
+
+// --- Live TV ---
+const LIVE_CATEGORIES = [
+  { id: 'news', name: 'News', icon: '📰' },
+  { id: 'sports', name: 'Sports', icon: '⚽' },
+  { id: 'movies', name: 'Movies', icon: '🍿' },
+  { id: 'entertainment', name: 'Entertainment', icon: '🎭' },
+  { id: 'music', name: 'Music', icon: '🎵' },
+  { id: 'kids', name: 'Kids', icon: '🧸' },
+  { id: 'general', name: 'General', icon: '📺' },
+  { id: 'documentary', name: 'Documentary', icon: '🌍' },
+  { id: 'education', name: 'Education', icon: '🎓' },
+]
+
+const LIVE_SOURCES = [
+  { id: 'iptv-org', name: 'iptv-org', categoryUrl: cat => `https://iptv-org.github.io/iptv/categories/${cat}.m3u` },
+  { id: 'freetv', name: 'Free-TV', url: 'https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8' },
+  { id: 'iptv-org-us', name: 'US Streams', url: 'https://raw.githubusercontent.com/iptv-org/iptv/master/streams/us.m3u' },
+  { id: 'youtube', name: 'YouTube' },
+]
+
+// YouTube live streams for news channels (channel name ΓåÆ channel ID)
+// Uses /embed/live_stream?channel=CHANNEL_ID which always shows the current live stream
+const YOUTUBE_NEWS = {
+  'bbc news': 'UC16niRr50-MSBwiO3YDb3RA',
+  'bbc world news': 'UC16niRr50-MSBwiO3YDb3RA',
+  'cnn': 'UCupvZG-5ko_eiXAupbDfxWw',
+  'al jazeera': 'UCNye-wNBqNL5ZzHSJj3l8Bg',
+  'sky news': 'UCoMdktPbSTixAyNGwb-UYkQ',
+  'france 24': 'UCQfwfsi5VrQ8yKZ-UWmAEFg',
+  'dw news': 'UCknLrEdhRCp1aegoMqRaCZg',
+  'reuters': 'UChqUTb7kYRX8-EiaN3XFrSQ',
+  'euronews': 'UCSrZ3UV4jOidv8ppoVuvW9Q',
+  'wion': 'UC_gUM8rL-Lrg6O3adPW9K1g',
+  'ndtv': 'UCZFMm1mMw0F81Z37aaEzTUA',
+  'india today': 'UCYPvAwZP8pZhSMW8qs7cVCw',
+  'republic tv': 'UCwqusr8YDwM-3mEYTDeJHzw',
+  'times now': 'UC6RJ7-PaXg6TIH2BzZfTV7w',
+  'nbc news': 'UCeY0bbntWzzVIaj2z3QigXg',
+  'abc news': 'UCBi2mrWuNuyYy4gbM6fU18Q',
+  'cbs news': 'UC8p1vwvWtl6T73JiExfWs1g',
+  'aaj tak': 'UCt4t-jeY85JegMlZ-E5UWtA',
+}
+
+let liveHls = null, currentLiveChannels = [], currentLiveIdx = 0, currentLiveSourceIdx = 0
+
+function parseM3U(text) {
+  const channels = []
+  const lines = text.split('\n')
+  for(let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim()
+    if(!line.startsWith('#EXTINF:')) continue
+    const info = line.slice(8)
+    let name = info
+    const logoMatch = info.match(/tvg-logo="([^"]*)"/)
+    const logo = logoMatch ? logoMatch[1] : ''
+    const groupMatch = info.match(/group-title="([^"]*)"/)
+    const group = groupMatch ? groupMatch[1] : ''
+    const nameMatch = info.match(/,(.+)$/)
+    if(nameMatch) name = nameMatch[1].trim()
+    name = name.replace(/\s*\([\d]+p\)/gi, '').replace(/\s*\[.*?\]/g, '').trim()
+    let j = i + 1;
+    let urlLine = null;
+    while(j < lines.length) {
+      const lineText = lines[j].trim();
+      if(!lineText) { j++; continue; }
+      if(!lineText.startsWith('#')) {
+        urlLine = lineText;
+        break;
+      }
+      if(lineText.startsWith('#EXTINF:')) {
+        break; // Next channel started without a URL for the previous one
+      }
+      j++;
+    }
+    if(urlLine) {
+      channels.push({ name, url: urlLine, logo, group })
+    }
+  }
+  return channels
+}
+
+function normalizeChName(name) {
+  return name.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim()
+}
+
+function mergeChannelLists(baseChannels, extraLists) {
+  const map = new Map()
+  for (const ch of baseChannels) {
+    const key = normalizeChName(ch.name)
+    if (!key) continue
+    map.set(key, { name: ch.name, logo: ch.logo, group: ch.group, sources: [{ url: ch.url, sourceId: 'iptv-org' }] })
+  }
+  for (const { sourceId, channels } of extraLists) {
+    for (const ch of channels) {
+      const key = normalizeChName(ch.name)
+      if (!key || !map.has(key)) continue
+      const entry = map.get(key)
+      if (!entry.sources.some(s => s.url === ch.url)) {
+        entry.sources.push({ url: ch.url, sourceId })
+      }
+    }
+  }
+  return Array.from(map.values())
+}
+
+let sourceCache = {}, liveChannelsCache = {}
+
+async function ensureSourceCached(sourceId) {
+  if (sourceCache[sourceId]) return sourceCache[sourceId]
+  const src = LIVE_SOURCES.find(s => s.id === sourceId)
+  if (!src || !src.url) return []
+  try {
+    const r = await fetch(src.url)
+    if (!r.ok) return []
+    const text = await r.text()
+    const channels = parseM3U(text)
+    sourceCache[sourceId] = channels
+    return channels
+  } catch(e) { return [] }
+}
+
+let currentCategoryChannels = []
+
+async function renderLiveTv() {
+  showLive()
+  document.title = 'Live TV - MediaHub'
+  const cats = $('liveCats')
+  cats.innerHTML = LIVE_CATEGORIES.map((c, i) =>
+    '<button class="' + (i === 0 ? 'active' : '') + '" onclick="loadLiveCategory(\'' + c.id + '\',this)"><span class="cat-icon">' + c.icon + '</span> ' + c.name + '</button>'
+  ).join('')
+  loadLiveCategory(LIVE_CATEGORIES[0].id)
+}
+
+function filterLiveCategory(val) {
+  const q = (val || '').trim().toLowerCase()
+  const clearBtn = $('liveSearchClear')
+  if (clearBtn) clearBtn.style.display = q ? 'block' : 'none'
+  if (!currentCategoryChannels.length) return
+  if (!q) {
+    currentLiveChannels = currentCategoryChannels
+    renderLiveChannels(currentCategoryChannels, false)
+    return
+  }
+  const filtered = currentCategoryChannels.filter(c => c.name.toLowerCase().includes(q))
+  currentLiveChannels = filtered
+  renderLiveChannels(filtered, true)
+}
+
+function clearLiveFilter() {
+  const inp = $('liveSearchInput')
+  if (inp) inp.value = ''
+  filterLiveCategory('')
+}
+
+async function loadLiveCategory(cat, btn) {
+  if(btn) {
+    document.querySelectorAll('.live-cats button').forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+  }
+  const area = $('liveArea')
+  const inp = $('liveSearchInput')
+  if (inp) inp.value = ''
+  const clearBtn = $('liveSearchClear')
+  if (clearBtn) clearBtn.style.display = 'none'
+
+  if(liveChannelsCache[cat]) {
+    currentCategoryChannels = liveChannelsCache[cat]
+    currentLiveChannels = liveChannelsCache[cat]
+    renderLiveChannels(currentLiveChannels, false)
+    return
+  }
+  area.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  try {
+    const r = await fetch('https://iptv-org.github.io/iptv/categories/' + cat + '.m3u')
+    if(!r.ok) { area.innerHTML = '<div class="loading"><p style="color:var(--muted)">Failed to load channels</p></div>'; return }
+    const text = await r.text()
+    const baseChannels = parseM3U(text)
+    const [freetvCh, usCh] = await Promise.all([ensureSourceCached('freetv'), ensureSourceCached('iptv-org-us')])
+    const merged = mergeChannelLists(baseChannels, [
+      { sourceId: 'freetv', channels: freetvCh },
+      { sourceId: 'iptv-org-us', channels: usCh }
+    ])
+    if (cat === 'news') {
+      const entries = Object.entries(YOUTUBE_NEWS).sort((a, b) => b[0].length - a[0].length)
+      for (const ch of merged) {
+        const key = normalizeChName(ch.name)
+        for (const [pattern, channelId] of entries) {
+          const match = pattern.includes(' ')
+            ? new RegExp('^' + pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(\\s|$)').test(key)
+            : key === pattern
+          if (match) {
+            if (!ch.sources.some(s => s.sourceId === 'youtube')) {
+              ch.sources.push({ url: 'https://www.youtube.com/embed/live_stream?channel=' + channelId + '&autoplay=1', sourceId: 'youtube' })
+            }
+            break
+          }
+        }
+      }
+    }
+    liveChannelsCache[cat] = merged
+    currentCategoryChannels = merged
+    currentLiveChannels = merged
+    renderLiveChannels(merged, false)
+  } catch(e) {
+    area.innerHTML = '<div class="loading"><p style="color:var(--muted)">Error loading channels</p></div>'
+  }
+}
+
+function renderLiveChannels(channels, isFilter = false) {
+  const area = $('liveArea')
+  const countEl = $('liveChannelCount')
+  if (countEl) countEl.textContent = channels.length + (channels.length === 1 ? ' channel' : ' channels')
+  if(!channels.length) {
+    area.innerHTML = '<div class="loading"><p style="color:var(--muted)">No channels found' + (isFilter ? ' matching your filter' : '') + '</p></div>'
+    return
+  }
+  const sorted = [...channels].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
+
+  if (isFilter) {
+    let html = '<div class="live-channel-grid">'
+    for (const ch of sorted) {
+      const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
+      html += '<div class="live-channel-card" onclick="playLiveStream(' + currentLiveChannels.indexOf(ch) + ')">' +
+        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+        '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
+        srcLabel +
+        '</div>'
+    }
+    html += '</div>'
+    area.innerHTML = html
+    return
+  }
+
+  const groups = {}
+  for (const ch of sorted) {
+    const firstChar = ch.name.charAt(0).toUpperCase()
+    const groupKey = /[0-9]/.test(firstChar) ? '#' : (/[A-Z]/.test(firstChar) ? firstChar : '#')
+    if (!groups[groupKey]) groups[groupKey] = []
+    groups[groupKey].push(ch)
+  }
+
+  const orderedKeys = ['#', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')]
+  let html = ''
+  for (const key of orderedKeys) {
+    if (!groups[key] || !groups[key].length) continue
+    const label = key === '#' ? '# (0-9)' : key
+    html += '<div class="ch-letter-header" id="ch-letter-' + (key === '#' ? 'num' : key) + '"><span class="ch-letter-pill">' + label + '</span><span class="ch-letter-line"></span></div><div class="live-channel-grid">'
+    for (const ch of groups[key]) {
+      const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
+      html += '<div class="live-channel-card" onclick="playLiveStream(' + currentLiveChannels.indexOf(ch) + ')">' +
+        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+        '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' +
+        srcLabel +
+        '</div>'
+    }
+    html += '</div>'
+  }
+  area.innerHTML = html
+}
+
+function getSourceLabel(id) {
+  const src = LIVE_SOURCES.find(s => s.id === id)
+  return src ? src.name : id
+}
+
+function playLiveStream(idx) {
+  const ch = currentLiveChannels[idx]
+  if (!ch) return
+  currentLiveIdx = idx
+  currentLiveSourceIdx = 0
+  $('playerOverlay').classList.add('active')
+  $('playerTitle').textContent = ch.name + ' | Live TV'
+  $('playerFrame').style.display = 'none'
+  $('livePlayer').style.display = 'block'
+  $('playerFrame').src = ''
+  const tabs = $('sourceTabs')
+  if (ch.sources.length > 1) {
+    tabs.innerHTML = ch.sources.map((s, i) =>
+      '<button class="' + (i === 0 ? 'active' : '') + '" onclick="switchLiveSource(' + i + ',this)">' + getSourceLabel(s.sourceId) + (i === 0 ? ' (Auto)' : '') + '</button>'
+    ).join('')
+  } else {
+    tabs.innerHTML = ''
+  }
+  loadLiveSource(ch.sources[0].url)
+}
+
+function switchLiveSource(srcIdx, btn) {
+  if (btn) {
+    document.querySelectorAll('#sourceTabs button').forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+  }
+  currentLiveSourceIdx = srcIdx
+  const ch = currentLiveChannels[currentLiveIdx]
+  if (ch && ch.sources[srcIdx]) loadLiveSource(ch.sources[srcIdx].url)
+}
+
+function loadLiveSource(url) {
+  if(liveHls) { liveHls.destroy(); liveHls = null }
+  const video = $('livePlayer'), iframe = $('playerFrame')
+  video.pause(); video.src = ''; iframe.src = ''
+  if (url.includes('youtube.com/embed/') || url.includes('youtu.be/')) {
+    video.style.display = 'none'
+    iframe.style.display = 'block'
+    iframe.src = url
+    return
+  }
+  video.style.display = 'block'
+  iframe.style.display = 'none'
+  if(url.includes('.m3u8') && Hls.isSupported()) {
+    liveHls = new Hls()
+    liveHls.loadSource(url)
+    liveHls.attachMedia(video)
+    liveHls.on(Hls.Events.MANIFEST_PARSED, () => video.play().catch(() => {}))
+  } else {
+    video.src = url
+    video.play().catch(() => {})
+  }
+}
+
+function closePlayer() {
+  $('playerOverlay').classList.remove('active')
+  if (currentWatchItem && currentWatchItem.timestamp > 0) {
+    recordWatchProgress(currentWatchItem, currentWatchItem.timestamp)
+  }
+  clearInterval(watchTicker)
+  watchTicker = null
+  renderWatchHistory()
+  $('playerFrame').style.display = ''; $('playerFrame').src = ''
+  $('livePlayer').style.display = 'none'
+  const v = $('livePlayer'); v.pause(); v.src = ''
+  if(liveHls) { liveHls.destroy(); liveHls = null }
+  if (probeAbort) { probeAbort.abort(); probeAbort = null }
+  clearTimeout(playerWatchdog); playerWatchdog = null
+  autoProbeActive = false
+  userManuallySwitched = false
+  const badge = $('playerStatusBadge')
+  if (badge) badge.style.display = 'none'
+}
+
+function escapeHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML }
+
+function switchTrend(type) {
+  trendType = type
+  renderHome()
+}
+
+async function doSearchLiveChannels(query) {
+  const ql = query.toLowerCase()
+  if(!Object.keys(liveChannelsCache).length) {
+    const [ft, tl] = await Promise.all([ensureSourceCached('freetv'), ensureSourceCached('tvlink')])
+    await Promise.all(LIVE_CATEGORIES.slice(0, 5).map(async c => {
+      if (liveChannelsCache[c.id]) return
+      try {
+        const r = await fetch('https://iptv-org.github.io/iptv/categories/' + c.id + '.m3u')
+        if (!r.ok) return
+        const text = await r.text()
+        const base = parseM3U(text)
+        liveChannelsCache[c.id] = mergeChannelLists(base, [
+          { sourceId: 'freetv', channels: ft },
+          { sourceId: 'tvlink', channels: tl }
+        ])
+      } catch(e) {}
+    }))
+  }
+  const all = Object.values(liveChannelsCache).flat()
+  const seen = new Set(); const deduped = [];
+  for (const ch of all) { if(!seen.has(ch.name)) { seen.add(ch.name); deduped.push(ch); } }
+  return deduped.filter(ch => ch.name.toLowerCase().includes(ql))
+}
+
+function getAnimeHtml(item, i) {
+  const t = item.title?.romaji || item.title?.english || item.title?.native || 'Untitled', img = item.coverImage?.large || ''
+  return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/anime/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (img || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (item.averageScore ? '<span class="rating">\u2605 ' + (item.averageScore/10).toFixed(1) + '</span>' : '') + (item.episodes ? '<span class="eps-badge">' + item.episodes + ' eps</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + (item.format||'Anime') + (item.season ? ' \u2022 ' + item.season : '') + '</p></div></div>'
+}
+
+function getTmdbHtml(item, i, type) {
+  const t = item.title || item.name || 'Untitled', date = item.release_date || item.first_air_date || '', y = date ? date.split('-')[0] : ''
+  const rt = item.vote_average ? '\u2605 ' + item.vote_average.toFixed(1) : '', poster = item.poster_path ? IMG + '/w342' + item.poster_path : '';
+  let m = item.media_type || type;
+  if (!['movie', 'tv', 'anime'].includes(m)) m = 'movie';
+  return '<div class="card" style="--i:' + i + '" onclick="navigate(\'#/' + m + '/' + item.id + '\')"><div class="poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')">' + (rt ? '<span class="rating">' + rt + '</span>' : '') + '<div class="hover-overlay"><div class="pbtn">\u25B6</div><span class="mtag">' + (m === 'movie' ? 'Movie' : m === 'tv' ? 'TV' : 'Anime') + '</span></div></div><div class="info"><h3>' + escapeHtml(t) + '</h3><p>' + y + (m === 'movie' ? ' \u2022 Movie' : ' \u2022 TV') + '</p></div></div>'
+}
+
+// --- Search ---
+async function renderSearch(q, type) {
+  showSearch(); document.title = 'Search: ' + q + ' - MediaHub'
+  $('searchTitle').textContent = 'Results for "' + q + '"'
+  $('searchInfo').textContent = 'Searching...'
+  $('searchGrid').innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  
+  if(type === 'anime') {
+    const d = await fetchAPI('/anime/search?q=' + encodeURIComponent(q))
+    if(!d || !d.media) { $('searchInfo').textContent = 'No results'; $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No results found</p></div>'; return }
+    $('searchInfo').textContent = 'Found ' + d.media.length + ' results'
+    $('searchGrid').innerHTML = '<div class="grid">' + d.media.map((item, i) => getAnimeHtml(item, i)).join('') + '</div>'
+  } else if(type === 'live') {
+    const results = await doSearchLiveChannels(q)
+    $('searchInfo').textContent = results.length ? 'Found ' + results.length + ' channels' : 'No channels found'
+    if(!results.length) { $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No live channels found</p></div>'; return }
+    currentLiveChannels = results
+    $('searchGrid').innerHTML = '<div class="live-channel-grid">' + results.map((ch, i) => {
+      const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
+      return '<div class="live-channel-card" onclick="playLiveStream(' + i + ')">' +
+        (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+        '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' + srcLabel + '</div>'
+    }).join('') + '</div>'
+  } else if (type === 'multi' || type === 'all') {
+    const [tmdbRes, animeRes, liveRes] = await Promise.all([
+      fetchAPI('/search?q=' + encodeURIComponent(q) + '&type=multi').catch(()=>null),
+      fetchAPI('/anime/search?q=' + encodeURIComponent(q)).catch(()=>null),
+      doSearchLiveChannels(q).catch(()=>[])
+    ])
+    const rTmdb = (tmdbRes && tmdbRes.results) ? tmdbRes.results.filter(x => x.media_type !== 'person' || !x.media_type) : []
+    const rAnime = (animeRes && animeRes.media) ? animeRes.media : []
+    currentLiveChannels = liveRes || []
+    
+    let html = ''
+    let total = rTmdb.length + rAnime.length + currentLiveChannels.length
+    if (total === 0) {
+      $('searchInfo').textContent = 'No results'
+      $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No results found</p></div>'
+      return
+    }
+    
+    if (rTmdb.length > 0) {
+      html += '<h2 class="section-title" style="margin-top:0">Movies & TV</h2>'
+      html += '<div class="grid">' + rTmdb.map((item, i) => getTmdbHtml(item, i, type)).join('') + '</div>'
+    }
+    if (rAnime.length > 0) {
+      html += '<h2 class="section-title">Anime</h2>'
+      html += '<div class="grid">' + rAnime.map((item, i) => getAnimeHtml(item, i)).join('') + '</div>'
+    }
+    if (currentLiveChannels.length > 0) {
+      html += '<h2 class="section-title">Live TV</h2>'
+      html += '<div class="live-channel-grid">' + currentLiveChannels.map((ch, i) => {
+        const srcLabel = ch.sources.length > 1 ? '<span class="ch-src-badge">' + ch.sources.length + ' sources</span>' : ''
+        return '<div class="live-channel-card" onclick="playLiveStream(' + i + ')">' +
+          (ch.logo ? '<img class="ch-logo" src="' + ch.logo + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">' : '') +
+          '<div class="ch-name">' + escapeHtml(ch.name) + '</div>' + srcLabel + '</div>'
+      }).join('') + '</div>'
+    }
+    
+    $('searchInfo').textContent = 'Found ' + total + ' total results across all categories'
+    $('searchGrid').innerHTML = html
+  } else {
+    const d = await fetchAPI('/search?q=' + encodeURIComponent(q) + '&type=' + type)
+    if(!d || !d.results) { $('searchInfo').textContent = 'No results'; $('searchGrid').innerHTML = '<div class="loading"><p style="color:var(--muted)">No results found</p></div>'; return }
+    const r = d.results.filter(x => x.media_type !== 'person' || !x.media_type)
+    $('searchInfo').textContent = 'Found ' + r.length + ' results'
+    $('searchGrid').innerHTML = '<div class="grid">' + r.map((item, i) => getTmdbHtml(item, i, type)).join('') + '</div>'
+  }
+}
+// --- Legal Pages ---
+function renderTerms() {
+  showDetail();
+  document.title = 'Terms of Service - MediaHub';
+  window.scrollTo({top: 0, behavior: 'instant'});
+  $('detailPage').innerHTML = `
+    <div class="legal-container">
+      <button class="back-btn" onclick="if(history.length>1){history.back()}else{location.hash='#/'}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+      </button>
+      <div class="legal-badge terms"><span class="dot"></span>Legal Agreement</div>
+      <h1 class="legal-title">Terms of Service</h1>
+      <div class="legal-meta">Last Updated: October 2026 &bull; Version 2.0</div>
+      <div class="legal-card">
+        <div class="legal-section">
+          <h3><span class="sec-num">1</span> Acceptance of Terms</h3>
+          <p>By accessing, browsing, or utilizing MediaHub (&quot;the Service&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;), you acknowledge that you have read, understood, and agreed to be legally bound by these Terms of Service in full, along with our Privacy Policy. If you do not agree with any part of these Terms, you must immediately cease accessing and using the Service.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">2</span> Non-Hosting &amp; Aggregator Status (Disclaimer)</h3>
+          <div class="legal-highlight">
+            <p><strong>Notice:</strong> MediaHub is exclusively a client-side search indexing catalog and directory. MediaHub does not host, upload, store, encode, or transmit any video, audio, or multimedia content on any server under our ownership or control.</p>
+          </div>
+          <p>All video streams, television broadcasts, movies, anime episodes, and media files displayed or played through MediaHub are hosted on and delivered by independent, non-affiliated third-party servers. MediaHub simply provides automated hyperlinks and standard iframe embeds that reference publicly discoverable media locations on the internet.</p>
+          <p>MediaHub has no control over the nature, content, availability, security, or legal status of third-party streaming sources.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">3</span> DMCA &amp; Copyright Infringement Policy</h3>
+          <p>MediaHub respects the intellectual property rights of copyright holders worldwide and complies with the provisions of the Digital Millennium Copyright Act (17 U.S.C. &sect; 512) and applicable international copyright treaties.</p>
+          <p>Because MediaHub does not host, store, or cache any copyrighted video or media files, requests to remove the underlying video files must be directed to the third-party web host or video delivery service responsible for storing the content.</p>
+          <p>However, if you are a copyright owner or an authorized representative and believe that any index link, thumbnail, or metadata record on MediaHub infringes upon your copyright, you may submit a written notice containing:</p>
+          <ul>
+            <li>Identification of the copyrighted work claimed to have been infringed.</li>
+            <li>Direct URL link(s) on MediaHub to the page containing the reference or embed.</li>
+            <li>Sufficient contact information (name, address, telephone number, and email address).</li>
+            <li>A statement that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law.</li>
+            <li>A statement made under penalty of perjury that the information in the notification is accurate and that you are authorized to act on behalf of the copyright owner.</li>
+          </ul>
+          <p>Notices may be submitted through our official repository issue tracker or designated communication channels. Verified infringing links will be purged from our search index promptly.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">4</span> Permitted Use &amp; License</h3>
+          <p>Subject to your continuous compliance with these Terms, you are granted a limited, personal, non-exclusive, non-transferable, revocable license to access and browse MediaHub for personal, non-commercial entertainment and informational purposes only.</p>
+          <p>You agree not to reverse engineer, decompile, scrape at scale, resell, repackage, or distribute any portion of the MediaHub interface, codebase, or proprietary assets without express written consent.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">5</span> User Conduct &amp; Prohibited Activities</h3>
+          <p>You agree not to engage in any of the following prohibited behaviors while using the Service:</p>
+          <ul>
+            <li>Interfering with or disrupting the functionality, integrity, or security of the Service, servers, or networks.</li>
+            <li>Using automated bots, web crawlers, spiders, or scripts in a manner that creates an unreasonable or disproportionately heavy load on API endpoints.</li>
+            <li>Circumventing or modifying any security, sandbox, popup blocker, or rate-limiting features incorporated into MediaHub.</li>
+            <li>Using the Service for any unlawful, fraudulent, or malicious purpose.</li>
+          </ul>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">6</span> Third-Party Content &amp; Advertisements</h3>
+          <p>When you initiate playback on external video embeds, those third-party hosts may present advertisements, pop-ups, trackers, or separate terms of service. MediaHub implements client-side protection measures where practical, but takes no responsibility and incurs no liability for third-party advertisements, malware, cookies, or external transactions.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">7</span> Disclaimer of Warranties</h3>
+          <p>MediaHub is provided on an <strong>&quot;AS IS&quot;</strong> and <strong>&quot;AS AVAILABLE&quot;</strong> basis, without warranties of any kind, whether express, statutory, or implied. To the maximum extent permitted under applicable law, MediaHub disclaims all warranties, including but not limited to merchantability, fitness for a particular purpose, non-infringement, stream continuity, uptime, and metadata accuracy.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">8</span> Limitation of Liability</h3>
+          <p>In no event shall MediaHub, its developers, maintainers, contributors, or partners be liable for any direct, indirect, incidental, consequential, special, exemplary, or punitive damages, including loss of data, loss of goodwill, device damage, or interruption of service arising out of or in connection with the use or inability to use MediaHub or third-party streaming links.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">9</span> Modifications &amp; Severability</h3>
+          <p>We reserve the right to amend or update these Terms of Service at our sole discretion at any time. Any changes will become effective immediately upon posting to this page. If any provision of these Terms is determined to be unlawful or unenforceable, that provision shall be severed without affecting the validity and enforceability of the remaining provisions.</p>
+        </div>
+      </div>
+    </div>`;
+}
+function renderPrivacy() {
+  showDetail();
+  document.title = 'Privacy Policy - MediaHub';
+  window.scrollTo({top: 0, behavior: 'instant'});
+  $('detailPage').innerHTML = `
+    <div class="legal-container">
+      <button class="back-btn" onclick="if(history.length>1){history.back()}else{location.hash='#/'}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+      </button>
+      <div class="legal-badge privacy"><span class="dot"></span>Data Protection &amp; Privacy</div>
+      <h1 class="legal-title">Privacy Policy</h1>
+      <div class="legal-meta">Last Updated: October 2026 &bull; Version 2.0</div>
+      <div class="legal-card">
+        <div class="legal-section">
+          <h3><span class="sec-num">1</span> Privacy-First Principles</h3>
+          <p>MediaHub is built on fundamental privacy-by-design principles. We believe that accessing public media metadata and discovering entertainment should not require sacrificing your personal privacy.</p>
+          <div class="legal-highlight">
+            <p><strong>Zero PII Collection:</strong> MediaHub does not require account creation, registration, usernames, email addresses, phone numbers, or passwords. We do not collect or maintain a database of Personally Identifiable Information (PII).</p>
+          </div>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">2</span> Local Browser Storage (Client-Side Only)</h3>
+          <p>To deliver convenient personalization features without central data collection, MediaHub utilizes your browser&apos;s HTML5 <code>localStorage</code> API. The following items are stored exclusively on your local device:</p>
+          <ul>
+            <li><strong>Watchlist &amp; Bookmarks:</strong> Titles you choose to save for later viewing.</li>
+            <li><strong>Watch History:</strong> Titles you have recently watched, along with last-played episodes.</li>
+            <li><strong>Playback Preferences:</strong> Audio/subtitle language preferences and volume levels.</li>
+            <li><strong>UI Settings:</strong> Dark/light mode theme selection and filter preferences.</li>
+          </ul>
+          <p>This data is never sent to, collected by, or synchronized with any remote server owned by MediaHub. You have full control over this data and may clear it at any time through your browser settings or the clear history button in MediaHub.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">3</span> Third-Party Metadata Providers</h3>
+          <p>MediaHub fetches title information, posters, synopses, cast lists, and release dates via direct client-side requests to public metadata APIs:</p>
+          <ul>
+            <li><strong>The Movie Database (TMDB):</strong> Used for movie and TV series metadata.</li>
+            <li><strong>AniList:</strong> Used for anime metadata, episode listings, and character information.</li>
+          </ul>
+          <p>When your browser makes these requests, standard HTTP headers (such as your IP address and User-Agent) are transmitted directly from your client to these services. These third-party APIs process requests in accordance with their respective privacy policies.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">4</span> External Media Players &amp; Embedded Content</h3>
+          <p>When playing a stream, MediaHub embeds external video players from independent third-party streaming providers inside iframes. When interacting with an embedded player:</p>
+          <ul>
+            <li>Your browser establishes a direct connection with the third-party streaming host.</li>
+            <li>The external host may set cookies, collect IP addresses, and enforce its own terms and privacy practices.</li>
+            <li>MediaHub does not possess access to cookies or session data handled by third-party iframe players.</li>
+          </ul>
+          <p>We advise users to review the privacy policies of any third-party streaming services they engage with.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">5</span> Cookies, Tracking &amp; Telemetry</h3>
+          <p>MediaHub itself does <strong>not</strong> set tracking cookies, session cookies, or marketing beacons. We do not utilize commercial analytics platforms (such as Google Analytics, Mixpanel, or Meta Pixel) and do not employ browser fingerprinting techniques.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">6</span> Children&apos;s Online Privacy</h3>
+          <p>MediaHub does not knowingly target, solicit, or collect personal information from children under the age of 13 (or under 16 in the European Economic Area). Because our service does not collect personal data from any user, no children&apos;s data is stored or processed on our servers.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">7</span> Security Standards</h3>
+          <p>MediaHub is delivered over secure Transport Layer Security (TLS / HTTPS) protocols, ensuring that communication between your browser and our static hosting CDN is encrypted and tamper-resistant.</p>
+        </div>
+
+        <div class="legal-section">
+          <h3><span class="sec-num">8</span> Changes to this Policy &amp; Inquiries</h3>
+          <p>We may update this Privacy Policy from time to time to reflect operational, technological, or legal developments. The updated date at the top of this page indicates the most recent revision. If you have questions regarding this Privacy Policy, please reach out via our GitHub repository.</p>
+        </div>
+      </div>
+    </div>`;
+}
+// --- Issue Support Center & Chat ---
+let selectedIssueCategory = '🚨 Broken Player';
+let isIssueDevMode = localStorage.getItem('mediahub_issue_dev_active') === 'true';
+
+const DEFAULT_ISSUE_MSGS = [
+  {
+    id: 'sys-welcome',
+    sender: 'admin',
+    name: 'Support Team',
+    text: '👋 Welcome to the MediaHub Issue Support Desk! Experiencing a broken video player, buffering issues, missing episodes, or want to suggest an improvement? Send a message below. All messages persist in your browser session so you can return here anytime to check for updates.',
+    time: 'System Notice',
+    category: 'Welcome'
+  }
+];
+
+function getIssueMessages() {
+  try {
+    const raw = localStorage.getItem('mediahub_issue_chat_messages');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch(e) {}
+  return [...DEFAULT_ISSUE_MSGS];
+}
+
+function saveIssueMessages(msgs) {
+  try {
+    localStorage.setItem('mediahub_issue_chat_messages', JSON.stringify(msgs));
+  } catch(e) {}
+}
+
+function formatIssueTime(d) {
+  const dt = d instanceof Date ? d : new Date(d);
+  const m = dt.toLocaleString('en-US', { month: 'short' });
+  const day = dt.getDate();
+  const hrs = String(dt.getHours()).padStart(2, '0');
+  const mins = String(dt.getMinutes()).padStart(2, '0');
+  return `${m} ${day}, ${hrs}:${mins}`;
+}
+
+function selectIssueCategory(cat) {
+  selectedIssueCategory = cat;
+  document.querySelectorAll('.issue-cat-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.dataset.cat === cat);
+  });
+}
+
+function renderIssueChatStream() {
+  const stream = $('issueChatStream');
+  if (!stream) return;
+  const msgs = getIssueMessages();
+  stream.innerHTML = msgs.map(m => {
+    const isUser = m.sender === 'user';
+    return `
+      <div class="issue-msg ${isUser ? 'user' : 'admin'}">
+        <div class="issue-msg-meta">
+          ${isUser ? `<span class="issue-msg-cat">${escapeHtml(m.category || 'Issue')}</span><span>${escapeHtml(m.name || 'You')}</span>` : `<span class="dev-badge"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> Developer / Support</span>`}
+          <span>&bull;</span>
+          <span>${escapeHtml(m.time || '')}</span>
+        </div>
+        <div class="issue-bubble">${escapeHtml(m.text).replace(/\n/g, '<br>')}</div>
+      </div>
+    `;
+  }).join('');
+  setTimeout(() => { stream.scrollTop = stream.scrollHeight; }, 10);
+}
+
+function sendUserIssue() {
+  const input = $('issueUserInput');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const msgs = getIssueMessages();
+  msgs.push({
+    id: 'user-' + Date.now(),
+    sender: 'user',
+    name: 'You',
+    text: text,
+    category: selectedIssueCategory,
+    time: formatIssueTime(new Date())
+  });
+  saveIssueMessages(msgs);
+  input.value = '';
+  renderIssueChatStream();
+}
+
+function sendDevResponse() {
+  const input = $('devResponseInput');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const msgs = getIssueMessages();
+  msgs.push({
+    id: 'admin-' + Date.now(),
+    sender: 'admin',
+    name: 'Developer / Support',
+    text: text,
+    category: 'Response',
+    time: formatIssueTime(new Date())
+  });
+  saveIssueMessages(msgs);
+  input.value = '';
+  renderIssueChatStream();
+}
+
+function insertCannedResponse(text) {
+  const input = $('devResponseInput');
+  if (!input) return;
+  input.value = text;
+  input.focus();
+}
+
+function clearIssueChat() {
+  if (confirm('Clear all issue messages and reset chat history?')) {
+    saveIssueMessages([...DEFAULT_ISSUE_MSGS]);
+    renderIssueChatStream();
+  }
+}
+
+let issueDevClicks = 0;
+let issueDevClickTimer = null;
+
+function handleIssueBadgeClick() {
+  issueDevClicks++;
+  clearTimeout(issueDevClickTimer);
+  issueDevClickTimer = setTimeout(() => {
+    issueDevClicks = 0;
+  }, 2500);
+
+  if (issueDevClicks >= 5) {
+    issueDevClicks = 0;
+    isIssueDevMode = !isIssueDevMode;
+    localStorage.setItem('mediahub_issue_dev_active', isIssueDevMode ? 'true' : 'false');
+    renderReportIssue();
+  }
+}
+
+function toggleIssueDevMode() {
+  isIssueDevMode = !isIssueDevMode;
+  localStorage.setItem('mediahub_issue_dev_active', isIssueDevMode ? 'true' : 'false');
+  renderReportIssue();
+}
+
+function renderReportIssue() {
+  showDetail();
+  document.title = 'Report an Issue - MediaHub';
+  window.scrollTo({top: 0, behavior: 'instant'});
+
+  const cats = [
+    '🚨 Broken Player',
+    '⏳ Buffering / Lag',
+    '📺 Missing Episode',
+    '🔊 Audio / Subtitles',
+    '💡 Feature Request',
+    '💬 Other'
+  ];
+
+  const catsHtml = cats.map(c => `
+    <button type="button" class="issue-cat-btn ${c === selectedIssueCategory ? 'selected' : ''}" data-cat="${escapeHtml(c)}" onclick="selectIssueCategory('${escapeHtml(c)}')">
+      ${escapeHtml(c)}
+    </button>
+  `).join('');
+
+  const devPanelHtml = isIssueDevMode ? `
+    <div class="issue-dev-panel" id="issueDevPanel">
+      <div class="issue-dev-bar">
+        <span class="issue-dev-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Developer Response Panel Active</span>
+        <span style="font-size:11px;color:var(--secondary);font-weight:600;">Replying as Verified Support</span>
+      </div>
+      <div class="issue-canned-list">
+        <button type="button" class="issue-canned-btn" onclick="insertCannedResponse('🔧 Checking the stream server now. Please try Server 2 or 3 in the meantime.')">🔧 Checking stream</button>
+        <button type="button" class="issue-canned-btn" onclick="insertCannedResponse('✅ Fixed! The broken embed source has been updated. Please refresh the player.')">✅ Fixed &amp; updated</button>
+        <button type="button" class="issue-canned-btn" onclick="insertCannedResponse('📺 Episode source verified and re-indexed into the catalog.')">📺 Episode re-indexed</button>
+        <button type="button" class="issue-canned-btn" onclick="insertCannedResponse('⚡ Buffering is due to high traffic on public video hosts. Switched to faster mirror.')">⚡ Faster mirror set</button>
+      </div>
+      <textarea id="devResponseInput" class="issue-textarea" style="min-height:50px;background:rgba(0,0,0,0.3);border:1px solid rgba(0,206,201,0.25);border-radius:10px;padding:10px;" placeholder="Type developer/support response to send into the chat..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendDevResponse();}"></textarea>
+      <div class="issue-dev-actions">
+        <button type="button" class="btn-play" style="padding:7px 16px;font-size:12.5px" onclick="sendDevResponse()">🚀 Send as Developer</button>
+        <button type="button" class="btn-secondary" style="padding:7px 14px;font-size:12px" onclick="clearIssueChat()">Wipe Chat</button>
+        <button type="button" class="btn-secondary" style="padding:7px 14px;font-size:12px" onclick="toggleIssueDevMode()">Hide Response Mode</button>
+      </div>
+    </div>
+  ` : '';
+
+  $('detailPage').innerHTML = `
+    <div class="legal-container">
+      <button class="back-btn" onclick="if(history.length>1){history.back()}else{location.hash='#/'}">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back
+      </button>
+
+      <div class="legal-badge issue-badge" id="issueDeskBadge" onclick="handleIssueBadgeClick()" style="cursor:pointer;user-select:none;${isIssueDevMode ? 'border-color:var(--secondary);box-shadow:0 0 12px rgba(0,206,201,0.3);' : ''}">
+        <span class="dot" style="background:${isIssueDevMode ? '#00f2fe' : '#00c6ff'};box-shadow:0 0 8px #00f2fe"></span>
+        Support Desk
+        ${isIssueDevMode ? '<span style="opacity:1;margin-left:6px;font-size:10.5px;color:var(--secondary);font-weight:700;">🔓 DEV ACTIVE</span>' : ''}
+      </div>
+
+      <h1 class="legal-title">Report an Issue</h1>
+      <div class="legal-meta">Report broken players, buffering, or missing content. Chat history saves locally on your browser.</div>
+
+      <div class="issue-card">
+        <div class="issue-header-bar">
+          <div class="issue-online-status">
+            <span class="status-dot"></span>
+            <span>Issue Desk Online</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <a href="https://github.com/coderaarav12/media-hub-frontend/issues" target="_blank" rel="noopener" style="font-size:12px;color:var(--primary-light);text-decoration:none;display:inline-flex;align-items:center;gap:4px">
+              GitHub Issues &rarr;
+            </a>
+          </div>
+        </div>
+
+        <div class="issue-chat-stream" id="issueChatStream"></div>
+
+        ${devPanelHtml}
+
+        <div class="issue-input-wrap">
+          <div class="issue-categories">
+            ${catsHtml}
+          </div>
+          <textarea id="issueUserInput" class="issue-textarea" placeholder="Describe the issue (e.g. Inception Server 1 not playing, episode 4 subtitle missing)..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendUserIssue();}"></textarea>
+          <div class="issue-input-bottom">
+            <span style="font-size:11.5px;color:var(--muted)">Press Enter to send &bull; Saves in your session</span>
+            <button type="button" class="btn-play issue-send-btn" onclick="sendUserIssue()">
+              <span>Submit Issue</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  renderIssueChatStream();
+}
+
+// Keyboard shortcut Alt+D to toggle developer response mode when on report page
+document.addEventListener('keydown', (e) => {
+  if (e.altKey && (e.key === 'd' || e.key === 'D')) {
+    if (location.hash.includes('report') || location.hash.includes('issue')) {
+      toggleIssueDevMode();
+    }
+  }
+});
+
+async function renderPerson(id) {
+  showDetail(); document.title = 'Loading...'
+  const dp = $('detailPage'); dp.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  const d = await fetchAPI('/person/' + id)
+  if(!d) { dp.innerHTML = '<div class="loading"><p>Error loading</p></div>'; return }
+  document.title = (d.name || 'Unknown') + ' - MediaHub'
+  const photo = d.profile_path ? IMG + '/w500' + d.profile_path : 'https://placehold.co/500x750/0a0a14/fff/?text=No+Photo'
+  const bio = d.biography ? d.biography.replace(/\n/g, '<br>') : 'No biography available.'
+  const knownFor = d.known_for_department || 'Acting'
+  const birthday = d.birthday || 'Unknown'
+  const placeOfBirth = d.place_of_birth || 'Unknown'
+  let credits = []
+  if (d.combined_credits && d.combined_credits.cast) {
+    credits = d.combined_credits.cast.sort((a, b) => b.popularity - a.popularity).slice(0, 24)
+  }
+  const creditsHtml = credits.length > 0 ? '<div class="similar-section" style="margin-top:0"><h2 class="section-title">Known For</h2><div class="grid" style="margin-top:16px;">' + credits.map(s => {
+    const p = s.poster_path ? IMG + '/w342' + s.poster_path : 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster';
+    const y = (s.release_date||s.first_air_date||'').split('-')[0] || '';
+    const m = s.media_type || 'movie'
+    return '<div class="card" onclick="navigate(\'#/' + m + '/' + s.id + '\')"><div class="poster" style="background-image:url(\'' + p + '\')">' + (s.vote_average ? '<span class="rating">\u2605 ' + s.vote_average.toFixed(1) + '</span>' : '') + '</div><div class="info"><h3>' + escapeHtml(s.title || s.name || '') + '</h3><p>' + y + '</p></div></div>';
+  }).join('') + '</div></div>' : ''
+  dp.innerHTML = '<button class="back-btn" onclick="history.back()">\u2190 Back</button><div class="detail-hero" style="min-height:auto; align-items:flex-start; padding: 4% 6%; background:var(--card); display:flex; gap:32px; flex-wrap:wrap; border:none; box-shadow:none;"><div class="detail-poster" style="background-image:url(\'' + photo + '\'); width: 260px; max-width: 100%; flex-shrink: 0; box-shadow:0 20px 40px rgba(0,0,0,0.5);"></div><div class="detail-info" style="flex:1; min-width:200px;"><h1 style="font-size:42px; font-weight:700; margin-bottom:16px; letter-spacing:-1px;">' + escapeHtml(d.name) + '</h1><div class="spotlight-meta" style="margin-bottom:24px;"><span>' + escapeHtml(knownFor) + '</span>' + (birthday !== 'Unknown' ? '<span>Born: ' + escapeHtml(birthday) + '</span>' : '') + (placeOfBirth !== 'Unknown' ? '<span>' + escapeHtml(placeOfBirth) + '</span>' : '') + '</div><h3 style="font-size:20px; font-weight:600; margin-bottom:12px;">Biography</h3><p class="overview" style="max-width:none; line-height:1.8; font-size:15px; color:var(--text2);">' + bio + '</p></div></div><div class="detail-content">' + creditsHtml + '</div>'
+}
+
+// --- Detail ---
+async function renderDetail(type, id, season) {
+  showDetail(); document.title = 'Loading...'
+  const dp = $('detailPage'); dp.innerHTML = '<div class="loading"><div class="spinner"></div></div>'
+  if(type === 'anime') {
+    const d = await fetchAPI('/anime/' + id)
+    if(!d) { dp.innerHTML = '<div class="loading"><p>Error loading</p></div>'; return }
+    currentItem = { type: 'anime', id, malId: d.idMal || id, title: d.title?.romaji || d.title?.english || 'Untitled' }
+    document.title = currentItem.title + ' - MediaHub'
+    const img = d.coverImage?.large || '', banner = d.bannerImage || '', desc = (d.description||'').replace(/<[^>]*>/g,'') || 'No description.'
+    const characters = d.characters?.edges || []
+    const animeCastHtml = characters.length > 0 ? '<div class="cast-section"><h2 class="section-title">Characters & Voice Actors</h2><div class="cast-list">' + characters.map(c => {
+      const charName = c.node?.name?.full || '', charImg = c.node?.image?.large || 'https://placehold.co/185x278/1a1a2e/666/?text=No+Photo'
+      const vaName = c.voiceActors?.[0]?.name?.full || 'Unknown VA'
+      return '<div class="cast-card" style="cursor:default;"><div class="cast-photo" style="background-image:url(\'' + charImg + '\')"></div><div class="cast-info-box"><strong>' + escapeHtml(charName) + '</strong><span>' + escapeHtml(vaName) + '</span></div></div>'
+    }).join('') + '</div></div>' : ''
+    let animeEpisodesHtml = ''
+    if (d.episodes && d.episodes > 1) {
+      animeEpisodesHtml = '<div class="episodes-section" style="margin-top:28px"><h2 class="section-title">Episodes (' + d.episodes + ')</h2><div class="ep-selector-grid" style="display:flex;flex-wrap:wrap;gap:8px;max-height:220px;overflow-y:auto;padding:8px 0">'
+      for (let ep = 1; ep <= Math.min(d.episodes, 250); ep++) {
+        animeEpisodesHtml += '<button class="ep-btn" onclick="playItem(\'anime\',' + id + ',1,' + ep + ')" style="padding:8px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;transition:all 0.2s">EP ' + ep + '</button>'
+      }
+      animeEpisodesHtml += '</div></div>'
+    }
+    dp.innerHTML = '<button class="back-btn" onclick="history.back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button><div class="detail-hero"><div class="detail-bg" style="background-image:url(\'' + (banner || img || 'https://placehold.co/1280x720/0c0c1e/fff') + '\')"></div><div class="detail-overlay"><div class="detail-poster" style="background-image:url(\'' + (img || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')"></div><div class="detail-info"><h1>' + currentItem.title + '</h1><div class="detail-meta"><span>' + (d.format||'Anime') + '</span>' + (d.status ? '<span>' + d.status + '</span>' : '') + (d.episodes ? '<span>' + d.episodes + ' Episodes</span>' : '') + (d.averageScore ? '<span>\u2605 ' + (d.averageScore/10).toFixed(1) + '</span>' : '') + (d.startDate?.year ? '<span>' + d.startDate.year + '</span>' : '') + (d.duration ? '<span>' + d.duration + 'm</span>' : '') + '</div><p class="overview">' + desc + '</p><div class="genre-tags">' + (d.genres||[]).map(g => '<span>' + g + '</span>').join('') + '</div><div class="detail-actions" style="margin-top:16px"><button class="btn-play" onclick="playItem(\'anime\',' + id + ',1,1)">\u25B6 Play Now</button><button class="btn-secondary" onclick="goHome()">Browse</button></div></div></div></div><div class="detail-content">' + animeCastHtml + animeEpisodesHtml + '</div>'
+  } else {
+    const d = await fetchAPI('/' + type + '/' + id)
+    if(!d) { dp.innerHTML = '<div class="loading"><p>Error loading</p></div>'; return }
+    const title = d.title || d.name || 'Untitled'; document.title = title + ' - MediaHub'
+    const year = (d.release_date||d.first_air_date||'').split('-')[0] || '', poster = d.poster_path ? IMG + '/w342' + d.poster_path : '', bg = d.backdrop_path ? IMG + '/w1280' + d.backdrop_path : ''
+    const rating = d.vote_average ? '\u2605 ' + d.vote_average.toFixed(1) + (d.vote_count ? ' (' + d.vote_count + ' votes)' : '') : '', rt = type === 'movie' && d.runtime ? d.runtime + 'm' : '', genres = (d.genres||[]).map(g => g.name||g), desc = d.overview || 'No description.'
+    currentItem = { type, id, title }
+    
+    let extraMeta = ''
+    if (d.tagline) extraMeta += '<p style="font-style:italic;color:var(--text2);margin-top:-8px;margin-bottom:12px;">"' + escapeHtml(d.tagline) + '"</p>'
+    
+    let infoGrid = '<div class="info-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(130px, 1fr));gap:16px;margin:24px 0;padding:20px;background:rgba(255,255,255,0.02);border-radius:16px;border:1px solid rgba(255,255,255,0.05)">'
+    if (type === 'movie') {
+      if(d.budget) infoGrid += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">Budget</span><strong>$' + (d.budget/1000000).toFixed(1) + 'M</strong></div>';
+      if(d.revenue) infoGrid += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">Revenue</span><strong>$' + (d.revenue/1000000).toFixed(1) + 'M</strong></div>';
+      if(d.status) infoGrid += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">Status</span><strong>' + d.status + '</strong></div>';
+      if(d.release_date) infoGrid += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">Released</span><strong>' + d.release_date + '</strong></div>';
+    } else {
+      if(d.status) infoGrid += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">Status</span><strong>' + d.status + '</strong></div>';
+      if(d.first_air_date) infoGrid += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">First Aired</span><strong>' + d.first_air_date + '</strong></div>';
+      if(d.number_of_episodes) infoGrid += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">Episodes</span><strong>' + d.number_of_episodes + '</strong></div>';
+    }
+    if(d.imdb_id) infoGrid += '<div id="imdbStatsContainer"></div><div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">IMDb</span><button onclick="event.stopPropagation();window.open(\'https://www.imdb.com/title/' + d.imdb_id + '\',\'_blank\')" style="background:none;border:none;padding:0;cursor:pointer;color:var(--primary-light);font-weight:700;font-size:inherit"><strong>View on IMDb ↗</strong></button></div>'
+    infoGrid += '</div>'
+    
+    const castList = (d.credits && d.credits.cast && d.credits.cast.length > 0) ? d.credits.cast : (d.aggregate_credits && d.aggregate_credits.cast) || []
+    const castHtml = castList.length > 0 ? '<div class="cast-section"><h2 class="section-title">Cast</h2><div class="cast-list">' + castList.slice(0, 10).map(c => '<div class="cast-card" onclick="navigate(\'#/person/' + c.id + '\')"><div class="cast-photo" style="background-image:url(\'' + (c.profile_path ? IMG + '/w185' + c.profile_path : 'https://placehold.co/185x278/1a1a2e/666/?text=No+Photo') + '\')"></div><div class="cast-info-box"><strong>' + escapeHtml(c.name) + '</strong><span>' + escapeHtml(c.character || (c.roles && c.roles[0]?.character) || '') + '</span></div></div>').join('') + '</div></div>' : ''
+    const similarHtml = (d.similar && d.similar.results && d.similar.results.length > 0) ? '<div class="similar-section"><h2 class="section-title">Similar ' + (type === 'movie' ? 'Movies' : 'Shows') + '</h2><div class="similar-list">' + d.similar.results.slice(0, 10).map(s => { const p = s.poster_path ? IMG + '/w342' + s.poster_path : 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster'; const y = (s.release_date||s.first_air_date||'').split('-')[0] || ''; return '<div class="card" onclick="navigate(\'#/' + type + '/' + s.id + '\')"><div class="poster" style="background-image:url(\'' + p + '\')">' + (s.vote_average ? '<span class="rating">\u2605 ' + s.vote_average.toFixed(1) + '</span>' : '') + '</div><div class="info"><h3>' + escapeHtml(s.title || s.name || '') + '</h3><p>' + y + '</p></div></div>'; }).join('') + '</div></div>' : ''
+    const extendedInfo = '<div class="extended-info">' + castHtml + similarHtml + '</div>'
+    
+    dp.innerHTML = '<button class="back-btn" onclick="goHome()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Back</button><div class="detail-hero"><div class="detail-bg" style="background-image:url(\'' + (bg || 'https://placehold.co/1280x720/0c0c1e/fff') + '\')"></div><div class="detail-overlay"><div class="detail-poster" style="background-image:url(\'' + (poster || 'https://placehold.co/342x513/0a0a14/fff/?text=No+Poster') + '\')"></div><div class="detail-info"><h1>' + title + '</h1><div class="detail-meta">' + (year ? '<span>' + year + '</span>' : '') + (rating ? '<span>' + rating + '</span>' : '') + (rt ? '<span>' + rt + '</span>' : '') + (d.status ? '<span>' + d.status + '</span>' : '') + (type === 'tv' && d.number_of_seasons ? '<span>' + d.number_of_seasons + ' Seasons</span>' : '') + '</div>' + extraMeta + '<p class="overview">' + desc + '</p><div class="genre-tags">' + genres.map(g => '<span>' + g + '</span>').join('') + '</div><div class="detail-actions" style="margin-top:16px">' + (type === 'movie' ? '<button class="btn-play" onclick="playItem(\'movie\',' + id + ')">\u25B6 Play Now</button>' : '') + (type === 'tv' ? '<button class="btn-play" onclick="playItem(\'tv\',' + id + ',1,1)">\u25B6 Play S1:E1</button>' : '') + '<button class="btn-secondary" onclick="goHome()">Browse</button></div></div></div></div><div class="detail-content">' + infoGrid + (type === 'tv' ? '<div id="seasonsSection"></div>' : '') + extendedInfo + '</div>'
+    if(type === 'tv') loadSeasons(id, season)
+    
+    if (d.imdb_id) {
+      fetchAPI('/imdb/' + d.imdb_id).then(imdb => {
+        if(imdb && imdb.Response === 'True') {
+          const rtScore = (imdb.Ratings||[]).find(x => x.Source === 'Rotten Tomatoes')
+          const cont = $('imdbStatsContainer')
+          if(cont) {
+            let h = ''
+            if(imdb.imdbRating && imdb.imdbRating !== 'N/A') h += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">IMDb Rating</span><strong style="color:#f5c518;display:flex;align-items:center;gap:4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg> ' + imdb.imdbRating + '</strong></div>'
+            if(rtScore && rtScore.Value) h += '<div><span style="display:block;font-size:11px;color:var(--muted);margin-bottom:4px">Rotten Tomatoes</span><strong style="color:#fa320a;display:flex;align-items:center;gap:4px"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> ' + rtScore.Value + '</strong></div>'
+            if(h) cont.outerHTML = h
+          }
+        }
+      })
+    }
+  }
+}
+
+async function loadSeasons(tvId, activeSeason) {
+  const d = await fetchAPI('/tv/' + tvId)
+  if(!d || !d.seasons) return
+  const seasons = d.seasons.filter(s => s.season_number > 0), init = activeSeason ? parseInt(activeSeason) : (seasons[0]?.season_number||1)
+  $('seasonsSection').innerHTML = '<div class="season-tabs">' + seasons.map(s => '<button class="' + (s.season_number === init ? 'active' : '') + '" onclick="switchSeason(' + tvId + ',' + s.season_number + ',this)">' + (s.name || 'Season ' + s.season_number) + '</button>').join('') + '</div><div id="episodesContainer"><div class="loading"><div class="spinner"></div></div></div>'
+  loadEpisodes(tvId, init)
+}
+function switchSeason(tvId, season, btn) { document.querySelectorAll('.season-tabs button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); loadEpisodes(tvId, season) }
+async function loadEpisodes(tvId, season) {
+  currentSeason = season; const d = await fetchAPI('/tv/' + tvId + '/season/' + season)
+  if(!d || !d.episodes) return
+  currentItem = { type: 'tv', id: tvId, title: currentItem?.title||'', season }
+  $('episodesContainer').innerHTML = '<div class="episodes-grid">' + d.episodes.map(ep => {
+    const still = ep.still_path ? IMG + '/w300' + ep.still_path : ''
+    return '<div class="episode-card" onclick="playItem(\'tv\',' + tvId + ',' + season + ',' + ep.episode_number + ')"><div class="episode-thumb" style="background-image:url(\'' + (still || 'https://placehold.co/300x169/0a0a14/666/?text=Episode+' + ep.episode_number) + '\')"></div><div class="episode-info"><div class="episode-num">EPISODE ' + ep.episode_number + '</div><h4>' + (ep.name||'Episode '+ep.episode_number) + '</h4>' + (ep.overview ? '<p>' + escapeHtml(ep.overview) + '</p>' : '') + '</div></div>'
+  }).join('') + '</div>'
+}
+
+
+// --- Cache-Based Watch History System ---
+const HISTORY_KEY = 'mediahub_watch_history'
+let currentResumeTime = 0
+let currentWatchItem = null
+let watchTicker = null
+
+function getWatchHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY)
+    return raw ? JSON.parse(raw) : []
+  } catch (e) {
+    return []
+  }
+}
+
+function saveWatchHistory(list) {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(list.slice(0, 50)))
+  } catch (e) {}
+}
+
+function formatWatchTime(sec) {
+  if (!sec || sec <= 0) return '0s'
+  sec = Math.floor(sec)
+  const h = Math.floor(sec / 3600)
+  const m = Math.floor((sec % 3600) / 60)
+  const s = sec % 60
+  if (h > 0) return `${h}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`
+  if (m > 0) return `${m}m ${s.toString().padStart(2, '0')}s`
+  return `${s}s`
+}
+
+function getHistoryItemKey(type, id, season, episode) {
+  if (type === 'tv') return `tv_${id}_s${season || 1}_e${episode || 1}`
+  if (type === 'anime') return `anime_${id}_ep${episode || 1}`
+  return `movie_${id}`
+}
+
+function recordWatchProgress(item, timestamp, duration) {
+  if (!item || !item.id) return
+  const list = getWatchHistory()
+  const key = item.key || getHistoryItemKey(item.type, item.id, item.season, item.episode)
+  const idx = list.findIndex(x => x.key === key)
+  
+  const entry = {
+    key,
+    id: item.id,
+    type: item.type || 'movie',
+    title: item.title || 'Untitled',
+    season: item.season || null,
+    episode: item.episode || null,
+    poster: item.poster || (idx >= 0 ? list[idx].poster : ''),
+    backdrop: item.backdrop || (idx >= 0 ? list[idx].backdrop : ''),
+    timestamp: Math.max(0, Math.floor(timestamp || 0)),
+    duration: duration && duration > 0 ? Math.floor(duration) : (idx >= 0 ? list[idx].duration : 0),
+    lastWatched: Date.now()
+  }
+
+  if (idx >= 0) {
+    list.splice(idx, 1)
+  }
+  list.unshift(entry)
+  saveWatchHistory(list)
+}
+
+function deleteFromHistory(key, e) {
+  if (e) { e.stopPropagation(); e.preventDefault(); }
+  const list = getWatchHistory().filter(x => x.key !== key)
+  saveWatchHistory(list)
+  renderWatchHistory()
+}
+
+function clearWatchHistory(e) {
+  if (e) { e.stopPropagation(); e.preventDefault(); }
+  if (!confirm('Clear all watch history?')) return
+  localStorage.removeItem(HISTORY_KEY)
+  renderWatchHistory()
+}
+
+function renderWatchHistory() {
+  const section = $('historySection')
+  const grid = $('historyCardsGrid')
+  const badge = $('historyCountBadge')
+  if (!section || !grid) return
+
+  const history = getWatchHistory()
+  if (!history || history.length === 0) {
+    section.style.display = 'none'
+    grid.innerHTML = ''
+    return
+  }
+
+  section.style.display = 'block'
+  if (badge) badge.textContent = `${history.length} watched`
+
+  // Asynchronously backfill missing posters for existing history entries
+  history.forEach(item => {
+    if ((!item.poster || !item.backdrop) && item.id) {
+      fetchAPI('/' + item.type + '/' + item.id).then(d => {
+        if (d) {
+          const p = d.poster_path ? (IMG + '/w342' + d.poster_path) : (d.coverImage?.large || '')
+          const b = d.backdrop_path ? (IMG + '/w780' + d.backdrop_path) : (d.bannerImage || p || '')
+          if (p || b) {
+            const list = getWatchHistory()
+            const target = list.find(x => x.key === item.key)
+            if (target && (!target.poster || !target.backdrop)) {
+              target.poster = p || target.poster
+              target.backdrop = b || target.backdrop
+              saveWatchHistory(list)
+              renderWatchHistory()
+            }
+          }
+        }
+      }).catch(() => {})
+    }
+  })
+
+  grid.innerHTML = history.map(item => {
+    const formatted = formatWatchTime(item.timestamp)
+    let percent = 0
+    if (item.duration && item.duration > 0) {
+      percent = Math.min(100, Math.round((item.timestamp / item.duration) * 100))
+    }
+    const bgImg = item.backdrop || item.poster || ''
+    const thumbStyle = bgImg ? `background-image:url('${bgImg}')` : 'background:linear-gradient(135deg,rgba(0,112,243,0.18),rgba(6,11,24,0.95))'
+    
+    // Clean label: NO duplicate Movie Movie
+    const typeLabel = item.type === 'movie' ? 'Movie' : (item.type === 'tv' ? 'TV' : 'Anime')
+    const sub = item.type === 'movie' ? '' : (item.type === 'tv' ? `S${item.season||1}:E${item.episode||1}` : `Ep ${item.episode||1}`)
+    const safeTitle = escapeHtml(item.title)
+    const escapedKey = item.key.replace(/'/g, "\\'")
+
+    return `
+      <div class="history-card" onclick="resumeFromHistory('${escapedKey}')">
+        <div class="history-thumb-wrap">
+          <div class="history-thumb" style="${thumbStyle}">
+            ${!bgImg ? '<div class="history-no-preview"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(0,240,255,0.6)" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg><span>Loading preview...</span></div>' : ''}
+          </div>
+          <div class="history-thumb-overlay"></div>
+          <div class="history-delete-btn" onclick="deleteFromHistory('${escapedKey}', event)" title="Delete from watch history">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </div>
+          <div class="history-time-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            ${formatted}
+          </div>
+          <div class="history-play-icon">▶</div>
+          <div class="history-progress-track">
+            <div class="history-progress-fill" style="width:${percent > 0 ? percent : Math.min(100, Math.max(10, item.timestamp > 0 ? 35 : 0))}%"></div>
+          </div>
+        </div>
+        <div class="history-info">
+          <div class="history-title" title="${safeTitle}">${safeTitle}</div>
+          <div class="history-sub">
+            <span class="history-tag">${typeLabel}</span>
+            ${sub ? `<span>${sub}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    `
+  }).join('')
+}
+
+function resumeFromHistory(key) {
+  const item = getWatchHistory().find(x => x.key === key)
+  if (!item) return
+  currentItem = {
+    type: item.type,
+    id: item.id,
+    title: item.title,
+    poster: item.poster,
+    backdrop: item.backdrop
+  }
+  playItem(item.type, item.id, item.season, item.episode, item.timestamp)
+}
+
+function applyResumeTimestamp(url, seconds) {
+  if (!seconds || seconds <= 0) return url
+  const s = Math.floor(seconds)
+  const parts = url.split('#')
+  let base = parts[0]
+  const sep = base.includes('?') ? '&' : '?'
+  base += `${sep}startAt=${s}&start=${s}&t=${s}&time=${s}`
+  return base + `#t=${s}`
+}
+
+function startOverPlayback() {
+  currentResumeTime = 0
+  if (currentWatchItem) {
+    currentWatchItem.timestamp = 0
+    recordWatchProgress(currentWatchItem, 0)
+  }
+  const resumeBadge = $('playerResumeBadge')
+  if (resumeBadge) resumeBadge.style.display = 'none'
+  loadSource(currentSourceIdx)
+}
+
+// Window message listener for embeds that post playback time
+window.addEventListener('message', (e) => {
+  try {
+    const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data
+    if (!data || !currentWatchItem) return
+    const t = data.currentTime || data.time || data?.data?.currentTime || data?.data?.time
+    const d = data.duration || data?.data?.duration
+    if (typeof t === 'number' && !isNaN(t) && t > 0) {
+      currentWatchItem.timestamp = Math.floor(t)
+      if (typeof d === 'number' && !isNaN(d) && d > 0) {
+        currentWatchItem.duration = Math.floor(d)
+      }
+      recordWatchProgress(currentWatchItem, currentWatchItem.timestamp, currentWatchItem.duration)
+    }
+  } catch(err) {}
+})
+
+window.addEventListener('beforeunload', () => {
+  if (currentWatchItem && currentWatchItem.timestamp > 0) {
+    recordWatchProgress(currentWatchItem, currentWatchItem.timestamp)
+  }
+})
+
+// --- Player ---
+let probeAbort = null
+let playerWatchdog = null
+let autoProbeActive = false
+let userManuallySwitched = false
+
+async function playItem(type, id, season, episode, explicitResumeTime) {
+  $('playerOverlay').classList.add('active')
+  $('playerTitle').textContent = currentItem?.title || 'Now Playing'
+  $('playerFrame').style.display = ''
+  $('livePlayer').style.display = 'none'
+  if(liveHls) { liveHls.destroy(); liveHls = null }
+  $('playerFrame').src = ''
+
+  // Watch history resolution
+  const histKey = getHistoryItemKey(type, id, season, episode)
+  if (explicitResumeTime !== undefined && explicitResumeTime !== null) {
+    currentResumeTime = Number(explicitResumeTime)
+  } else {
+    const existing = getWatchHistory().find(x => x.key === histKey)
+    currentResumeTime = (existing && existing.timestamp > 5) ? existing.timestamp : 0
+  }
+
+  const foundInTrend = (typeof trendData !== 'undefined' ? trendData : [])?.find(x => x.id == id)
+  let itemPoster = currentItem?.poster || (foundInTrend?.poster_path ? IMG + '/w342' + foundInTrend.poster_path : '')
+  let itemBackdrop = currentItem?.backdrop || (foundInTrend?.backdrop_path ? IMG + '/w780' + foundInTrend.backdrop_path : '')
+
+  currentWatchItem = {
+    key: histKey,
+    type,
+    id,
+    season,
+    episode,
+    title: currentItem?.title || foundInTrend?.title || foundInTrend?.name || 'Now Playing',
+    poster: itemPoster,
+    backdrop: itemBackdrop,
+    timestamp: currentResumeTime
+  }
+  recordWatchProgress(currentWatchItem, currentResumeTime)
+
+  if ((!itemPoster || !itemBackdrop) && id) {
+    fetchAPI('/' + type + '/' + id).then(d => {
+      if (d) {
+        const p = d.poster_path ? (IMG + '/w342' + d.poster_path) : (d.coverImage?.large || '')
+        const b = d.backdrop_path ? (IMG + '/w780' + d.backdrop_path) : (d.bannerImage || p || '')
+        if (p || b) {
+          if (currentWatchItem && currentWatchItem.id == id) {
+            currentWatchItem.poster = p || currentWatchItem.poster
+            currentWatchItem.backdrop = b || currentWatchItem.backdrop
+          }
+          const list = getWatchHistory()
+          const target = list.find(x => x.key === histKey)
+          if (target) {
+            target.poster = p || target.poster
+            target.backdrop = b || target.backdrop
+            saveWatchHistory(list)
+            renderWatchHistory()
+          }
+        }
+      }
+    }).catch(() => {})
+  }
+
+  const resumeBadge = $('playerResumeBadge')
+  if (resumeBadge) {
+    if (currentResumeTime > 5) {
+      resumeBadge.innerHTML = '<span>Resuming from ' + formatWatchTime(currentResumeTime) + '</span><button onclick="startOverPlayback()">Start Over</button>'
+      resumeBadge.style.display = 'inline-flex'
+    } else {
+      resumeBadge.style.display = 'none'
+    }
+  }
+
+  // Ticker for elapsed seconds tracking
+  clearInterval(watchTicker)
+  watchTicker = setInterval(() => {
+    if ($('playerOverlay')?.classList.contains('active') && currentWatchItem) {
+      currentWatchItem.timestamp = (currentWatchItem.timestamp || 0) + 1
+      if (currentWatchItem.timestamp % 4 === 0) {
+        recordWatchProgress(currentWatchItem, currentWatchItem.timestamp)
+      }
+    }
+  }, 1000)
+
+  if (probeAbort) { probeAbort.abort() }
+  probeAbort = new AbortController()
+  clearTimeout(playerWatchdog)
+  playerWatchdog = null
+  autoProbeActive = true
+  userManuallySwitched = false
+
+  const badge = $('playerStatusBadge')
+  if (badge) {
+    badge.className = 'player-status-badge'
+    badge.innerHTML = '<span class="dot"></span> Testing fastest stream...'
+    badge.style.display = 'inline-flex'
+  }
+
+  let q = '/sources?type=' + type + '&id=' + id
+  if (type === 'tv') q += '&season=' + (season || 1) + '&episode=' + (episode || 1)
+  if (type === 'anime') {
+    if (episode) q += '&episode=' + episode
+    const mId = currentItem?.malId || id
+    if (mId) q += '&malId=' + mId
+  }
+
+  const d = await fetchAPI(q)
+  currentSources = d?.sources || []
+  currentSourceIdx = 0
+
+  if (!currentSources.length) {
+    if (badge) {
+      badge.className = 'player-status-badge'
+      badge.innerHTML = 'No streams found'
+    }
+    return
+  }
+
+  const tabs = $('sourceTabs')
+  tabs.innerHTML = currentSources.map((s, i) =>
+    '<button class="' + (i === 0 ? 'active' : '') + '" onclick="switchSource(' + i + ',this,true)">' + s.name + '</button>'
+  ).join('')
+
+  loadSource(0)
+
+  if (currentSources.length > 1) {
+    probeAndAutoSelect(currentSources, probeAbort.signal)
+  } else {
+    if (badge) {
+      badge.className = 'player-status-badge success'
+      badge.innerHTML = '<span class="dot"></span> Connected: ' + currentSources[0].name
+      setTimeout(() => { if (!userManuallySwitched && badge) badge.style.display = 'none' }, 3000)
+    }
+  }
+}
+
+async function probeAndAutoSelect(sources, signal) {
+  const probeOne = async (source, index) => {
+    const t0 = performance.now()
+    try {
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 3200))
+      const fetchPromise = fetch(source.url, { mode: 'no-cors', cache: 'no-store', signal })
+      await Promise.race([fetchPromise, timeoutPromise])
+      const latency = Math.round(performance.now() - t0)
+      return { index, latency, ok: true }
+    } catch (e) {
+      return { index, latency: 99999, ok: false }
+    }
+  }
+
+  try {
+    const results = await Promise.all(sources.map((s, i) => probeOne(s, i)))
+    if (signal.aborted || userManuallySwitched || !autoProbeActive) return
+
+    const successful = results.filter(r => r.ok).sort((a, b) => a.latency - b.latency)
+    const badge = $('playerStatusBadge')
+
+    if (successful.length > 0) {
+      const fastest = successful[0]
+      const fastestSource = sources[fastest.index]
+
+      if (fastest.index !== currentSourceIdx) {
+        currentSourceIdx = fastest.index
+        const tabs = document.querySelectorAll('#sourceTabs button')
+        tabs.forEach((b, idx) => b.classList.toggle('active', idx === fastest.index))
+        $('playerFrame').src = applyResumeTimestamp(fastestSource.url, currentResumeTime)
+      }
+
+      if (badge) {
+        badge.className = 'player-status-badge success'
+        badge.innerHTML = '<span class="dot"></span> Connected: ' + fastestSource.name + ' (' + fastest.latency + 'ms)'
+        setTimeout(() => {
+          if (!userManuallySwitched && badge) badge.style.display = 'none'
+        }, 3500)
+      }
+    } else {
+      if (badge) {
+        badge.className = 'player-status-badge'
+        badge.innerHTML = '<span class="dot"></span> Connected: ' + sources[currentSourceIdx].name
+        setTimeout(() => { if (badge) badge.style.display = 'none' }, 3000)
+      }
+    }
+  } catch(e) {}
+}
+
+function switchSource(idx, btn, manual = false) {
+  if (manual) {
+    userManuallySwitched = true
+    autoProbeActive = false
+    if (probeAbort) { probeAbort.abort(); probeAbort = null }
+    clearTimeout(playerWatchdog)
+    playerWatchdog = null
+    const badge = $('playerStatusBadge')
+    if (badge) {
+      badge.className = 'player-status-badge'
+      badge.innerHTML = 'Server: ' + (currentSources[idx]?.name || '')
+      badge.style.display = 'inline-flex'
+      setTimeout(() => { if (badge) badge.style.display = 'none' }, 2000)
+    }
+  }
+  if(btn) {
+    document.querySelectorAll('#sourceTabs button').forEach(b => b.classList.remove('active'))
+    btn.classList.add('active')
+  } else {
+    const tabs = document.querySelectorAll('#sourceTabs button')
+    tabs.forEach((b, i) => b.classList.toggle('active', i === idx))
+  }
+  currentSourceIdx = idx
+  loadSource(idx)
+}
+
+function loadSource(idx) {
+  const src = currentSources[idx]
+  if(!src) return
+  const frame = $('playerFrame')
+
+  clearTimeout(playerWatchdog)
+  if (autoProbeActive && !userManuallySwitched && currentSources.length > 1) {
+    playerWatchdog = setTimeout(() => {
+      if (!userManuallySwitched && autoProbeActive) {
+        const nextIdx = (currentSourceIdx + 1) % currentSources.length
+        if (nextIdx !== 0) {
+          const badge = $('playerStatusBadge')
+          if (badge) {
+            badge.className = 'player-status-badge'
+            badge.innerHTML = '<span class="dot"></span> Server slow, switching to ' + currentSources[nextIdx].name + '...'
+            badge.style.display = 'inline-flex'
+          }
+          switchSource(nextIdx, null, false)
+        }
+      }
+    }, 7500)
+  }
+
+  frame.onload = () => {
+    clearTimeout(playerWatchdog)
+    const badge = $('playerStatusBadge')
+    if (badge && autoProbeActive && !userManuallySwitched) {
+      badge.className = 'player-status-badge success'
+      badge.innerHTML = '<span class="dot"></span> Ready: ' + src.name
+      setTimeout(() => { if (!userManuallySwitched && badge) badge.style.display = 'none' }, 3000)
+    }
+  }
+
+  frame.src = applyResumeTimestamp(src.url, currentResumeTime)
+}
+// --- Share / QR ---
+const SITE_URL = 'https://greatmedia.goelaarav.dpdns.org/'
+let qrInstance = null
+
+function openShare() {
+  $('shareOverlay').classList.add('active')
+  const c = $('qrContainer')
+  if(!qrInstance) {
+    const existing = c.querySelector('canvas')
+    if(existing) existing.remove()
+    if(typeof QRCode !== 'undefined') {
+      const cv = document.createElement('div'); cv.id = 'qrCanvas'
+      c.prepend(cv)
+      qrInstance = new QRCode(cv, {
+        text: SITE_URL, width: 220, height: 220,
+        colorDark: '#0a0a10', colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      })
+    }
+  }
+  $('shareUrl').textContent = SITE_URL
+  $('shareHint').textContent = 'Scan to open MediaHub on your device'
+}
+
+function closeShare() { $('shareOverlay').classList.remove('active') }
+
+function copyShareLink() {
+  navigator.clipboard.writeText(SITE_URL).then(() => {
+    $('shareHint').textContent = 'Link copied!'
+    setTimeout(() => { $('shareHint').textContent = 'Scan to open MediaHub on your device' }, 2000)
+  }).catch(() => {
+    $('shareHint').textContent = 'Press and hold to copy the URL above'
+    setTimeout(() => { $('shareHint').textContent = 'Scan to open MediaHub on your device' }, 3000)
+  })
+}
+
+// --- GitHub Repo Info ---
+const REPO = 'coderaarav12/media-hub-frontend'
+async function loadRepoStats() {
+  try {
+    const r = await fetch('https://api.github.com/repos/' + REPO)
+    if(!r.ok) return
+    const d = await r.json()
+    $('footerStars').innerHTML = '&#9733; ' + (d.stargazers_count || 0)
+    const updated = d.pushed_at ? new Date(d.pushed_at).toLocaleDateString() : ''
+    if(updated) $('footerUpdated').textContent = 'Updated ' + updated
+
+    const gh = $('ghRepoArea')
+    gh.innerHTML = '<div class="gh-left"><div class="gh-icon"><svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg></div><div><a class="gh-name" href="https://github.com/' + REPO + '" target="_blank" rel="noopener">' + REPO + '</a><div class="gh-desc">' + escapeHtml(d.description || '') + '</div></div></div><div class="gh-stats"><div class="gh-stat"><svg viewBox="0 0 16 16"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25z"/></svg><span class="gh-stat-num">' + (d.stargazers_count || 0) + '</span></div><div class="gh-stat"><svg viewBox="0 0 16 16"><path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0z"/></svg><span class="gh-stat-num">' + (d.forks_count || 0) + '</span></div><div class="gh-stat"><svg viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8ZM5 12.25a.25.25 0 0 1 .25-.25h3.5a.25.25 0 0 1 .25.25v3.25a.25.25 0 0 1-.4.2l-1.45-1.087a.25.25 0 0 0-.3 0L5.4 15.7a.25.25 0 0 1-.4-.2Z"/></svg><span class="gh-stat-num">' + (d.open_issues_count || 0) + '</span></div></div>'
+  } catch(e) { $('ghRepoArea').innerHTML = '<div class="gh-loading">Could not load repo info</div>' }
+}
+
+const CHANGELOG = [
+  { date: '2026-10-11', msg: 'Peeka 2.0: Cute chibi mascot redesign with wiggling cat ears, star bobble, interactive flight on clicks, and genre-smart humor (Romance, Horror, Comedy, Sci-Fi, etc.)' },
+  { date: '2026-10-11', msg: 'Full UI theme overhaul: Sleek obsidian black with electric blue & neon cyan glow accents' },
+  { date: '2026-10-09', msg: 'Added working anime embed sources (VidLink Sub/Dub, VidJoy, 2Embed, AutoEmbed) with episode selector' },
+  { date: '2026-10-09', msg: 'Smart auto-switch: concurrently probes all video servers on Play Now & connects to fastest stream' },
+  { date: '2026-10-09', msg: 'Player watchdog auto-fallback on stall, while preserving manual server switching' },
+  { date: '2026-10-09', msg: 'Mobile home redesign: cinematic backdrop spotlight hero, clean 2-column bento, streamlined cards' },
+  { date: '2026-10-09', msg: 'Live TV revamp: public streams notice banner, category icons, instant in-category search, cleaned letter headers' },
+  { date: '2025-07-08', msg: 'Live TV: alphabetical grouping with letter headers, compact tile layout' },
+  { date: '2025-07-08', msg: 'Multi-source Live TV with channel merging and fallback (iptv-org, Free-TV, TVLink)' },
+  { date: '2025-07-08', msg: 'Service worker network-first strategy with versioned cache' },
+  { date: '2025-07-08', msg: 'Refresh button that clears SW cache and hard reloads' },
+  { date: '2025-07-08', msg: 'Changelog with What\'s New link in footer, fresh commits fetched' },
+  { date: '2025-07-08', msg: 'Live TV search across all merged channels' },
+  { date: '2025-07-08', msg: 'Source tabs in player for channel fallback' },
+  { date: '2025-07-08', msg: 'Initial release: MediaHub with Movies, TV, Anime, Live TV' },
+]
+const CHANGELOG_VER = 11
+
+function checkUpdate() {
+  const last = localStorage.getItem('changelogVer')
+  if(last !== String(CHANGELOG_VER)) { $('updateBanner').style.display = 'flex' }
+  localStorage.setItem('changelogVer', CHANGELOG_VER)
+}
+function dismissUpdate() { $('updateBanner').style.display = 'none' }
+async function refreshApp() {
+  $('updateBanner').style.display = 'none'
+  if('serviceWorker' in navigator) {
+    const regs = await navigator.serviceWorker.getRegistrations()
+    await Promise.all(regs.map(r => r.unregister()))
+  }
+  if('caches' in window) {
+    const keys = await caches.keys()
+    await Promise.all(keys.map(k => caches.delete(k)))
+  }
+  location.reload()
+}
+function openChangelog() {
+  $('updateBanner').style.display = 'none'; $('changelogOverlay').classList.add('active')
+  $('changelogBody').innerHTML = CHANGELOG.map(e =>
+    '<div class="changelog-item"><div class="changelog-sha">' + e.date + '</div><div><div class="changelog-msg">' + escapeHtml(e.msg) + '</div></div></div>'
+  ).join('')
+}
+function closeChangelog() { $('changelogOverlay').classList.remove('active') }
+
+checkUpdate()
+loadRepoStats()
+handleRoute()
+// --- Custom Selects ---
+document.querySelectorAll('.custom-select-wrapper').forEach(wrap => {
+  const trig = wrap.querySelector('.custom-select-trigger')
+  const opts = wrap.querySelectorAll('.custom-option')
+  const inp = wrap.querySelector('input')
+  trig.addEventListener('click', e => { e.stopPropagation(); document.querySelectorAll('.custom-select-wrapper').forEach(w => w !== wrap && w.classList.remove('open')); wrap.classList.toggle('open') })
+  opts.forEach(o => {
+    o.addEventListener('click', () => {
+      opts.forEach(x => x.classList.remove('selected'))
+      o.classList.add('selected')
+      inp.value = o.dataset.value
+      trig.querySelector('.c-val').textContent = o.textContent
+      wrap.classList.remove('open')
+      
+      // Auto trigger search if input has value
+      if(wrap.id === 'typeDesktopWrapper' && $('searchInput').value) triggerSearch()
+      if(wrap.id === 'typeMobileWrapper' && $('searchInputMobile').value) triggerMobileSearch()
+    })
+  })
+})
+document.addEventListener('click', () => { document.querySelectorAll('.custom-select-wrapper').forEach(w => w.classList.remove('open')) })
+
+// --- Popup Blocker (Allows legitimate links like GitHub, IMDb, AniList) ---
+;(function(){
+  const _realOpen = window.open
+  const isAllowedUrl = (url) => {
+    if (typeof url !== 'string') return false
+    return url.includes('github.com') || 
+           url.includes('imdb.com') || 
+           url.includes('themoviedb.org') || 
+           url.includes('anilist.co') ||
+           url.includes('twitter.com') ||
+           url.includes('x.com')
+  }
+
+  window.open = function(url, target, features){
+    if (isAllowedUrl(url)) {
+      return _realOpen ? _realOpen.call(window, url, target, features) : null
+    }
+    return null
+  }
+
+  document.addEventListener('click', function(e){
+    const a = e.target.closest('a')
+    if(a && a.href){
+      // Always allow github, imdb, tmdb, anilist or relative app navigation
+      if(isAllowedUrl(a.href) || a.href.startsWith('#') || a.href.startsWith(location.origin)){
+        return
+      }
+      // If inside legitimate UI containers, allow
+      if(a.closest('.site-footer, .gh-repo-card, .share-modal, .changelog-modal, .detail-actions, .extended-info')){
+        return
+      }
+      if(a.target === '_blank'){
+        e.preventDefault(); e.stopPropagation(); return false
+      }
+    }
+  }, true)
+})()
+</script>
+<script src="peeka.js"></script>
+</body>
+</html>
